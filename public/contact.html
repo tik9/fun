@@ -1,0 +1,44 @@
+<div id=container class="container">
+    <h4 class='mt-4'>Contact</h3>
+    <div id="contact">
+        <form id=contact onsubmit="return false">
+            <table class="table">
+                <tr>
+                    <td>
+                        <label for="name">Full Name</label>
+                    </td>
+                    <td>
+                        <input type="text" name="name" id="name" placeholder="First and Last" class=form-control-sm>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="email">Email Address</label>
+                    </td>
+                    <td>
+                        <input type="email" name="email" id="email" placeholder="email@domain.tld"
+                            class=form-control-sm>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="message">Comments</label>
+                    </td>
+                    <td>
+                        <textarea rows="3" class=form-control-sm name="message" id="message"
+                            placeholder="message"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <input type=submit id="send1" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mymodal"
+                value="submit" />
+
+            <button id="reset" class="btn btn-primary" style="margin-left: 10px;">Reset</button>
+        </form>
+    </div>
+    <div id="git_code">
+        <h5>Github Links</h5>
+    </div>
+</div>
+
+<script src="src.js"></script>

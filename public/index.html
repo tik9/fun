@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jamstack Explorers - Up and Running with Serverless Functions</title>
-  </head>
-  <body>
-    <h1>Up and Running with Serverless Functions</h1>
-    <button id="fetch-btn">Fetch</button>
-    <p id="response-output">Response Placeholder</p>
+<div id=container class="container">
+  <h4 class='mt-4'>My website with serverless examples</h4>
+  <h5 class='mt-4'>Example 1: Fetch a Joke</h5>
+  <button class='mt-3 btn btn-primary' id="fetch-joke">Fetch</button>
+  <p id="restext" class="mt-3">..joke is waiting</p>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const fetchBtn = document.getElementById('fetch-btn')
-        const responseText = document.getElementById('response-output')
+  <div id="git_code">
+    <h5>Github Links</h5>
+  </div>
 
-        fetchBtn.addEventListener('click', () => {
-          responseText.innerText = 'Static Text Replacement'
-        })
-      })
-    </script>
-  </body>
-</html>
+  <script src="src.js"></script>
+</div>

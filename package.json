@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@netlify/functions": "^1.0.0",
+    "@types/node": "^18.6.3",
+    "dotenv": "^16.0.1"
+  },
+  "name": "netlify",
+  "description": "Learn how to use serverless functions in less than 30 minutes!",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tik9/netlify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tik9/netlify/issues"
+  },
+  "homepage": "https://github.com/tik9/netlify#readme"
+}
