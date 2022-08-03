@@ -1,35 +1,12 @@
 
 var container = document.getElementById('container')
 
-var btnjoke = document.getElementById('fetch-joke')
-
-if (btnjoke)
-    btnjoke.addEventListener('click', async () => {
-        var restext = document.getElementById('restext')
-        restext.innerText = ''
-        async function joke() {
-            var res = await (await fetch('/.netlify/functions/rapid')).json()
-            console.log(res)
-            var ul = document.createElement('ul')
-            for (var elem of res.result) {
-                var li = document.createElement('li')
-                var aref = document.createElement('a')
-                aref.href = elem.url
-                aref.textContent = elem.value
-                li.append(aref)
-                ul.append(li)
-            }
-            restext.append(ul)
-        }
-        joke()
-    })
-
 function ghli(elem) {
     var elemjs = `${elem}.js`;
     var li = document.createElement("li");
     var ahref = document.createElement("a");
     li.appendChild(ahref);
-    ahref.href = ghBase + '/assets/' + elemjs
+    ahref.href = ghBase + '/public/' + elemjs
     ahref.textContent = elemjs;
     ghUlLinks.appendChild(li);
     return elemjs
@@ -50,6 +27,7 @@ var ghBase = ghMe + '/blob/master'
 
 
 ghli('src')
+ghli('api')
 
 function create_icon() {
     var icon = document.createElement("link");
@@ -77,7 +55,7 @@ function con_impr() {
 
     var ul = document.createElement('ul')
     ul.style.listStyleType = "none"
-    ul.classList.add('list-inline', 'mt-4')
+    ul.classList.add('mt-4')
     for (var elem of arr) {
         var li = document.createElement('li')
         li.classList.add('list-inline-item')

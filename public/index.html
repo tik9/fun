@@ -1,12 +1,25 @@
 <div id=container class="container">
   <h4 class='mt-4'>My website with serverless examples</h4>
-  <h5 class='mt-4'>Example 1: Fetch a Joke</h5>
-  <button class='mt-3 btn btn-primary' id="fetch-joke">Fetch</button>
-  <p id="restext" class="mt-3">..joke is waiting</p>
+
+  <div id="example1">
+    <h5 class='mt-4'>Example 1: Fetch a Joke</h5>
+    <button class='mt-3 btn btn-primary' id="fetch-joke">Fetch</button>
+    <p id="resjoke" class="mt-3">..joke is waiting</p>
+  </div>
+  <div id="example2">
+    <h5 class='mt-5'>Example 2: Fetch stock data - Result is probably in dollars</h5>
+    <h6 class="mt-3">Symbols - Companies:</h6>
+    <div id=symbols class="mt-2"></div>
+    <input id=symbol class="mt-3" placeholder="Enter symbol, eg. ibm">
+    <button class='ms-3 btn btn-primary' id="fetch-stock">Fetch</button>
+
+    <p id="resstock" class="mt-3">..stock data waits</p>
+  </div>
 
   <div id="git_code">
     <h5>Github Links</h5>
   </div>
 
   <script src="src.js"></script>
+  <script src="api.js"></script>
 </div>
