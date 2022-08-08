@@ -5,12 +5,9 @@ import { Handler } from "@netlify/functions";
 dotenv.config()
 
 //@ts-ignore
-const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event, context) => {
     //@ts-ignore
-    var eventbody = (event.body == '{}') ? { type: 'joke', input: 'msft' } : JSON.parse(event.body)
-
-    // console.log(eventbody)
-    // return
+    var eventbody = (event.body == '{}') ? { type: 'joke', input: 'abc' } : JSON.parse(event.body)
 
     var url
     if (eventbody.type == 'joke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search?query=' + eventbody.input
@@ -25,7 +22,6 @@ const handler: Handler = async (event, context) => {
                 'x-rapidapi-host': url.split('//')[1]
             }
         })).json()
-        console.log((process.env.rapidapi)?.slice(0, 4))
 
         return {
             statusCode: 200,
@@ -38,5 +34,3 @@ const handler: Handler = async (event, context) => {
         };
     }
 };
-
-export { handler };

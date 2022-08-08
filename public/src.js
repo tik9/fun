@@ -79,6 +79,7 @@ function head() {
     var h3 = document.createElement('h3')
     var nav = document.createElement('div')
     nav.append(h3)
+    nav.id = 'nav'
     nav.classList.add('nav', 'pt-2', 'ps-3', 'fixed-top', 'bg-dark')
     var aref = document.createElement("a");
     aref.href = '/';

@@ -1,12 +1,15 @@
+
 ### Goal of the repo
 
-- Present myself as Javascript Developer with node server experience
+- Present myself as TDD Developer with node experience
 - Serverless Functions with Netlify
+- My ability to use continuos deployment
 
 <br>
 
 ### Steps to reach Goal
-- Single Page App
+- Using Fetch api without tests
+- Tests with Cypress
 
 <br>
   
@@ -25,7 +28,8 @@
 
 | Tool | About       |
 | ---- | ----------- |
-| Js   | async/await |
+| Test framework   | Cypress Tests |
+serverless functions|calling them in node
 
 <br>
 

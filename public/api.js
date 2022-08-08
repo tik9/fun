@@ -1,4 +1,5 @@
 
+// console.log(location.host.split(':')[0])
 var symbols = { aapl: 'apple', amzn: 'amazon', googl: 'google', msft: 'microsoft' }
 
 var headers = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd', nextexample: 'nextexample ..' }
@@ -35,14 +36,14 @@ function creategui() {
         btn.classList.add('ms-2', 'btn', 'btn-primary')
         btn.id = elem
         btn.textContent = 'Fetch'
-        btn.setAttribute('data-test','btn'+ elem)
+        btn.setAttribute('data-test', 'btn' + elem)
         if (elem != 'transcript') {
             var input = document.createElement('input')
             input.id = 'query' + elem
             input.classList.add('mt-3')
             input.required = true
-            input.setAttribute('data-test','input'+ elem)
-            // input.value = 'msft'
+            input.setAttribute('data-test', 'input' + elem)
+            if (location.host.split(':')[0] == 'localhost') input.value = 'msft'
             div.append(input, btn)
         } else div.append(btn)
 
@@ -62,14 +63,12 @@ async function rapid(type, input = '') {
             method: 'post',
             body: JSON.stringify({ type: type, input: input })
         })).json()
-        console.log(1, type, res)
         if (type == 'joke') res = res.result
         else {
-            var resstock = document.getElementById('resstock')
             res = res["Monthly Time Series"]
             var lastkey = Object.keys(res)[0]
             res = res[lastkey]['1. open']
-            resstock.innerText = res.split('.')[0]
+            document.getElementById('resstock').innerText = res.split('.')[0]
             return
         }
         var ul = document.createElement('ul')
@@ -103,13 +102,8 @@ fetchstock.addEventListener('click', async (event) => {
 var fetchtrans = document.getElementById('transcript')
 fetchtrans.focus()
 fetchtrans.addEventListener('click', async (event) => {
-    // var res = await fetch('/.netlify/functions/as2')
     var res = await (await fetch('/.netlify/functions/as2')).json()
-    console.log(1, res)
-    // res = await res.json()
-    // console.log(2, res)
 
-    var restranscript = document.getElementById('restranscript')
-    restranscript.innerText = 'Api result: ' + res
+    document.getElementById('restranscript').innerText = 'Api result: ' + res
 }
 )

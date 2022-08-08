@@ -10,7 +10,9 @@ describe('my site', () => {
     cy.get('button').eq(0).contains('Fetch')
   })
   it('get jokes', () => {
-    cy.getByData('inputjoke')
-    cy.getByData('btnjoke').click()
+
+    // cy.getByData('inputjoke').scrollIntoView().should('be.visible')
+    cy.getByData('inputjoke').scrollIntoView().type('abc', { force: true })
+    cy.getByData('btnjoke').scrollIntoView().click({ force: true })
   })
 })
