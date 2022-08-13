@@ -3,7 +3,7 @@ describe('my site', () => {
   beforeEach(() => {
     cy.visit("http://localhost:8888")
   })
-  it('h4 has correct text', () => {
+  it('h4 is correct', () => {
     cy.getByData('header').contains('Tiko\'s website with serverless Api examples')
   })
   it("btn is correct", () => {

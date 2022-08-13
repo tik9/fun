@@ -1,8 +1,7 @@
 
 // console.log(location.host.split(':')[0])
-var symbols = { aapl: 'apple', amzn: 'amazon', googl: 'google', msft: 'microsoft' }
+var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon', googl: 'google', msft: 'microsoft' }
 
-var headers = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd', nextexample: 'nextexample ..' }
 
 function creategui() {
     i = 1
@@ -13,7 +12,7 @@ function creategui() {
         div.id = 'example' + i
         apis.append(div)
         var h5 = document.createElement('h5')
-        h5.innerText = headers[elem]
+        h5.innerText = i + '. ' + headers[elem]
         div.append(h5)
         if (elem == 'stock') {
             var sym = document.createElement('div')
@@ -22,28 +21,21 @@ function creategui() {
             sym.classList.add('mt-2')
             headsym.classList.add('mt-2')
             headsym.textContent = 'Symbols - Companies:'
-            var ul = document.createElement('ul')
-            sym.append(ul)
-            for (var symelem in symbols) {
-                var li = document.createElement('li')
-                ul.append(li)
-                var stock = symelem + ': ' + symbols[symelem]
-                li.innerText = stock
-            }
+            sym.append(list(symbols))
             div.append(headsym, sym)
         }
         var btn = document.createElement('button')
         btn.classList.add('ms-2', 'btn', 'btn-primary')
-        btn.id = elem
+        btn.id = 'btn' + elem
         btn.textContent = 'Fetch'
         btn.setAttribute('data-test', 'btn' + elem)
         if (elem != 'transcript') {
             var input = document.createElement('input')
-            input.id = 'query' + elem
+            input.id = 'input' + elem
             input.classList.add('mt-3')
             input.required = true
             input.setAttribute('data-test', 'input' + elem)
-            if (location.host.split(':')[0] == 'localhost') input.value = 'msft'
+            if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
             div.append(input, btn)
         } else div.append(btn)
 
@@ -63,45 +55,37 @@ async function rapid(type, input = '') {
             method: 'post',
             body: JSON.stringify({ type: type, input: input })
         })).json()
-        if (type == 'joke') res = res.result
+
+        if (type == 'btnjoke') {
+            res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
+            document.getElementById('resjoke').append(table(res, 'joke'))
+        }
         else {
             res = res["Monthly Time Series"]
             var lastkey = Object.keys(res)[0]
             res = res[lastkey]['1. open']
             document.getElementById('resstock').innerText = res.split('.')[0]
-            return
         }
-        var ul = document.createElement('ul')
-        for (var elem of res) {
-            var li = document.createElement('li')
-            var aref = document.createElement('a')
-            aref.href = elem.url
-            aref.textContent = elem.value
-            li.append(aref)
-            ul.append(li)
-        }
-        var resjoke = document.getElementById('resjoke')
-        resjoke.append(ul)
+
     } catch (err) { console.log(err) }
 }
 
-var fetchjoke = document.getElementById('joke')
-// fetchjoke.focus()
-fetchjoke.addEventListener('click', async (event) => {
+var btnjoke = document.getElementById('btnjoke')
+btnjoke.focus()
+btnjoke.addEventListener('click', async (event) => {
     resjoke.innerText = ''
-    rapid(event.target.id, document.getElementById('queryjoke').value)
+    rapid(event.target.id, document.getElementById('inputjoke').value)
 })
 
-var fetchstock = document.getElementById('stock')
-// fetchstock.focus()
-fetchstock.addEventListener('click', async (event) => {
+var btnstock = document.getElementById('btnstock')
+// btnstock.focus()
+btnstock.addEventListener('click', async (event) => {
     resstock.innerText = ''
-    rapid(event.target.id, document.getElementById('querystock').value)
+    rapid(event.target.id, document.getElementById('inputstock').value)
 })
 
-var fetchtrans = document.getElementById('transcript')
-fetchtrans.focus()
-fetchtrans.addEventListener('click', async (event) => {
+var btntrans = document.getElementById('btntranscript')
+btntrans.addEventListener('click', async (event) => {
     var res = await (await fetch('/.netlify/functions/as2')).json()
 
     document.getElementById('restranscript').innerText = 'Api result: ' + res

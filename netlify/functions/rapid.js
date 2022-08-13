@@ -1,21 +1,18 @@
 
 import dotenv from "dotenv";
-import { Handler } from "@netlify/functions";
+import fetch from 'node-fetch';
 
 dotenv.config()
 
-//@ts-ignore
-export const handler: Handler = async (event, context) => {
-    //@ts-ignore
-    var eventbody = (event.body == '{}') ? { type: 'joke', input: 'abc' } : JSON.parse(event.body)
-
+export const handler = async (event, context) => {
+    var eventbody = (event.body == '{}') ? { type: 'btnjoke', input: 'abc' } : JSON.parse(event.body)
+    // console.log(eventbody)
     var url
-    if (eventbody.type == 'joke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search?query=' + eventbody.input
+    if (eventbody.type == 'btnjoke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search?query=' + eventbody.input
     else url = 'https://alpha-vantage.p.rapidapi.com/query?function=TIME_SERIES_MONTHLy&symbol=' + eventbody.input + '&datatype=json&output_size=compact'
 
     try {
         var res = await (await fetch(url, {
-            //@ts-ignore
             headers:
             {
                 'x-rapidapi-key': process.env.rapidapi,

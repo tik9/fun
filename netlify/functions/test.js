@@ -1,5 +1,4 @@
 
-import { Handler } from "@netlify/functions"
 import dotenv from "dotenv";
 
 dotenv.config()
@@ -9,12 +8,10 @@ url = 'https://country-flags.p.rapidapi.com/svg/ad'
 url = 'https://google-translate1.p.rapidapi.com/language/translate/v2/languages'
 url = 'https://numbersapi.p.rapidapi.com/3/math?fragment=true&json=true'
 
-//@ts-ignore
-export var handler: Handler = async (event, context) => {
+export var handler = async (event, context) => {
 
     try {
         var res = await (await fetch(url, {
-            //@ts-ignore
             headers:
             {
                 'x-rapidapi-key': process.env.rapidapi,
