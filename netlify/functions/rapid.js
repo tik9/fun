@@ -6,11 +6,10 @@ dotenv.config()
 
 export const handler = async (event, context) => {
     var eventbody = (event.body == '{}') ? { type: 'btnjoke', input: 'abc' } : JSON.parse(event.body)
-    // console.log(eventbody)
     var url
     if (eventbody.type == 'btnjoke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search?query=' + eventbody.input
     else url = 'https://alpha-vantage.p.rapidapi.com/query?function=TIME_SERIES_MONTHLy&symbol=' + eventbody.input + '&datatype=json&output_size=compact'
-
+    
     try {
         var res = await (await fetch(url, {
             headers:
@@ -19,7 +18,8 @@ export const handler = async (event, context) => {
                 'x-rapidapi-host': url.split('//')[1]
             }
         })).json()
-
+        console.log(res.result[0])
+        
         return {
             statusCode: 200,
             body: JSON.stringify(res)

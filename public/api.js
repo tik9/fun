@@ -2,7 +2,6 @@
 // console.log(location.host.split(':')[0])
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon', googl: 'google', msft: 'microsoft' }
 
-
 function creategui() {
     i = 1
     for (var elem in headers) {
@@ -55,7 +54,7 @@ async function rapid(type, input = '') {
             method: 'post',
             body: JSON.stringify({ type: type, input: input })
         })).json()
-
+        console.log(res.result)
         if (type == 'btnjoke') {
             res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
             document.getElementById('resjoke').append(table(res, 'joke'))

@@ -1,16 +1,14 @@
 {
+  "type": "module",
   "dependencies": {
     "cypress": "^10.4.0",
     "dotenv": "^16.0.1",
+    "netlify-cli": "^10.17.4",
     "node-fetch": "^3.2.10"
   },
   "name": "netlify",
-  "description": "Learn how to use serverless functions in less than 30 minutes!",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "serverless functions",
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tik9/netlify.git"
