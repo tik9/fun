@@ -4,12 +4,20 @@ var tiko = "Tiko's"
 
 var dateformat = /^\d{4}-\d{2}-\d{2}/
 
-var headers = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd', nextexample: 'nextexample ..' }
+var headers = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd' }
 
 var bottomnav = document.getElementById('bottomnav')
 var topnav = document.getElementById('topnav')
-
+topnav.id = 'topnav'
+topnav.classList.add('fixed-top', 'bg-dark')
 document.title += tiko;
+
+var res, respage
+async function getjson(sub = 'pages') {
+    if (!res) res = await (await fetch('/filejs/all')).json()
+    for (var json of res) { if (typeof json[sub] != 'undefined') return json[sub] }
+}
+
 
 function locale_date(date = '') {
     var today = new Date()
@@ -44,13 +52,22 @@ function ghli(elem) {
     return elemjs
 }
 var ghUlLinks = document.createElement('ul')
+ghUlLinks.style.marginBottom = '70px'
 
 function git_code() {
     var ghDivLink = document.getElementById("git_code");
-    ghDivLink.classList.add('mt-4', 'mb-5')
+    ghDivLink.classList.add('mt-5', 'mb-5')
     ghDivLink.append(ghUlLinks);
 }
-git_code()
+var fun_arr = [git_code, navbottom]
+if (location.pathname == '/' || location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == 'index.html') {
+    fun_arr.forEach(elem => { elem() })
+    navtop()
+    navtoparef()
+}
+else if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == 'contact.html') fun_arr.forEach(elem => { elem() })
+
+// console.log(1, location.pathname)
 
 var gih = 'https://github.com'
 var ghMe = gih + '/tik9/netlify'
@@ -114,32 +131,28 @@ function navbottom() {
         bottomnav.append(aref)
     }
 }
-navbottom()
 
 function navtop() {
-    topnav.id = 'topnav'
-    topnav.classList.add('fixed-top', 'bg-dark')
     var aref = document.createElement("a");
     aref.classList.add('nav', 'active')
     aref.href = '#container';
     aref.textContent = 'Index'
     topnav.append(aref)
 }
-navtop()
+
+function navhelp(elem) {
+    var aref = document.createElement('a')
+    aref.textContent = elem
+    aref.href = '#' + elem
+    aref.classList.add('nav')
+    topnav.append(aref)
+}
 
 function navtoparef() {
-
-
-    var i = 1
     for (var elem in headers) {
-        var aref = document.createElement('a')
-        aref.textContent = '' + i + '. ' + elem
-        aref.href = '#example' + i
-        aref.classList.add('nav')
-        i++
-        topnav.append(aref)
+        navhelp(elem)
     }
-
+    // cloud: 'Info on my accounts'
+    navhelp('cloud')
     container.prepend(topnav)
 }
-if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != 'contact.html') navtoparef()

@@ -1,5 +1,4 @@
 
-// console.log(location.host.split(':')[0])
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon', googl: 'google', msft: 'microsoft' }
 
 function creategui() {
@@ -8,7 +7,7 @@ function creategui() {
         var apis = document.getElementById('apis')
         var div = document.createElement('div')
         div.classList.add('mt-5')
-        div.id = 'example' + i
+        div.id = elem
         apis.append(div)
         var h5 = document.createElement('h5')
         h5.innerText = i + '. ' + headers[elem]

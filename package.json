@@ -4,11 +4,11 @@
     "cypress": "^10.4.0",
     "dotenv": "^16.0.1",
     "netlify-cli": "^10.17.4",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "run-func": "^3.0.0"
   },
   "name": "netlify",
   "description": "serverless functions",
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tik9/netlify.git"
