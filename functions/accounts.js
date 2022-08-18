@@ -31,10 +31,12 @@ export async function handler(event, context) {
                 resprop = (new Date(resprop * 1000)).toISOString().substring(0, 10)
             obj2[prop] = resprop
         }
+        var { hostname } = new URL(val.url);
+        obj2.url = hostname
         obj1[key] = obj2
         obj.push(obj1)
     }
-    file.writeJs('./json/account.json', obj)
+    file.writeJs('./json/accounts.json', obj)
 
     return {
         statusCode: 200, body: JSON.stringify(obj)

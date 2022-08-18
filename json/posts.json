@@ -1,0 +1,118 @@
+[
+  [
+    {
+      "date": "2022-08-18",
+      "text": "If you need the hostname with https:&#47;&#47;, you do const { hostname,protocol } = new URL(url);",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-18",
+      "text": "The curly braces are needed because an object is returned and hostname is one property of it. It is..",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-18",
+      "text": "I got the error Error: functions directory is undefined, did you forget to set it in netlify.toml?..",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-18",
+      "text": "with the newer esm it is import path from &#39;path&#39; and then path.resolve().",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-17",
+      "text": "I got this error when calling an endpoint of the heroku Api. I solved it by setting the correct..",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-16",
+      "text": "Is ist still patch or is it now in v3 post as request?",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-14",
+      "text": "esnext is a false friend!",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-11",
+      "text": "so you first define a css var and then change the var in js?",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    }
+  ],
+  [
+    {
+      "date": "2022-07-08",
+      "text": "An updated example with async/await related to this answer:\nasync function index() {\n  var res2 =..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/72909206"
+    },
+    {
+      "date": "2022-06-06",
+      "text": "An example with for .. of, close to the example further up which checks for the abort..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/72521388"
+    },
+    {
+      "date": "2022-05-28",
+      "text": "My approach to the Pons Api on the server\nconst utils =..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/72413869"
+    },
+    {
+      "date": "2022-05-16",
+      "text": "Working Example in Nodejs with indexes()\na) Definition\nexport function getIndexes(coll, callback:..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/72259553"
+    },
+    {
+      "date": "2022-05-02",
+      "text": "People coming from google and using the built-in-php-server: put on the first line in your..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/72088372"
+    },
+    {
+      "date": "2022-04-19",
+      "text": "It works with JS and Node\nPreconditions:\n\nNode\nMongo - either local installed or via..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/71930422"
+    },
+    {
+      "date": "2022-04-12",
+      "text": "Late to the better-sqlite3 party:\nconst del = db.prepare('DELETE FROM logging WHERE guildid =..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/71844464"
+    },
+    {
+      "date": "2022-03-30",
+      "text": "Two steps for the venv python debug\n\nin the project local..",
+      "score": 0,
+      "cat": "posts",
+      "url": "https://stackoverflow.com/a/71680526"
+    }
+  ]
+]
