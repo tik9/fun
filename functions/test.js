@@ -1,30 +1,23 @@
 
-import dotenv from "dotenv";
-import fetch from 'node-fetch'
+import { MongoClient } from 'mongodb'
 
-dotenv.config()
+const mongoClient = new MongoClient(process.env.mongo);
 
-var url = 'https://alpha-vantage.p.rapidapi.com/query?function=TIME_SERIES_mONTHLy&symbol=ibm&datatype=json&output_size=compact'
-url = 'https://country-flags.p.rapidapi.com/svg/ad'
-url = 'https://google-translate1.p.rapidapi.com/language/translate/v2/languages'
-url = 'https://numbersapi.p.rapidapi.com/3/math?fragment=true&json=true'
+const clientPromise = mongoClient.connect();
 
-export async function handler(event, context) {
-
+export async function handler(event) {
     try {
-        var res = (new Date().toISOString()).substring(0, 10)
-        // var res = await (await fetch(url, {
-        //     headers:
-        //     {
-        //         'x-rapidapi-key': process.env.rapidapi,
-        //         'x-rapidapi-host': url.split('//')[1]
-        //     }
-        // })).json()
-        return { statusCode: 200, body: JSON.stringify(res) }
-    } catch (err) {
+        const database = (await clientPromise).db('website');
+        const res = await database.collection('sys').find({}).limit(3).toArray();
         return {
-            statusCode: 404,
-            body: console.log('err here', err),
-        };
+            statusCode: 200,
+            body: JSON.stringify(res),
+            // // more keys you can return:
+            // headers: { "headerName": "headerValue", ... },
+            // isBase64Encoded: true,
+        }
+
+    } catch (error) {
+        return { statusCode: 500, body: error.toString() }
     }
 }

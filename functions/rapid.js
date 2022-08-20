@@ -1,10 +1,7 @@
 
-import dotenv from "dotenv";
 import fetch from 'node-fetch';
 
-dotenv.config()
-
-export const handler = async (event, context) => {
+export const handler = async (event) => {
     var eventbody = (event.body == '{}') ? { type: 'btnjoke', input: 'abc' } : JSON.parse(event.body)
     var url
     if (eventbody.type == 'btnjoke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search?query=' + eventbody.input
@@ -14,7 +11,7 @@ export const handler = async (event, context) => {
         var res = await (await fetch(url, {
             headers:
             {
-                'x-rapidapi-key': process.env.rapidapi,
+                'x-rapidapi-key': process.env.rapid,
                 'x-rapidapi-host': url.split('//')[1]
             }
         })).json()

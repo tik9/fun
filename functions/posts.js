@@ -1,13 +1,9 @@
 
+import fetch from 'node-fetch';
 import * as file from './file'
 import * as utils from './utils'
 
 export async function handler(event, context) {
-    // var content = JSON.parse((await fs.readFile(path.resolve('json', 'posts_in.json'))).toString())
-    // console.log(content)
-    // fs.writeFile(path.resolve('json', 'posts.json'), JSON.stringify(content))
-    // return
-
     try {
         for (var elem of ["comments", "posts"]) {
             var res = await fetch(`https://api.stackexchange.com/2.2/users/1705829/${elem}?site=stackoverflow&filter=withbody`);
