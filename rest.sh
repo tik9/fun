@@ -1,6 +1,9 @@
 
-server=http://localhost:8888
-server_n=http://tik2.netlify.app
+serv=http://localhost:8888
+servn=http://tik2.netlify.app
+servn_te=http://tik2.netlify.app/test.html
+servn_sys=http://tik2.netlify.app/sys.html
+test=12
 
 function cloud {
 
@@ -15,8 +18,11 @@ function cloud {
 
 function file { ntl functions:invoke ${FUNCNAME[0]} --querystring 'dir=js' ;}
 
-function serv { curl -s $server/ | jq ;}
+function mongo { ntl functions:invoke ${FUNCNAME[0]} | jq ;}
+function serv { curl -s ${FUNCNAME[0]} | jq ;}
 
-function servn { curl -s $server_n/sys | jq ;}
+function servn { curl -sL $servn | jq ;}
+function servn_te { curl $servn_te | jq ;}
+function servn_sys { curl -v $servn_sys | jq ;}
 
 $@

@@ -1,17 +1,15 @@
 
-import { promises as fs } from "fs"
+import { exec } from 'node:child_process'
 import { join, resolve } from 'path'
+import { promises as fs } from "fs"
 import { readdirSync, statSync } from 'fs'
 
 export async function handler(event, context) {
     try {
         var dir = event.queryStringParameters.dir
         var res
-        if (dir) {
-            res = await listDir('public/' + dir)
-            // console.log(2, res)
-        } else
-            res = JSON.parse(await fs.readFile(resolve('json', (event.queryStringParameters.json || 'all') + '.json')))
+        if (dir) res = await listDir(join('public', dir))
+        else res = JSON.parse(await fs.readFile(join('public', 'json', event.queryStringParameters.json + '.json')))
         return {
             statusCode: 200,
             body: JSON.stringify(res)
@@ -20,25 +18,42 @@ export async function handler(event, context) {
     } catch (error) { console.log(error) }
 }
 
+export async function create() {
+    var arr = []
+    var all = 'all.json'
+    var filepath = resolve('public', 'json')
+    console.log(1, filepath)
+    for (var json of await fs.readdir(filepath)) {
+        if (json != 'posts.json' && json != all) {
+            var obj = {}
+            obj[json.split('.')[0]] = JSON.parse((await fs.readFile(resolve(filepath, json))).toString())
+            arr.push(obj)
+        }
+    }
+    writeJs(resolve(filepath, all), arr)
+}
+
 export async function add_removeJs(file, data) {
     try {
-        var json = JSON.parse((await fs.readFile(resolve('json', file + '.json'))).toString());
+        var filepath = resolve('public', 'json', file + '.json')
+        console.log(1, filepath)
+        var json = JSON.parse((await fs.readFile(filepath)).toString());
         json.push(data);
         // json.pop()
-        await fs.writeFile(resolve('json', file + '.json'), JSON.stringify(json, null, 2));
+        await fs.writeFile(resolve(filepath), JSON.stringify(json, null, 2));
     } catch (error) { console.log(1, error, file, data) }
 };
 
-export async function listDir(dir, subdir = '') {
-    var dir_ = resolve(subdir, dir)
-    var files = await fs.readdir(dir_);
+export async function listDir(dir, subdir = '') { return await fs.readdir(dir); }
+
+export async function listTest() {
+    var files = await fs.readdir(resolve('tests'));
     // console.log(1, files)
-    if (dir != 'test') return files
 
     var res = []
     for (var file of files) {
         var wc = ('wc -l < ' + join(dir, file)).toString().trim()
-        var lines = parseInt(require('child_process').execSync(wc));
+        var lines = parseInt(exec(wc));
         var extension = file.replace(/.*\./, '')
         if (!['ts', 'sh'].includes(extension)) continue
 
@@ -46,6 +61,7 @@ export async function listDir(dir, subdir = '') {
     };
     writeJs('./json/tests.json', res)
 }
+
 
 function listDir_path(dir_) {
     var unfold = (f, initState) =>
@@ -74,4 +90,4 @@ function listDir_path(dir_) {
     return traverseDir(dir_)
 }
 
-export function writeJs(file, json) { try { fs.writeFile(resolve('json', file + '.json'), JSON.stringify(json, null, 2)); } catch (error) { console.log(error) } }
+export function writeJs(file, json) { try { fs.writeFile(resolve('public', 'json', file), JSON.stringify(json, null, 2)); } catch (error) { console.log(error) } }

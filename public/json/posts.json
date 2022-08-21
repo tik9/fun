@@ -1,6 +1,13 @@
 [
   [
     {
+      "date": "2022-08-21",
+      "text": "To make the example complete, put it in src&#47;App.js and add two imports import React from..",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
       "date": "2022-08-20",
       "text": "When passing args to launch.json, the args are added to the call: node .&#47;test&#47;test.js..",
       "score": 0,
@@ -45,13 +52,6 @@
     {
       "date": "2022-08-18",
       "text": "I got the error Error: functions directory is undefined, did you forget to set it in netlify.toml?..",
-      "score": 0,
-      "cat": "comments",
-      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
-    },
-    {
-      "date": "2022-08-18",
-      "text": "with the newer esm it is import path from &#39;path&#39; and then path.resolve().",
       "score": 0,
       "cat": "comments",
       "url": "https://stackexchange.com/users/1886776/timo?tab=activity"

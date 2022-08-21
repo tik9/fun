@@ -1,8 +1,9 @@
 
 // import dotenv from 'dotenv'
 // dotenv.config()
-
+import * as file from './file'
 import { MongoClient } from 'mongodb'
+import { join } from 'path'
 
 var dbWeb = "website"
 
@@ -10,21 +11,20 @@ export function main() { return new MongoClient(process.env.mongo).connect() }
 
 
 export async function handler(event, context) {
-    var coll = 'sys'
-
-    var old = 'name'
     var searchkey = 'tool'
     var searchval = 'api'
 
+    var coll = 'sys'
     var key = 'host'
 
-    var val = '984c596b-9f85-..'
+    var val = 'tis-Mac-mini.f..'
     // var cat = 'cloud'
     // var cat = 'further'
 
     // var values = [{ [key]: val, name: 'heroaccount', title: 'heroku account', cat: 'cloud' }]
+    // exportjs()
     res = {}
-    // var res = await find('sys')
+    // var res = JSON.stringify(await find('sys'), null, 2)
     var res = await count('sys')
     // var res = await find_one('sys', 'node version')
     // console.log(res)
@@ -40,16 +40,14 @@ export async function handler(event, context) {
     }
 }
 
-async function exportjs() {
+export async function exportjs() {
     var obj = ['host', 'category', 'info', 'value']
 
-    for (var elem of obj) {
-        var res = find('sys')
-        console.log(res)
-        // res = JSON.parse(JSON.stringify(res, obj, 4));
+    var res = await find('sys')
+    console.log(res)
+    res = JSON.parse(JSON.stringify(res, obj, 4));
 
-        // file.writeJs(path.join('json', 'sys.json'), res)
-    }
+    file.writeJs(join('sys'), res)
 }
 
 export async function count(coll) { return (await main()).db(dbWeb).collection(coll).countDocuments() }

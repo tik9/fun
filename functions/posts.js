@@ -23,7 +23,7 @@ export async function handler(event, context) {
             file.add_removeJs('posts', res)
         }
         return {
-            body: JSON.stringify(res),
+            body: JSON.stringify(1),
             statusCode: 200
         }
     } catch (error) { console.log(2, error) }

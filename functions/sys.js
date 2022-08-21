@@ -1,6 +1,8 @@
 
+import { exec } from 'node:child_process'
+
 import os from "os"
-import * as utils from './utils.js'
+import * as utils from './utils'
 import * as mongo from './mongo'
 
 
@@ -81,7 +83,7 @@ export async function handler(event, context) {
     mongo.insert_val('sys', sys)
 
     // file.writeJs('sys', sys)
-
+    // for (var elem of sys) console.log(elem.info, elem.value)
     return {
         statusCode: 200,
         body: JSON.stringify(sys)
