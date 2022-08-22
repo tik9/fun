@@ -1,22 +1,34 @@
 
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 export const handler = async (event) => {
-    var eventbody = (event.body == '{}') ? { type: 'btnjoke', input: 'abc' } : JSON.parse(event.body)
+    var params = event.queryStringParameters
+    params = (Object.keys(params).length !== 0) ? params : { type: 'joke', input: 'abc' }
+
     var url
-    if (eventbody.type == 'btnjoke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search?query=' + eventbody.input
-    else url = 'https://alpha-vantage.p.rapidapi.com/query?function=TIME_SERIES_MONTHLy&symbol=' + eventbody.input + '&datatype=json&output_size=compact'
+    if (params.type == 'joke') {
+        url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search'
+        params = { query: params.input }
+    }
+    else {
+        url = 'https://alpha-vantage.p.rapidapi.com/query'
+        params = { symbol: params.input, interval: '5min', function: 'time_series_monthly' }
+    }
+    // console.log(params)
 
     try {
-        var res = await (await fetch(url, {
+        var options = {
+            method: 'get',
+            url: url,
+            params: params,
             headers:
             {
                 'x-rapidapi-key': process.env.rapid,
                 'x-rapidapi-host': url.split('//')[1]
             }
-        })).json()
-        // console.log(1, res.result[0])
-
+        }
+        var res = (await axios.request(options)).data
+        // console.log(2, res)
         return {
             statusCode: 200,
             body: JSON.stringify(res)
@@ -27,4 +39,4 @@ export const handler = async (event) => {
             body: console.log('error here', err)
         };
     }
-};
+}

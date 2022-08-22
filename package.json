@@ -1,8 +1,10 @@
 {
   "type": "module",
   "dependencies": {
+    "axios": "^0.27.2",
     "cypress": "^10.4.0",
     "dotenv": "^16.0.1",
+    "mailgun-js": "^0.22.0",
     "mongodb": "^4.8.1",
     "netlify-cli": "^10.17.4",
     "node-fetch": "^3.2.10",

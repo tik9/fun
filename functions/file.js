@@ -4,12 +4,16 @@ import { join, resolve } from 'path'
 import { promises as fs } from "fs"
 import { readdirSync, statSync } from 'fs'
 
-export async function handler(event, context) {
+var asset_dir = './public/'
+export async function handler(event) {
+    var params = event.queryStringParameters
+    var res
     try {
-        var dir = event.queryStringParameters.dir
-        var res
-        if (dir) res = await listDir(join('public', dir))
-        else res = JSON.parse(await fs.readFile(join('public', 'json', event.queryStringParameters.json + '.json')))
+        if (params.dir) res = await listDir(asset_dir + params.dir)
+        else if (params.json) res = JSON.parse(await fs.readFile(join(asset_dir, 'json', params.json + '.json')))
+        else res = 'dir is missing'
+        // res = await listDir('./assets/js')
+        // console.log(1, res)
         return {
             statusCode: 200,
             body: JSON.stringify(res)
@@ -21,33 +25,36 @@ export async function handler(event, context) {
 export async function create() {
     var arr = []
     var all = 'all.json'
-    var filepath = resolve('public', 'json')
-    console.log(1, filepath)
+    var filepath = join(asset_dir, 'json')
     for (var json of await fs.readdir(filepath)) {
         if (json != 'posts.json' && json != all) {
             var obj = {}
-            obj[json.split('.')[0]] = JSON.parse((await fs.readFile(resolve(filepath, json))).toString())
+            obj[json.split('.')[0]] = JSON.parse((await fs.readFile(join(filepath, json))).toString())
             arr.push(obj)
         }
     }
-    writeJs(resolve(filepath, all), arr)
+    writeJs(join(filepath, all), arr)
 }
 
 export async function add_removeJs(file, data) {
+    var filepath = join(asset_dir, 'json', file + '.json')
     try {
-        var filepath = resolve('public', 'json', file + '.json')
-        console.log(1, filepath)
         var json = JSON.parse((await fs.readFile(filepath)).toString());
         json.push(data);
         // json.pop()
-        await fs.writeFile(resolve(filepath), JSON.stringify(json, null, 2));
+        await fs.writeFile(join(filepath), JSON.stringify(json, null, 2));
     } catch (error) { console.log(1, error, file, data) }
 };
 
 export async function listDir(dir, subdir = '') { return await fs.readdir(dir); }
 
+
+export function writeJs(file, json) { try { fs.writeFile(join(asset_dir, 'json', file), JSON.stringify(json, null, 2)); } catch (error) { console.log(error) } }
+
+
+
 export async function listTest() {
-    var files = await fs.readdir(resolve('tests'));
+    var files = await fs.readdir(join('tests'));
     // console.log(1, files)
 
     var res = []
@@ -89,5 +96,3 @@ function listDir_path(dir_) {
 
     return traverseDir(dir_)
 }
-
-export function writeJs(file, json) { try { fs.writeFile(resolve('public', 'json', file), JSON.stringify(json, null, 2)); } catch (error) { console.log(error) } }

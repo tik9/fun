@@ -10,44 +10,34 @@ var dbWeb = "website"
 export function main() { return new MongoClient(process.env.mongo).connect() }
 
 
-export async function handler(event, context) {
+export async function handler(event) {
     var searchkey = 'tool'
     var searchval = 'api'
-
+    var key = 'name'
+    var val = ''
     var coll = 'sys'
-    var key = 'host'
+    var coll = 'mails'
+    var params = event.queryStringParameters
+    // console.log(1, Object.keys(params).length)
+    if (Object.keys(params).length != 0) { return { statusCode: 200, body: JSON.stringify(await find(coll)) } }
 
-    var val = 'tis-Mac-mini.f..'
-    // var cat = 'cloud'
-    // var cat = 'further'
-
-    // var values = [{ [key]: val, name: 'heroaccount', title: 'heroku account', cat: 'cloud' }]
-    // exportjs()
-    res = {}
-    // var res = JSON.stringify(await find('sys'), null, 2)
-    var res = await count('sys')
-    // var res = await find_one('sys', 'node version')
-    // console.log(res)
-    // insert_val(coll, values)
-    // update_one(coll, searchkey, searchval, key, val)
+    var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]
+    values = [JSON.parse(event.body)]
+    var res = {}
+    // res = await count(coll)
+    // create_coll(coll)
+    // res = await find(coll)
+    // res = await find_one('sys', 'node version')
+    // if (Object.keys(values).length != 0) insert_val(coll, values)
+    // res = await list_coll()
+    // remove_coll(coll)
     // remove_field(coll, searchkey, searchval, 'del')
     // rename_field(coll, old, newf)
     // remove_many(coll, key, val)
+    // truncate_coll(coll)
+    // update_one(coll, searchkey, searchval, key, val)
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(res)
-    }
-}
-
-export async function exportjs() {
-    var obj = ['host', 'category', 'info', 'value']
-
-    var res = await find('sys')
-    console.log(res)
-    res = JSON.parse(JSON.stringify(res, obj, 4));
-
-    file.writeJs(join('sys'), res)
+    return { statusCode: 200, body: JSON.stringify(res) }
 }
 
 export async function count(coll) { return (await main()).db(dbWeb).collection(coll).countDocuments() }
@@ -79,3 +69,14 @@ async function truncate_coll(coll) { (await main()).db(dbWeb).collection(coll).d
 async function update_one(coll, searchkey, searchval, key, val) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }) }
 
 async function update_many(coll, field, val) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $set: { [field]: val } }); }
+
+
+export async function exportjs() {
+    var obj = ['host', 'category', 'info', 'value']
+
+    var res = await find('sys')
+    console.log(res)
+    res = JSON.parse(JSON.stringify(res, obj, 4));
+
+    file.writeJs(join('sys'), res)
+}
