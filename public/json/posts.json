@@ -1,6 +1,27 @@
 [
   [
     {
+      "date": "2022-08-23",
+      "text": "the code does not work for me:..",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-22",
+      "text": "@RandalSchwartz your comment regarding whitespaces before @ is already written by mohit I think.",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
+      "date": "2022-08-21",
+      "text": "The final links do not work anymore: populated for exports, require, module, __filename and..",
+      "score": 0,
+      "cat": "comments",
+      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
+    },
+    {
       "date": "2022-08-21",
       "text": "To make the example complete, put it in src&#47;App.js and add two imports import React from..",
       "score": 0,
@@ -31,27 +52,6 @@
     {
       "date": "2022-08-18",
       "text": "So you recommend to not use global variables together with async&#47;await? I have two async..",
-      "score": 0,
-      "cat": "comments",
-      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
-    },
-    {
-      "date": "2022-08-18",
-      "text": "If you need the hostname with https:&#47;&#47;, you do const { hostname,protocol } = new URL(url);",
-      "score": 0,
-      "cat": "comments",
-      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
-    },
-    {
-      "date": "2022-08-18",
-      "text": "The curly braces are needed because an object is returned and hostname is one property of it. It is..",
-      "score": 0,
-      "cat": "comments",
-      "url": "https://stackexchange.com/users/1886776/timo?tab=activity"
-    },
-    {
-      "date": "2022-08-18",
-      "text": "I got the error Error: functions directory is undefined, did you forget to set it in netlify.toml?..",
       "score": 0,
       "cat": "comments",
       "url": "https://stackexchange.com/users/1886776/timo?tab=activity"

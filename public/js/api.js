@@ -1,22 +1,32 @@
 
-var apiheaders = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd', worldclock: 'Get current UTC Time' }
+var apiheaders = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd', clock: 'Get current UTC Time' }
 
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
+var api_div = document.getElementById('apis')
+api_div.scrollIntoView()
 
+api()
+creategui()
 
 async function api() {
-    document.getElementById('apis').append(table(await getjson('apis'), 'apis'))
+    var res = await getjson('apis')
+    api_div.append(table(res, 'apis'))
 }
-// api()
 
-function creategui() {
+
+async function api_helper(name, url = '/.netlify/functions/') {
+    var res = await (await fetch(url + name)).json()
+    document.getElementById('res' + name).innerText = 'Result: ' + res
+}
+
+async function creategui() {
+    await sleep(100)
     i = 1
     for (var elem in apiheaders) {
-        var apis = document.getElementById('apis')
         var div = document.createElement('div')
         div.classList.add('mt-5')
         div.id = elem
-        apis.append(div)
+        api_div.append(div)
         var head = document.createElement('h5')
         head.innerText = i + '. ' + apiheaders[elem]
         div.append(head)
@@ -36,13 +46,14 @@ function creategui() {
         btn.id = 'btn' + elem
         btn.textContent = 'Fetch'
         btn.setAttribute('data-test', 'btn' + elem)
-        if (elem != 'transcript') {
+        if (!['transcript', 'clock'].includes(elem)) {
             var input = document.createElement('input')
+            btn.addEventListener('click', async (event) => { rapid(event.target.id.slice(3), input) })
             input.id = 'input' + elem
             input.classList.add('mt-3')
             input.required = true
             input.setAttribute('data-test', 'input' + elem)
-            // if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
+            if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
             div.append(input, btn)
         } else div.append(btn)
 
@@ -53,52 +64,32 @@ function creategui() {
         div.append(res)
         i++
     }
+
+    document.getElementById('btntranscript').addEventListener('click', async (event) => { api_helper(event.target.id.slice(3)) })
+
+    document.getElementById('btnclock').addEventListener('click', async (event) => {
+        var res = await (await fetch('http://worldclockapi.com/api/json/utc/now')).json()
+        res = res.currentDateTime.split('T')[1].slice(0, 5) + ' hours'
+        document.getElementById('resclock').innerText = 'Result: ' + res
+    })
 }
-creategui()
 
 async function rapid(type, input) {
+    input.innerText = ''
+    var resdiv = document.getElementById('res' + type)
     try {
-        var res = await (await fetch('/.netlify/functions/rapid?type=' + type + '&input=' + input)).json()
+        var res = await (await fetch('/.netlify/functions/rapid?type=' + type + '&input=' + input.value)).json()
         if (type == 'joke') {
             res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
-            document.getElementById('resjoke').append(table(res, 'joke'))
+            resdiv.append(table(res, 'joke'))
         }
         else {
             res = res["Monthly Time Series"]
             // var lastkey = Object.keys(res)[0]
             res = res[Object.keys(res)[0]]['1. open']
-            document.getElementById('resstock').innerText = res.split('.')[0]
+            resdiv.innerText = res.split('.')[0]
         }
-
     } catch (err) { console.log(err) }
 }
 
-var btnjoke = document.getElementById('btnjoke')
-btnjoke.focus()
-function rapid_helper(name) {
-    document.getElementById('res' + name).innerText = ''
-    rapid(name, document.getElementById('input' + name).value)
-}
-
-btnjoke.addEventListener('click', async (event) => {
-    rapid_helper(event.target.id.slice(3))
-})
-
-var btnstock = document.getElementById('btnstock')
-// btnstock.focus()
-btnstock.addEventListener('click', async (event) => {
-    resstock.innerText = ''
-    rapid('stock', document.getElementById('inputstock').value)
-})
-
-async function api_helper(name) {
-    var res = await (await fetch('/.netlify/functions/' + name)).json()
-    document.getElementById('res' + name).innerText = 'Api result: ' + res
-}
-
-document.getElementById('btntranscript').addEventListener('click', async (event) => {
-    // console.log(event.target.id.slice(3))
-    api_helper(event.target.id.slice(3))
-}
-)
-// http://worldclockapi.com/api/json/utc/now
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }

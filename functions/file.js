@@ -12,8 +12,6 @@ export async function handler(event) {
         if (params.dir) res = await listDir(asset_dir + params.dir)
         else if (params.json) res = JSON.parse(await fs.readFile(join(asset_dir, 'json', params.json + '.json')))
         else res = 'dir is missing'
-        // res = await listDir('./assets/js')
-        // console.log(1, res)
         return {
             statusCode: 200,
             body: JSON.stringify(res)
@@ -22,27 +20,29 @@ export async function handler(event) {
     } catch (error) { console.log(error) }
 }
 
+
 export async function create() {
     var arr = []
     var all = 'all.json'
-    var filepath = join(asset_dir, 'json')
+    var filepath = resolve(asset_dir, 'json')
     for (var json of await fs.readdir(filepath)) {
         if (json != 'posts.json' && json != all) {
             var obj = {}
-            obj[json.split('.')[0]] = JSON.parse((await fs.readFile(join(filepath, json))).toString())
+            var cont = JSON.parse(await fs.readFile(join(filepath, json)))
+            obj[json.split('.')[0]] = cont
             arr.push(obj)
         }
     }
-    writeJs(join(filepath, all), arr)
+    writeJs(all, arr)
 }
 
 export async function add_removeJs(file, data) {
-    var filepath = join(asset_dir, 'json', file + '.json')
+    var filepath = join(asset_dir, 'json', file)
     try {
         var json = JSON.parse((await fs.readFile(filepath)).toString());
         json.push(data);
         // json.pop()
-        await fs.writeFile(join(filepath), JSON.stringify(json, null, 2));
+        await fs.writeFile(filepath, JSON.stringify(json, null, 2));
     } catch (error) { console.log(1, error, file, data) }
 };
 

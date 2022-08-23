@@ -1,14 +1,17 @@
 
+git_code(['js/contact.min.js'])
+
 var modalContent = document.getElementById('modal-content')
 var modalTitle = document.getElementById('modal-title')
+var reg_mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 var arr = ['name', 'email', 'message']
 
-var input_address_nl = document.getElementById('nl-input')
+var input_nl = document.getElementById('nl-input')
 
 async function mail(type = 'mail') {
     var obj = getObj()
-    if (type == 'news') obj = { name: 'news', email: input_address_nl.value, message: 'Newsletter abo' }
+    if (type == 'news') obj = { name: 'news', email: input_nl.value, message: 'Newsletter abo' }
     // console.log(2, type)
 
     try {
@@ -23,13 +26,12 @@ function getObj() {
     for (var elem of arr) {
         var val = document.getElementById(elem).value
         if (val == '') missing.push(elem)
-
         obj[elem] = val
     }
-
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value) == false && missing.length == 0) missing.push('email')
+    if (reg_mail.test(document.getElementById('email').value) == false && missing.length == 0) missing.push('email')
     return missing.length != 0 ? missing : obj
 }
+
 
 var reset = document.getElementById('reset')
 var send1 = document.getElementById('send1')
@@ -50,46 +52,33 @@ send1.addEventListener("click", () => {
 })
 
 document.getElementById('container').addEventListener("click", async (event) => {
-    var btn = document.getElementById('final-close')
+    var btn = document.getElementById('final_close')
     btn.style.display = 'block'
-    btn.setAttribute('data-bs-dismiss', 'modal')
+    // btn.setAttribute('data-bs-dismiss', 'modal')
 
     var target = event.target
     var type = target.id.split('_')[0]
-    if (target.classList.contains('send-btn')) {
+    if (target.classList.contains('send_btn')) {
         mail_btn.style.display = 'none'
-
-        if (type == 'news' && input_address_nl.value == '') {
-            modalTitle.textContent = 'Address is missing'
+        // console.log(type, reg_mail)
+        if (reg_mail.test(input_nl.value) == false) {
+            modalTitle.textContent = 'Address is missing/wrong'
             return
         }
         // var res = await mail(type)
-        if (type == 'mail') { modalTitle.textContent = 'Data entered:' } else { modalTitle.textContent = input_address_nl.value + ' has been subscribed' }
+        if (type == 'mail') { modalTitle.textContent = 'Data entered:' } else { modalTitle.textContent = input_nl.value + ' has been subscribed' }
     }
 })
 
 reset.addEventListener("click", () => { for (var elem of arr) document.getElementById(elem).value = '' });
 
-document.getElementById('final-close').addEventListener('click', () => { location.reload() })
-
-git_code(['js/contact.min.js'])
-includes()
-
-function includes() {
-    var minjs = '.min.js'
-    var arr = [
-        bootstrap_root_cdn.cdn + 'jquery/3.6.0/jquery' + minjs,
-        bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'js/bootstrap' + minjs
-    ]
-    script_(arr)
-}
+// document.getElementById('final-close').addEventListener('click', () => { location.reload() })
 
 if (location.hostname == 'localhost') {
     var count = 1
     for (var elem of arr) {
-        document.getElementById(elem).value = 'a@' + count + '.d'
+        document.getElementById(elem).value = 'a@' + count + '.'
         count++
     }
     // input_address_nl.value = 'a@a.'
 }
-

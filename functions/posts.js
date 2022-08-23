@@ -20,7 +20,7 @@ export async function handler(event, context) {
                     url: obj.link ? obj.link : 'https://stackexchange.com/users/1886776/timo?tab=activity',
                 } : {}))
             // file.writeJs('posts', res)
-            file.add_removeJs('posts', res)
+            file.add_removeJs('posts.json', res)
         }
         return {
             body: JSON.stringify(1),

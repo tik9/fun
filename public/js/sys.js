@@ -1,4 +1,5 @@
 
+
 sys()
 
 function groupByKey(list, key) {
@@ -7,12 +8,13 @@ function groupByKey(list, key) {
 }
 
 async function sys() {
+    // var a = table([{ 1: 2 }], '1')
     var jstab = []
     var sys = arguments.callee.name
     var res = JSON.parse(JSON.stringify(await getjson(), ['host', 'category', 'info', 'value']))
+    // console.log(res)
     res = groupByKey(res, 'host')
     // res = (res[Object.keys(res)[0]])
-    // console.log(res)
     for (var key in res) {
         var arr = []
         for (var elem2 of res[key]) {

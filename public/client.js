@@ -1,4 +1,24 @@
 
+var modal = `<div id="mymodal" class="modal fade" role="dialog">
+<div class="modal-dialog">  
+  <div class="modal-content">
+    <div class="modal-header">
+      <button class="close" data-bs-dismiss="modal">&times;</button>
+      <h5 id=modal-title class="modal-title" data-test="success-msg"></h5>
+    </div>
+    <div id="modal-content" class="modal-body"></div>
+    <div class="modal-footer">
+      <button id=mail_btn class="btn btn-default send_btn">Send</button>
+      <button id=final_close data-bs-dismiss=modal class="btn btn-default">Close</button>
+    </div>
+  </div>
+</div>
+</div>`
+
+document.body.insertAdjacentHTML("afterbegin", modal);
+var myModal = new bootstrap.Modal(document.getElementById('mymodal'))
+myModal.show();
+
 var asset_dir = ''
 var container = document.getElementById('container')
 var dateformat = /^\d{4}-\d{2}-\d{2}/
@@ -17,10 +37,18 @@ topnav.classList.add('fixed-top', 'bg-dark')
 
 var bootstrap_root_cdn = { cdn: 'https://cdnjs.cloudflare.com/ajax/libs/', boots: 'twitter-bootstrap/5.0.0/' }
 
+add_css()
 create_icon()
-css()
+// includes()
 navbottom()
 
+
+async function add_css() {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'css/bootstrap.min.css'
+    document.head.appendChild(link);
+}
 
 function create_icon() {
     var icon = document.createElement("link");
@@ -29,14 +57,6 @@ function create_icon() {
     document.head.appendChild(icon);
 }
 
-async function css() {
-    for (var elem of await css_js([bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'css/bootstrap.min.css'], 'css')) {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = elem;
-        document.head.appendChild(link);
-    }
-}
 
 async function css_js(cdn, type) {
     var res = await (await fetch('/.netlify/functions/file?dir=' + type)).json()
@@ -50,7 +70,7 @@ function git_code(js_arr2) {
         var li = document.createElement("li");
         var aref = document.createElement("a");
         li.appendChild(aref);
-        aref.href = gitBase + '/' + elem
+        aref.href = gitBase + '/public/' + elem
         aref.textContent = elem.split('/')[1];
         ghUlLinks.append(li);
     }
@@ -59,6 +79,14 @@ function git_code(js_arr2) {
     ghDivLink.append(ghUlLinks);
 }
 
+function includes() {
+    var minjs = '.min.js'
+    var arr = [
+        bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'js/bootstrap' + minjs,
+        bootstrap_root_cdn.cdn + 'jquery/3.6.0/jquery' + minjs,
+    ]
+    script_(arr)
+}
 
 function list(arr, name = '') {
     var ul = document.createElement('ul')

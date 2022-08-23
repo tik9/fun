@@ -8,7 +8,7 @@ function aref(elem, val) {
 }
 
 function table(arr = [], src) {
-    var excludes = ['_id', '__v', 'cat', 'url', 'page']
+    var excludes = ['_id', '__v', 'cat', 'url', 'page', 'api']
     var table_ = document.createElement('table')
     var columns = []
     var thead = document.createElement('thead')
@@ -71,9 +71,7 @@ function table(arr = [], src) {
                 }
             }
             else if (src == 'apis') {
-                if (elem2 == 'api') td.append(aref({ url: 'https://my-first-servless.netlify.app' }, val))
-                else
-                    td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
+                if (elem2 == 'description') td.append(aref({ url: '#' + elem.api }, val))
             }
             else if (src == 'joke') td.append(aref(elem, elem.value))
             else td.innerHTML = val
@@ -82,7 +80,7 @@ function table(arr = [], src) {
         tbody.appendChild(tr)
     }
     table_.appendChild(tbody);
-    table_.classList.add('table', 'table-bordered', 'table-striped')
+    table_.classList.add('table', 'table-bordered', 'table-striped', 'mt-4', 'mb-4')
     return table_;
 }
 table()

@@ -35,7 +35,6 @@ async function commits_repos() {
       var clouddiv = document.getElementById('cloud')
       clouddiv.append(comm_rep)
       comm_rep.id = elem
-      indexfun(elem)
       comm_rep.append(table((await getjson(elem)).slice(0, 5), elem))
     } catch (error) { console.log(error) }
   }

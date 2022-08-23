@@ -36,7 +36,7 @@ export async function handler(event) {
         obj1[key] = obj2
         obj.push(obj1)
     }
-    file.writeJs('accounts', obj)
+    file.writeJs('accounts.json', obj)
 
     return {
         statusCode: 200, body: JSON.stringify(obj)

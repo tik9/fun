@@ -1,21 +1,18 @@
 [
     {
-        "api": "assemblyai",
-        "use": "convert audio or video to text - sample audio https://bit.ly/3rBnQ8i",
-        "date": "2022-07-25"
+        "api": "transcript",
+        "description": "Convert audio or video speech to text"
     },
     {
-        "api": "rapidapi Chuck Norris",
-        "use": "Jokes for geeks and IT Amigos",
-        "date": "2022-08-03"
+        "api": "jokes",
+        "description": "Chuck Norris Jokes for Amigos"
     },
     {
-        "api": "rapidapi Alpha vantage",
-        "use": "get stock prices",
-        "date": "2022-08-03"
+        "api": "stock",
+        "description": "Get stock prices"
     },
     {
-        "api": "world clock",
-        "use": "get utc time with `curl http://worldclockapi.com/api/json/utc/now`"
+        "api": "clock",
+        "description": "Get utc time"
     }
 ]
