@@ -1,10 +1,10 @@
 
-var modal = `<div id="mymodal" class="modal fade" role="dialog">
+var modal = `<div id="mymodal" style="display:none;" class="modal fade" role="dialog">
 <div class="modal-dialog">  
   <div class="modal-content">
     <div class="modal-header">
-      <button class="close" data-bs-dismiss="modal">&times;</button>
-      <h5 id=modal-title class="modal-title" data-test="success-msg"></h5>
+    <h5 id=modal-title class="modal-title" data-test="success_msg"></h5>
+    <button class="close" data-bs-dismiss="modal">&times;</button>
     </div>
     <div id="modal-content" class="modal-body"></div>
     <div class="modal-footer">
@@ -16,8 +16,11 @@ var modal = `<div id="mymodal" class="modal fade" role="dialog">
 </div>`
 
 document.body.insertAdjacentHTML("afterbegin", modal);
-var myModal = new bootstrap.Modal(document.getElementById('mymodal'))
-myModal.show();
+
+var modalTitle = document.getElementById('modal-title')
+var mail_btn = document.getElementById('mail_btn')
+
+// modalDiv.addEventListener('shown.bs.modal', () => {modalContent.focus()})
 
 var asset_dir = ''
 var container = document.getElementById('container')

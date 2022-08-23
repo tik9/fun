@@ -9,7 +9,6 @@ var dbWeb = "website"
 
 export function main() { return new MongoClient(process.env.mongo).connect() }
 
-
 export async function handler(event) {
     var searchkey = 'tool'
     var searchval = 'api'
@@ -17,8 +16,8 @@ export async function handler(event) {
     var val = ''
     var coll = 'sys'
     var coll = 'mails'
+    
     var params = event.queryStringParameters
-    // console.log(1, Object.keys(params).length)
     if (Object.keys(params).length != 0) { return { statusCode: 200, body: JSON.stringify(await find(coll)) } }
 
     var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]

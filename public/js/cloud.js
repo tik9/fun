@@ -1,14 +1,15 @@
 
-accounts()
+// accounts()
 // commits_repos()
-posts()
+// posts()
 
 
 async function accounts() {
   try {
     var accounts = helper(arguments.callee.name)
 
-    var res = await getjson(arguments.callee.name)
+    // var res = await getjson(arguments.callee.name)
+    var res = []
     // console.log(3, res)
     for (var elem of res) {
       for (var elem2 in elem) {
@@ -50,7 +51,8 @@ function helper(elem) {
 
 async function posts() {
   try {
-    var res = await (await fetch('/.netlify/functions/file?json=' + arguments.callee.name)).json()
+    var res = []
+    // var res = await (await fetch('/.netlify/functions/file?json=' + arguments.callee.name)).json()
     // console.log(1, res)
     var posts = helper(arguments.callee.name)
 

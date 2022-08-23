@@ -5,18 +5,35 @@ var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 var api_div = document.getElementById('apis')
 api_div.scrollIntoView()
 
-api()
+// api()
 creategui()
 
 async function api() {
-    var res = await getjson('apis')
+    var res = []
+    // var res = await getjson('apis')
     api_div.append(table(res, 'apis'))
 }
 
 
-async function api_helper(name, url = '/.netlify/functions/') {
-    var res = await (await fetch(url + name)).json()
-    document.getElementById('res' + name).innerText = 'Result: ' + res
+async function api_helper() {
+    document.getElementById('restranscript').innerText = ''
+    var modalDiv = document.getElementById('mymodal')
+    var myModal = new bootstrap.Modal(modalDiv)
+    myModal.show();
+    mail_btn.style.display = 'none'
+    modalTitle.textContent = 'The api is loading'
+    try {
+        var res = await (await fetch('/.netlify/functions/transcript')).json()
+        var endres = res
+    } catch (error) {
+        console.log('err here', error)
+        endres = 'No result'
+    }
+    // await sleep(4000)
+    modalTitle.textContent = 'Loading finished, you can close the window'
+    // var res = 'end'
+    document.getElementById('restranscript').innerText = 'Result: ' + endres
+    // myModal.hide()
 }
 
 async function creategui() {
@@ -65,7 +82,9 @@ async function creategui() {
         i++
     }
 
-    document.getElementById('btntranscript').addEventListener('click', async (event) => { api_helper(event.target.id.slice(3)) })
+    var btntrans = document.getElementById('btntranscript')
+    btntrans.focus()
+    btntrans.addEventListener('click', async (event) => { api_helper() })
 
     document.getElementById('btnclock').addEventListener('click', async (event) => {
         var res = await (await fetch('http://worldclockapi.com/api/json/utc/now')).json()

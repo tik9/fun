@@ -21,7 +21,6 @@ export async function handler(event) {
         if (Object.keys(elem) == 'stack') res = res.items[0]
 
         var obj1 = {}
-        var obj2 = {}
         for (var prop of val.props) {
             var resprop = res[prop]
 
@@ -29,14 +28,14 @@ export async function handler(event) {
                 resprop = resprop.substring(0, 10)
             else if (prop == 'last_access_date')
                 resprop = (new Date(resprop * 1000)).toISOString().substring(0, 10)
-            obj2[prop] = resprop
+            obj1[prop] = resprop
         }
         var { hostname } = new URL(val.url);
-        obj2.url = hostname
-        obj1[key] = obj2
+        obj1.url = hostname
+        obj1.provider = key
         obj.push(obj1)
     }
-    file.writeJs('accounts.json', obj)
+    // console.log(obj)
 
     return {
         statusCode: 200, body: JSON.stringify(obj)

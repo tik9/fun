@@ -14,7 +14,6 @@ export const handler = async (event) => {
         url = 'https://alpha-vantage.p.rapidapi.com/query'
         params = { symbol: params.input, interval: '5min', function: 'time_series_monthly' }
     }
-    // console.log(params)
 
     try {
         var options = {
@@ -28,7 +27,6 @@ export const handler = async (event) => {
             }
         }
         var res = (await axios.request(options)).data
-        // console.log(2, res)
         return {
             statusCode: 200,
             body: JSON.stringify(res)

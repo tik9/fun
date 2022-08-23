@@ -1,17 +1,29 @@
 
 import { exec } from 'node:child_process'
 import { join, resolve } from 'path'
+import * as mongo from './mongo'
 import { promises as fs } from "fs"
 import { readdirSync, statSync } from 'fs'
 
 var asset_dir = './public/'
+var all = 'all.json'
+var filepath = resolve(asset_dir, 'json')
+
 export async function handler(event) {
     var params = event.queryStringParameters
     var res
     try {
-        if (params.dir) res = await listDir(asset_dir + params.dir)
-        else if (params.json) res = JSON.parse(await fs.readFile(join(asset_dir, 'json', params.json + '.json')))
-        else res = 'dir is missing'
+        // var cont = JSON.stringify(JSON.parse(await fs.readFile(join(filepath, all))))
+        for (var json of await fs.readdir(filepath)) {
+            var obj = {}
+            var cont = JSON.parse(await fs.readFile(join(filepath, json)))
+            var name = json.split('.')[0]
+            // obj[name] = cont
+            // arr.push(obj)
+            // console.log(1, name, cont, json)
+            mongo.insert_val(name, cont)
+        }
+
         return {
             statusCode: 200,
             body: JSON.stringify(res)
@@ -20,21 +32,6 @@ export async function handler(event) {
     } catch (error) { console.log(error) }
 }
 
-
-export async function create() {
-    var arr = []
-    var all = 'all.json'
-    var filepath = resolve(asset_dir, 'json')
-    for (var json of await fs.readdir(filepath)) {
-        if (json != 'posts.json' && json != all) {
-            var obj = {}
-            var cont = JSON.parse(await fs.readFile(join(filepath, json)))
-            obj[json.split('.')[0]] = cont
-            arr.push(obj)
-        }
-    }
-    writeJs(all, arr)
-}
 
 export async function add_removeJs(file, data) {
     var filepath = join(asset_dir, 'json', file)
@@ -95,4 +92,9 @@ function listDir_path(dir_) {
             )
 
     return traverseDir(dir_)
+}
+
+async function fetchjs() {
+    var res = await listDir(asset_dir)
+    res = JSON.parse(await fs.readFile(join(asset_dir, 'json',)))
 }

@@ -1,72 +1,73 @@
 
+var modalContent = document.getElementById('modal-content')
+
 git_code(['js/contact.min.js'])
 
-var modalContent = document.getElementById('modal-content')
-var modalTitle = document.getElementById('modal-title')
 var reg_mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+var email_contact = 'contact_input'
+var arr = ['name', email_contact, 'message', 'nl_input']
 
-var arr = ['name', 'email', 'message']
-
-var input_nl = document.getElementById('nl-input')
+var contact_input = document.getElementById(email_contact)
+var nl_input = document.getElementById('nl_input')
 
 async function mail(type = 'mail') {
     var obj = getObj()
-    if (type == 'news') obj = { name: 'news', email: input_nl.value, message: 'Newsletter abo' }
-    // console.log(2, type)
+    delete Object.assign(obj, { ['email']: obj[email_contact] })[email_contact];
+
+    if (type == 'news') obj = { name: 'news', email: nl_input.value, message: 'Newsletter abo' }
 
     try {
-        return (await fetch('/.netlify/functions/mongo', { method: "post", body: JSON.stringify(obj) })).json()
-
+        return (await fetch('/.netlify/functions/mail', { method: "post", body: JSON.stringify(obj) })).json()
     } catch (error) { console.log('res: ', error) }
 }
 
 function getObj() {
     var obj = {}
     var missing = []
-    for (var elem of arr) {
+    for (var elem of arr.slice(0, -1)) {
         var val = document.getElementById(elem).value
         if (val == '') missing.push(elem)
         obj[elem] = val
     }
-    if (reg_mail.test(document.getElementById('email').value) == false && missing.length == 0) missing.push('email')
+    if (reg_mail.test(contact_input.value) == false && missing.length == 0) missing.push('email')
     return missing.length != 0 ? missing : obj
 }
 
-
 var reset = document.getElementById('reset')
 var send1 = document.getElementById('send1')
-var mail_btn = document.getElementById('mail_btn')
 var news_btn = document.getElementById('news_btn')
-send1.focus()
+news_btn.focus()
 
 send1.addEventListener("click", () => {
     mail_btn.style.display = 'block'
-    modalTitle.textContent = 'Correct data entered?'
+    modalTitle.textContent = contact_input.value + ', Correct data entered?'
     if (Array.isArray(getObj())) {
         mail_btn.style.display = 'none'
         modalTitle.textContent = 'Data is missing or email is wrong'
     }
     modalContent.innerHTML = ''
     modalContent.append(list(getObj()))
-
 })
 
-document.getElementById('container').addEventListener("click", async (event) => {
-    var btn = document.getElementById('final_close')
-    btn.style.display = 'block'
-    // btn.setAttribute('data-bs-dismiss', 'modal')
-
+document.body.addEventListener("click", async (event) => {
     var target = event.target
-    var type = target.id.split('_')[0]
     if (target.classList.contains('send_btn')) {
+        document.getElementById('final_close').style.display = 'block'
+        var type = target.id.split('_')[0]
+        // console.log(type, target)
         mail_btn.style.display = 'none'
-        // console.log(type, reg_mail)
-        if (reg_mail.test(input_nl.value) == false) {
-            modalTitle.textContent = 'Address is missing/wrong'
+
+        if (type == 'mail') {
+            try { await mail(type) } catch (error) { console.log(1, error) }
+            modalTitle.textContent = contact_input.value + ', Data entered:'
             return
         }
-        // var res = await mail(type)
-        if (type == 'mail') { modalTitle.textContent = 'Data entered:' } else { modalTitle.textContent = input_nl.value + ' has been subscribed' }
+        else if (reg_mail.test(nl_input.value) == false) modalTitle.textContent = 'Address is missing/wrong'
+        else {
+            modalTitle.textContent = nl_input.value + ' has been subscribed'
+            try { await mail(type) } catch (error) { console.log(1, error) }
+        }
+        modalContent.innerHTML = ''
     }
 })
 
@@ -74,11 +75,11 @@ reset.addEventListener("click", () => { for (var elem of arr) document.getElemen
 
 // document.getElementById('final-close').addEventListener('click', () => { location.reload() })
 
+// console.log(location.hostname)
 if (location.hostname == 'localhost') {
     var count = 1
     for (var elem of arr) {
-        document.getElementById(elem).value = 'a@' + count + '.'
+        document.getElementById(elem).value = 'a@' + count + '.1'
         count++
     }
-    // input_address_nl.value = 'a@a.'
 }

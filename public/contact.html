@@ -1,28 +1,10 @@
 <div id=container class="container">
-    <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="modal-title" data-test="success-msg"></h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="modal-content"></div>
-                <div class="modal-footer" id="modal-footer">
-                    <input type="submit" id=mail_btn class="btn btn-primary send_btn" value="send" />
-                    <button id="final_close" style="display: none" class="btn btn-primary"
-                        data-bs-dismiss=modal>Close</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div class="nav" id="topnav">
         <a href="/" class="active">Home</a>
     </div>
     <div id="contact">
         <h3 class=mb-5 style="margin-top: 70px;">Contact</h3>
-        <form id=contact accept-charset="utf-8" onsubmit="return false">
+        <form id=contact accept-charset="utf-8" onsubmit="return false" novalidate>
 
             <table class="table">
                 <tr>
@@ -30,7 +12,8 @@
                         <label for="name">Full Name</label>
                     </td>
                     <td>
-                        <input type="text" name="name" id="name" placeholder="First and Last" class=form-control-sm>
+                        <input type="text" name="name" id="name" data-test="name" placeholder="First and Last"
+                            class=form-control-sm>
                     </td>
                 </tr>
                 <tr>
@@ -38,8 +21,8 @@
                         <label for="email">Email Address</label>
                     </td>
                     <td>
-                        <input type="email" name="email" id="email" placeholder="email@domain.tld"
-                            class=form-control-sm>
+                        <input type="email" name="email" id="contact_input" placeholder="email@dom.tld"
+                            data-test="contact_input" class=form-control-sm>
                     </td>
                 </tr>
                 <tr>
@@ -47,23 +30,22 @@
                         <label for="message">Comments</label>
                     </td>
                     <td>
-                        <textarea rows="3" class=form-control-sm name="message" id="message"
+                        <textarea rows="3" class=form-control-sm name="message" id="message" data-test="message"
                             placeholder="message"></textarea>
                     </td>
                 </tr>
             </table>
             <input type=submit id="send1" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mymodal"
-                value="submit" />
+                value="submit" data-test="contact_btn" />
 
             <button id="reset" class="btn btn-primary" style="margin-left: 10px;">Reset</button>
         </form>
     </div>
     <div id="newsletter">
         <h5 class="mt-5">Get newsletter</h5>
-        <input type="email" name="email" id="nl-input" placeholder="subscribe for update" data-test="nl-input">
-        <button id="news_btn" class="btn btn-primary send-btn" data-bs-target="#mymodal" data-bs-toggle="modal"
-            style="margin-left: 10px;" data-test="nl-btn">Get News</button>
-        <div id="success-nl"></div>
+        <input type="email" name="email" id="nl_input" placeholder="subscribe for update" data-test="nl_input">
+        <button id="news_btn" class="btn btn-primary send_btn" data-bs-target="#mymodal" data-bs-toggle="modal"
+            style="margin-left: 10px;" data-test="nl_btn">Get News</button>
     </div>
     <div id="git_code">
         <h5>Links</h5>
