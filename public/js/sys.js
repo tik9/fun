@@ -1,11 +1,5 @@
 
-
-sys()
-
-function groupByKey(list, key) {
-    return list.reduce((hash, { [key]: value, ...rest }) =>
-        ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
-}
+// sys()
 
 async function sys() {
     // var a = table([{ 1: 2 }], '1')

@@ -1,7 +1,8 @@
 
 import { MongoClient } from 'mongodb'
-
 const clientPromise = (new MongoClient(process.env.mongo)).connect();
+import { promises as fs } from 'fs'
+import { join, resolve } from 'path';
 
 export function regex() {
     var reg_mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -11,7 +12,13 @@ export function regex() {
 }
 
 export async function handler(event) {
-    const res = await (await clientPromise).db('website').collection('sys').find({}).toArray();
+    // dir = 'public'
+    var dir = 'assets'
+    var file = join(dir, 'test.json')
+    console.log(file)
+    var res = await (await clientPromise).db('website').collection('mails').find({}).toArray();
+    res = await fs.readFile(file)
+
     return {
         statusCode: 200,
         body: JSON.stringify(res),

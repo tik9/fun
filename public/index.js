@@ -20,6 +20,10 @@ async function getjson(file = 'sys') {
   for (var json of res) { if (typeof json[file] != 'undefined') return json[file] }
 }
 
+function groupByKey(list, key) {
+  return list.reduce((hash, { [key]: value, ...rest }) =>
+    ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
+}
 
 async function includes() {
   var arr = await css_js([], 'js')

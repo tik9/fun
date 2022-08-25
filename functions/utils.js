@@ -1,5 +1,5 @@
 
-export function sortOne(property) {
+export function sort(property) {
     // console.log(1, property[0])
     var sortOrder = 1;
     if (property[0] === "-") {

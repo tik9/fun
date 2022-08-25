@@ -22,54 +22,44 @@ export async function handler(event, context) {
 
     var sys = [
         {
-            "info": "npm version",
-            "value": npv,
+            "npm version": npv,
             "category": "node"
         },
         {
-            "info": "architecture",
-            "value": os.arch(),
+            "architecture": os.arch(),
             "category": "hardware"
         },
 
         {
-            "info": 'os version',
-            "value": utils.truncate(os.version(), 30),
+            "os version": utils.truncate(os.version(), 30),
             "category": "os"
         },
         {
-            "info": "platform",
-            "value": os.platform(),
+            "platform": os.platform(),
             "category": "os"
         },
         {
-            "info": "release",
-            "value": os.release(),
+            "release": os.release(),
             "category": "os"
         },
         {
-            "info": "cores",
-            "value": os.cpus().length,
+            "cores": os.cpus().length,
             "category": "hardware"
         },
         {
-            "info": 'speed cpu mhz',
-            "value": os.cpus()[0].speed,
+            "speed cpu mhz": os.cpus()[0].speed,
             "category": "hardware"
         },
         {
-            "info": 'total memory',
-            "value": utils.formatBytes(os.totalmem()),
+            "total memory": utils.formatBytes(os.totalmem()),
             "category": "hardware"
         },
         {
-            "info": 'free memory',
-            "value": utils.formatBytes(os.freemem()),
+            "free memory": utils.formatBytes(os.freemem()),
             "category": "hardware"
         },
         {
-            "info": "node version",
-            "value": process.versions.node.split(".")[0],
+            "node version": process.versions.node.split(".")[0],
             "category": "node"
         },
     ]
@@ -79,7 +69,7 @@ export async function handler(event, context) {
         elem.host = utils.truncate(os.hostname(), 15)
     }
 
-    sys.sort(utils.sortMulti('category', 'info'))
+    sys.sort(utils.sort('category'))
     mongo.insert_val('sys', sys)
 
     // file.writeJs('sys', sys)

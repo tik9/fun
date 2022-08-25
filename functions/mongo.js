@@ -14,11 +14,14 @@ export async function handler(event) {
     var searchval = 'api'
     var key = 'name'
     var val = ''
-    var coll = 'sys'
-    var coll = 'mails'
-    
+    var coll = 'accounts'
+
     var params = event.queryStringParameters
-    if (Object.keys(params).length != 0) { return { statusCode: 200, body: JSON.stringify(await find(coll)) } }
+    if (typeof (params.coll) != 'undefined') {
+        var res = await find(params.coll)
+        console.log(1, res)
+        return { statusCode: 200, body: JSON.stringify(res) }
+    }
 
     var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]
     values = [JSON.parse(event.body)]
@@ -27,13 +30,12 @@ export async function handler(event) {
     // create_coll(coll)
     // res = await find(coll)
     // res = await find_one('sys', 'node version')
-    // if (Object.keys(values).length != 0) insert_val(coll, values)
     // res = await list_coll()
     // remove_coll(coll)
     // remove_field(coll, searchkey, searchval, 'del')
     // rename_field(coll, old, newf)
     // remove_many(coll, key, val)
-    // truncate_coll(coll)
+    // if (Object.keys(values).length != 0) insert_val(coll, values)
     // update_one(coll, searchkey, searchval, key, val)
 
     return { statusCode: 200, body: JSON.stringify(res) }
@@ -47,9 +49,15 @@ export async function find(coll, limit = 0) { return (await main()).db(dbWeb).co
 
 export async function find_one(coll, value, field = 'info') { return (await main()).db(dbWeb).collection(coll).findOne({ [field]: value }, { _id: 0 }) }
 
-export async function insert_val(coll, values = {}) { (await main()).db(dbWeb).collection(coll).insertMany(values) }
+export async function insert_val(coll, values = {}) {
+    await truncate_coll(coll)
+        (await main()).db(dbWeb).collection(coll).insertMany(values)
+}
 
-async function list_coll() { return (await main()).db(dbWeb).listCollections().toArray() }
+async function list_coll() {
+    var res = await (await main()).db(dbWeb).listCollections().toArray()
+    return res.map(elem => elem.name)
+}
 
 async function remove_coll(coll) { (await main()).db(dbWeb).collection(coll).drop() }
 
