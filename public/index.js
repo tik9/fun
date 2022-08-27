@@ -61,10 +61,10 @@ function navtop() {
 
 function navtoparef_title() {
   var arr = []
-  var headers = { cloud: 'My social cloud actvities', sys: 'Node server in use', apis: 'Apis I favour' }
+  var headers = { cloud: 'social cloud actvities', sys: 'Node server in use', apis: 'Apis I favour' }
   for (var elem in headers) {
     var div = document.getElementById(elem)
-    div.classList.add('mb-4', 'mt-4')
+    div.classList.add('mt-4')
     arr.push(elem)
     var head = document.createElement('h4')
     head.innerText = headers[elem]

@@ -17,8 +17,11 @@ export async function handler(event) {
                 score: obj.score,
                 url: 'https://stackexchange.com/users/1886776/timo?tab=activity',
             } : {}))
-        // mongo.insert_val('posts', res)
-        console.log(res)
+        var posts = 'posts'
+        mongo.truncate_coll(posts)
+        await mongo.insert_val(posts, res)
+        await mongo.count(posts)
+        // console.log(res)
         return {
             body: JSON.stringify(1),
             statusCode: 200

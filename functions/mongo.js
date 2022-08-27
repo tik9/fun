@@ -14,7 +14,7 @@ export async function handler(event) {
     var searchval = 'api'
     var key = 'name'
     var val = ''
-    var coll = 'accounts'
+    var coll = 'posts'
 
     var params = event.queryStringParameters
     if (typeof (params.coll) != 'undefined') {
@@ -26,7 +26,7 @@ export async function handler(event) {
     var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]
     values = [JSON.parse(event.body)]
     var res = {}
-    // res = await count(coll)
+    res = await count(coll)
     // create_coll(coll)
     // res = await find(coll)
     // res = await find_one('sys', 'node version')
@@ -50,13 +50,11 @@ export async function find(coll, limit = 0) { return (await main()).db(dbWeb).co
 export async function find_one(coll, value, field = 'info') { return (await main()).db(dbWeb).collection(coll).findOne({ [field]: value }, { _id: 0 }) }
 
 export async function insert_val(coll, values = {}) {
-    await truncate_coll(coll)
-        (await main()).db(dbWeb).collection(coll).insertMany(values)
+    return (await main()).db(dbWeb).collection(coll).insertMany(values)
 }
 
 async function list_coll() {
-    var res = await (await main()).db(dbWeb).listCollections().toArray()
-    return res.map(elem => elem.name)
+    return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name)
 }
 
 async function remove_coll(coll) { (await main()).db(dbWeb).collection(coll).drop() }
@@ -71,7 +69,7 @@ async function rename_coll(old, newcoll) { (await main()).db(dbWeb).collection(o
 
 async function rename_field(coll, old, newf) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $rename: { [old]: newf } }) }
 
-async function truncate_coll(coll) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
+export async function truncate_coll(coll) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
 
 async function update_one(coll, searchkey, searchval, key, val) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }) }
 
