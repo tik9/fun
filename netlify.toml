@@ -3,6 +3,3 @@
   functions = "functions"
   publish = "public"
   environment = { NODE_VERSION = "18" }
-
-  [functions]
-  included_files= ["asset/**"]

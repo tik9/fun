@@ -14,7 +14,7 @@ export async function handler(event) {
     var searchval = 'api'
     var key = 'name'
     var val = ''
-    var coll = 'posts'
+    var coll = 'repos'
 
     var params = event.queryStringParameters
     if (typeof (params.coll) != 'undefined') {
@@ -25,8 +25,7 @@ export async function handler(event) {
 
     var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]
     values = [JSON.parse(event.body)]
-    var res = {}
-    res = await count(coll)
+    var res = await count(coll)
     // create_coll(coll)
     // res = await find(coll)
     // res = await find_one('sys', 'node version')

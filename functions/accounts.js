@@ -33,6 +33,7 @@ export async function handler(event) {
         obj.push(obj1)
     }
     // console.log(obj)
+    mongo.truncate_coll(posts)
     mongo.insert_val('accounts', obj)
     return { statusCode: 200, body: JSON.stringify(obj) }
 }

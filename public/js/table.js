@@ -50,7 +50,7 @@ function table(arr = [], src) {
                 }
                 else if (elem2 == 'repo') {
                     var ahref = document.createElement('a')
-                    ahref.href = ghMe + elem.repo
+                    ahref.href = git + elem.repo
                     ahref.textContent = val
                     td.append(ahref)
                 }

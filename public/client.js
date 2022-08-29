@@ -25,9 +25,10 @@ var mail_btn = document.getElementById('mail_btn')
 var asset_dir = ''
 var container = document.getElementById('container')
 var dateformat = /^\d{4}-\d{2}-\d{2}/
-var git = 'https://github.com'
-var git2 = git + '/tik9/fun'
-var gitBase = git2 + '/blob/master'
+var github = 'https://github.com/'
+var git = github + 'tik9/'
+var git2 = git + 'fun'
+var gitBase = git2 + '/blob/master/'
 var tiko = "Tiko's"
 
 document.title += tiko;
@@ -56,7 +57,7 @@ async function add_css() {
 function create_icon() {
     var icon = document.createElement("link");
     icon.rel = "icon";
-    icon.href = git + "/github.png";
+    icon.href = github + "github.png";
     document.head.appendChild(icon);
 }
 
@@ -73,7 +74,7 @@ function git_code(js_arr2) {
         var li = document.createElement("li");
         var aref = document.createElement("a");
         li.appendChild(aref);
-        aref.href = gitBase + '/public/' + elem
+        aref.href = gitBase + 'public/' + elem
         aref.textContent = elem.split('/')[1];
         ghUlLinks.append(li);
     }
