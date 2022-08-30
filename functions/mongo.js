@@ -1,6 +1,4 @@
 
-// import dotenv from 'dotenv'
-// dotenv.config()
 import * as file from './file'
 import { MongoClient } from 'mongodb'
 import { join } from 'path'

@@ -1,6 +1,6 @@
 
-import * as utils from './utils.js'
-import * as mongo from './mongo'
+import * as utils from './modules/utils.js'
+import * as mongo from './mongo.js'
 
 
 export async function handler(event) {

@@ -13,11 +13,10 @@ describe("Newsletter Subscribing", () => {
     it.only("invalid address", () => {
         var address = 't'
 
-        // cy.getByData("nl_input").type(address)
-        // cy.getByData("nl_btn").click()
+        cy.getByData("nl_input").type(address)
+        cy.getByData("nl_btn").click()
 
-        // cy.getByData('success-msg').contains(falsy).then($el => {cy.wrap($el).should($el => {   expect(Cypress.dom.isAttached($el)).to.eq(false)})})
-        // cy.getByData("success_msg").contains(address).should("not.exist")
+        cy.getByData("success_msg").contains(address).should("not.exist")
     })
 
 })

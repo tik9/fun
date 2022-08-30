@@ -3,38 +3,8 @@ var apiheaders = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data 
 
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 var api_div = document.getElementById('apis')
-api_div.scrollIntoView()
 
-// api()
 creategui()
-
-async function api() {
-    var res = []
-    // var res = await getjson('apis')
-    api_div.append(table(res, 'apis'))
-}
-
-
-async function api_helper() {
-    document.getElementById('restranscript').innerText = ''
-    var modalDiv = document.getElementById('mymodal')
-    var myModal = new bootstrap.Modal(modalDiv)
-    myModal.show();
-    mail_btn.style.display = 'none'
-    modalTitle.textContent = 'The api is loading'
-    try {
-        var res = await (await fetch('/.netlify/functions/transcript')).json()
-        var endres = res
-    } catch (error) {
-        console.log('err here', error)
-        endres = 'No result'
-    }
-    // await sleep(4000)
-    modalTitle.textContent = 'Loading finished, you can close the window'
-    // var res = 'end'
-    document.getElementById('restranscript').innerText = 'Result: ' + endres
-    // myModal.hide()
-}
 
 async function creategui() {
     await sleep(100)
@@ -60,36 +30,58 @@ async function creategui() {
         }
         var btn = document.createElement('button')
         btn.classList.add('ms-2', 'btn', 'btn-primary')
-        btn.id = 'btn' + elem
+        var btnElem = 'btn' + elem
+        btn.id = btnElem
         btn.textContent = 'Fetch'
-        btn.setAttribute('data-test', 'btn' + elem)
+        btn.setAttribute('data-test', btnElem)
         if (!['transcript', 'clock'].includes(elem)) {
             var input = document.createElement('input')
             btn.addEventListener('click', async (event) => { rapid(event.target.id.slice(3), input) })
-            input.id = 'input' + elem
+            var inputElem = 'input' + elem
+            input.id = inputElem
             input.classList.add('mt-3')
             input.required = true
-            input.setAttribute('data-test', 'input' + elem)
+            input.setAttribute('data-test', inputElem)
             if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
             div.append(input, btn)
         } else div.append(btn)
 
         var res = document.createElement('div')
-        res.id = 'res' + elem
+        var resElem = 'res' + elem
+        res.id = resElem
         res.classList.add('mt-3')
         res.textContent = '.. ' + elem + ' waits ..'
+        res.setAttribute('data-test', resElem)
         div.append(res)
         i++
     }
 
     var btntrans = document.getElementById('btntranscript')
     btntrans.focus()
-    btntrans.addEventListener('click', async (event) => { api_helper() })
+    btntrans.addEventListener('click', async (event) => {
+        document.getElementById('restranscript').innerText = ''
+        var modalDiv = document.getElementById('mymodal')
+        var myModal = new bootstrap.Modal(modalDiv)
+        myModal.show();
+        mail_btn.style.display = 'none'
+        modalTitle.textContent = 'The api is loading'
+        try {
+            var res = await (await fetch('/.netlify/functions/transcript')).json()
+            var endres = res
+        } catch (error) {
+            console.log('err here', error)
+            endres = 'No result'
+        }
+        // await sleep(4000)
+        modalTitle.textContent = 'Loading finished, you can close the window'
+        // var res = 'end'
+        document.getElementById('restranscript').innerText = 'Result: ' + endres
+        // myModal.hide()    
+    })
 
     document.getElementById('btnclock').addEventListener('click', async (event) => {
         var res = await (await fetch('http://worldclockapi.com/api/json/utc/now')).json()
-        res = res.currentDateTime.split('T')[1].slice(0, 5) + ' hours'
-        document.getElementById('resclock').innerText = 'Result: ' + res
+        document.getElementById('resclock').innerText = res.currentDateTime.split('T')[1].slice(0, 5) + ' hours'
     })
 }
 
@@ -104,9 +96,8 @@ async function rapid(type, input) {
         }
         else {
             res = res["Monthly Time Series"]
-            // var lastkey = Object.keys(res)[0]
             res = res[Object.keys(res)[0]]['1. open']
-            resdiv.innerText = res.split('.')[0]
+            resdiv.innerText = Number(res.split('.')[0])
         }
     } catch (err) { console.log(err) }
 }

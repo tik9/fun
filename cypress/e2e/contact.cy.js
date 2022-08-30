@@ -1,8 +1,6 @@
 
 describe('contact', () => {
-  beforeEach(() => {
-    cy.visit("http://localhost:8888/contact.html")
-  })
+  beforeEach(() => { cy.visit("http://localhost:8888/contact.html") })
 
   it("address", () => {
     var address = 't@t.'

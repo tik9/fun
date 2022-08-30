@@ -74,6 +74,13 @@ function table(arr = [], src) {
                 if (elem2 == 'description') td.append(aref({ url: '#' + elem.api }, val))
             }
             else if (src == 'joke') td.append(aref(elem, elem.value))
+            else if (src == 'issues') {
+                if (elem2 == 'title') {
+                    td.append(aref(elem, val))
+                    // console.log(elem)
+                }
+                td.innerHTML = (elem2 == 'createdAt') ? locale_date(val) : val
+            }
             else td.innerHTML = val
             tr.appendChild(td);
         }

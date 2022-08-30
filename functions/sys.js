@@ -2,8 +2,8 @@
 import { exec } from 'node:child_process'
 
 import os from "os"
-import * as utils from './utils'
-import * as mongo from './mongo'
+import * as utils from './modules/utils.js'
+import * as mongo from './mongo.js'
 
 
 function execPromise(command) {

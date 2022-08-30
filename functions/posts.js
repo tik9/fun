@@ -1,7 +1,7 @@
 
 import fetch from 'node-fetch';
-import * as mongo from './mongo'
-import * as utils from './utils'
+import * as mongo from './mongo.js'
+import * as utils from './modules/utils.js'
 
 export async function handler(event) {
     try {
@@ -20,10 +20,10 @@ export async function handler(event) {
         var posts = 'posts'
         mongo.truncate_coll(posts)
         await mongo.insert_val(posts, res)
-        await mongo.count(posts)
+        var res = await mongo.count(posts)
         // console.log(res)
         return {
-            body: JSON.stringify(1),
+            body: JSON.stringify(res),
             statusCode: 200
         }
     } catch (error) { console.log(2, error) }

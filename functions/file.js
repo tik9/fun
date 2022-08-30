@@ -1,9 +1,7 @@
 
 import { exec } from 'node:child_process'
 import { join, resolve } from 'path'
-import * as mongo from './mongo'
-import { promises as fs } from "fs"
-import { readdirSync, statSync } from 'fs'
+import { promises as fs, readdirSync, statSync } from "fs"
 
 var asset_dir = './public/'
 var all = 'all.json'
@@ -21,7 +19,6 @@ export async function handler(event) {
             // obj[name] = cont
             // arr.push(obj)
             // console.log(1, name, cont, json)
-            mongo.insert_val(name, cont)
         }
 
         return {
@@ -33,21 +30,9 @@ export async function handler(event) {
 }
 
 
-export async function add_removeJs(file, data) {
-    var filepath = join(asset_dir, 'json', file)
-    try {
-        var json = JSON.parse((await fs.readFile(filepath)).toString());
-        json.push(data);
-        // json.pop()
-        await fs.writeFile(filepath, JSON.stringify(json, null, 2));
-    } catch (error) { console.log(1, error, file, data) }
-};
-
 export async function listDir(dir, subdir = '') { return await fs.readdir(dir); }
 
-
 export function writeJs(file, json) { try { fs.writeFile(join(asset_dir, 'json', file), JSON.stringify(json, null, 2)); } catch (error) { console.log(error) } }
-
 
 
 export async function listTest() {
@@ -92,9 +77,4 @@ function listDir_path(dir_) {
             )
 
     return traverseDir(dir_)
-}
-
-async function fetchjs() {
-    var res = await listDir(asset_dir)
-    res = JSON.parse(await fs.readFile(join(asset_dir, 'json',)))
 }
