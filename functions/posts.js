@@ -7,7 +7,7 @@ export async function handler(event) {
     try {
         var res = await fetch('https://api.stackexchange.com/2.2/users/1705829/comments?site=stackoverflow&filter=withbody');
 
-        res = (await res.json()).items.slice(0, 8);
+        res = (await res.json()).items.slice(0, 5);
 
         res.sort(utils.sort('-score'));
         res = res.map(obj => (

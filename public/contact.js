@@ -1,8 +1,6 @@
 
 var modalContent = document.getElementById('modal-content')
 
-git_code(['js/contact.min.js'])
-
 var reg_mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 var email_contact = 'contact_input'
 var arr = ['name', email_contact, 'message', 'nl_input']
@@ -18,7 +16,7 @@ async function mail(type = 'mail') {
 
     try {
         return (await fetch('/.netlify/functions/mail', { method: "post", body: JSON.stringify(obj) })).json()
-    } catch (error) { console.log('res: ', error) }
+    } catch (error) { console.log('err', error) }
 }
 
 function getObj() {
@@ -33,10 +31,11 @@ function getObj() {
     return missing.length != 0 ? missing : obj
 }
 
+var mail_btn = document.getElementById('mail_btn')
+var news_btn = document.getElementById('news_btn')
 var reset = document.getElementById('reset')
 var send1 = document.getElementById('send1')
-var news_btn = document.getElementById('news_btn')
-news_btn.focus()
+send1.focus()
 
 send1.addEventListener("click", () => {
     mail_btn.style.display = 'block'
@@ -73,9 +72,6 @@ document.body.addEventListener("click", async (event) => {
 
 reset.addEventListener("click", () => { for (var elem of arr) document.getElementById(elem).value = '' });
 
-// document.getElementById('final-close').addEventListener('click', () => { location.reload() })
-
-// console.log(location.hostname)
 if (location.hostname == 'localhost') {
     var count = 1
     for (var elem of arr) {

@@ -1,28 +1,24 @@
 
-// document.getElementById('btn_startmod').addEventListener('click', function () {
-// var mod = makeModal()
-// });
-// function makeModal() {
-// console.log(1, arguments.callee.name)
-
-// }
-
-git_code(['js/table.js'])
 // includes()
 navtop()
-navtoparef_title()
+navtop_head()
 
-
-var res
-async function getjson(file = 'sys') {
-  if (!res) res = await (await fetch('/.netlify/functions/file?json=all')).json()
-  // console.log(1, res)
-  for (var json of res) { if (typeof json[file] != 'undefined') return json[file] }
-}
 
 function groupByKey(list, key) {
   return list.reduce((hash, { [key]: value, ...rest }) =>
     ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
+}
+
+function helper(sub, sup = 'cloud') {
+  var div = document.createElement('div')
+  div.id = sub
+  var sup = document.getElementById(sup)
+  var head = document.createElement('h5')
+  if (sub != 'accounts') head.classList.add('mt-3',)
+  head.classList.add('mb-3')
+  head.textContent = sub[0].toUpperCase() + sub.slice(1).replace(/_/g, ' ')
+  sup.append(head, div)
+  return div
 }
 
 async function includes() {
@@ -59,16 +55,16 @@ function navtop() {
   topnav.append(aref)
 }
 
-function navtoparef_title() {
+function navtop_head() {
   var arr = []
-  var headers = { cloud: 'social cloud actvities', sys: 'Node server in use', apis: 'Apis I favour' }
+  var headers = { client: 'Infos on client', cloud: 'Social cloud actvities', sys: 'Node server in use', apis: 'Apis I favour' }
   for (var elem in headers) {
     var div = document.getElementById(elem)
     div.classList.add('mt-4')
     arr.push(elem)
     var head = document.createElement('h4')
     head.innerText = headers[elem]
-    head.classList.add('mb-3', 'mt-5')
+    head.classList.add('mt-5')
     div.prepend(head)
   }
 

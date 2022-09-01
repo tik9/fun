@@ -1,5 +1,5 @@
 
-import fetch from 'node-fetch';
+import axios from "axios";
 
 var url = 'https://api.assemblyai.com/v2/transcript'
 var audio = "https://bit.ly/3yxKEIY"
@@ -8,25 +8,26 @@ function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
 export const handler = async (event) => {
     var id = await api1()
-    await sleep(9000)
+    await sleep(8000)
     var res = await api2(id)
-    // await sleep(3000)
 
-    console.log(1, res)
-    return { body: res, statusCode: 200 }
+    // console.log(2, res)
+    return { body: JSON.stringify(res), statusCode: 200 }
 }
 
 async function api1() {
-    return (await (await fetch(url, {
+    return (await axios.request({
+        url: url,
         method: 'post',
         headers: { authorization: process.env.assembly },
-        body: JSON.stringify({ audio_url: audio })
-    })).json()).id
+        data: JSON.stringify({ audio_url: audio })
+    })).data.id
 }
 
 
 async function api2(id) {
-    return (await (await fetch(url + '/' + id, {
+    return (await axios.request({
+        url: url + '/' + id,
         headers: { authorization: process.env.assembly }
-    })).json()).text
+    })).data
 }

@@ -7,7 +7,7 @@ export async function handler(event) {
         { stack: { url: 'http://api.stackexchange.com/2.2/users/1705829?site=stackoverflow', props: 'reputation' } },
         { git: { url: 'http://api.github.com/users/tik9', props: 'followers' } },
         { hero: { headers: { Accept: 'application/vnd.heroku+json; version=3', Authorization: 'Bearer ' + process.env.hero }, url: 'https://api.heroku.com/account', props: '' }, },
-        { netlify: { headers: { Authorization: 'Bearer ' + process.env.netlify }, url: 'https://api.netlify.com/api/v1/user', props: 'site_count' } }
+        { netlify: { headers: { Authorization: 'Bearer ' + process.env.netlify }, url: 'https://api.netlify.com/api/v1/user', props: ['site_count', 'aa'] } }
     ]
     var obj = []
     for (var elem of arr) {
@@ -19,7 +19,7 @@ export async function handler(event) {
         if (Object.keys(elem) == 'stack') res = res.items[0]
 
         var obj1 = {}
-        for (var prop of [val.props].flat()) {
+        for (var prop of [val.props]) {
             var resprop = res[prop]
 
             if (prop == '') continue

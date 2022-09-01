@@ -13,10 +13,11 @@ export async function handler(event) {
             message: obj.commit.message,
             url: obj.html_url,
         }));
-        res = res.sort(utils.sort('-date')).slice(0, 6);
+        res = res.sort(utils.sort('-date')).slice(0, 4);
+        console.log(res)
         mongo.truncate_coll(commits);
         await mongo.insert_val(commits, res);
-        var res = await mongo.count(commits)
+        // var res = await mongo.count(commits)
 
         return { statusCode: 200, body: JSON.stringify(res) };
     } catch (error) {

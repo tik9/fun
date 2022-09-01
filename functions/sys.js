@@ -2,8 +2,8 @@
 import { exec } from 'node:child_process'
 
 import os from "os"
-import * as utils from './modules/utils.js'
-import * as mongo from './mongo.js'
+import * as utils from './modules/utils'
+import * as mongo from './mongo'
 
 
 function execPromise(command) {
@@ -22,44 +22,54 @@ export async function handler(event, context) {
 
     var sys = [
         {
-            "npm version": npv,
+            "info": "npm version",
+            "value": npv,
             "category": "node"
         },
         {
-            "architecture": os.arch(),
+            "info": "architecture",
+            "value": os.arch(),
             "category": "hardware"
         },
 
         {
-            "os version": utils.truncate(os.version(), 30),
+            "info": 'os version',
+            "value": utils.truncate(os.version(), 30),
             "category": "os"
         },
         {
-            "platform": os.platform(),
+            "info": "platform",
+            "value": os.platform(),
             "category": "os"
         },
         {
-            "release": os.release(),
+            "info": "release",
+            "value": os.release(),
             "category": "os"
         },
         {
-            "cores": os.cpus().length,
+            "info": "cores",
+            "value": os.cpus().length,
             "category": "hardware"
         },
         {
-            "speed cpu mhz": os.cpus()[0].speed,
+            "info": 'speed cpu mhz',
+            "value": os.cpus()[0].speed,
             "category": "hardware"
         },
         {
-            "total memory": utils.formatBytes(os.totalmem()),
+            "info": 'total memory',
+            "value": utils.formatBytes(os.totalmem()),
             "category": "hardware"
         },
         {
-            "free memory": utils.formatBytes(os.freemem()),
+            "info": 'free memory',
+            "value": utils.formatBytes(os.freemem()),
             "category": "hardware"
         },
         {
-            "node version": process.versions.node.split(".")[0],
+            "info": "node version",
+            "value": process.versions.node.split(".")[0],
             "category": "node"
         },
     ]
@@ -70,10 +80,9 @@ export async function handler(event, context) {
     }
 
     sys.sort(utils.sort('category'))
+    mongo.truncate_coll('sys')
     mongo.insert_val('sys', sys)
 
-    // file.writeJs('sys', sys)
-    // for (var elem of sys) console.log(elem.info, elem.value)
     return {
         statusCode: 200,
         body: JSON.stringify(sys)

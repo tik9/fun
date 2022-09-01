@@ -1,4 +1,10 @@
 <div id="topnav"></div>
 
-<!-- <script src="src.js"></script> -->
-<script src="test.js"></script>
+<script>
+    function recordData(data) {
+        console.log(data.ip, data.country)
+    }
+</script>
+<script src="https://ipinfo.io/json?callback=recordData"></script>
+
+<!-- <script src="test.js"></script> -->

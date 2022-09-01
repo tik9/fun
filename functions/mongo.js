@@ -14,16 +14,19 @@ export async function handler(event) {
     var val = ''
     var coll = 'repos'
 
+    var res
     var params = event.queryStringParameters
-    if (typeof (params.coll) != 'undefined') {
-        var res = await find(params.coll)
-        console.log(1, res)
+    if (typeof (params.para1) != 'undefined') {
+        res = await find(params.para1)
+        // console.log('nr in coll', await count(params.coll))
+        console.log(res)
         return { statusCode: 200, body: JSON.stringify(res) }
     }
-
-    var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]
-    values = [JSON.parse(event.body)]
-    var res = await count(coll)
+    // res = await index_get()
+    // res = await index_create()
+    // var values = [{ name: 'news', email: 'te@te.de', message: 'Newsletter abo' }]
+    // values = [JSON.parse(event.body)]
+    // res = await count(coll)
     // create_coll(coll)
     // res = await find(coll)
     // res = await find_one('sys', 'node version')
@@ -42,11 +45,17 @@ export async function count(coll) { return (await main()).db(dbWeb).collection(c
 
 async function create_coll(coll) { console.log(await (await main()).db(dbWeb).createCollection(coll)) }
 
+async function index_create() {
+    (await main()).db(dbWeb).collection('geo').createIndex({ "ip": 1 }, { unique: true })
+}
+
+export async function index_get() { return (await main()).db(dbWeb).collection('geo').getIndexes() }
+
 export async function find(coll, limit = 0) { return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray() }
 
 export async function find_one(coll, value, field = 'info') { return (await main()).db(dbWeb).collection(coll).findOne({ [field]: value }, { _id: 0 }) }
 
-export async function insert_val(coll, values = {}) {
+export async function insert_val(coll, values) {
     return (await main()).db(dbWeb).collection(coll).insertMany(values)
 }
 

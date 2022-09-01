@@ -1,6 +1,6 @@
-import mailgun_ from 'mailgun-js';
+import mailgun from 'mailgun-js';
 
-const mailg = mailgun_({ apiKey: process.env.mailgun, domain: 'sandbox155be01191ff49929c48ce437f0feb28.mailgun.org' });
+const mailg = mailgun({ apiKey: process.env.mailgun, domain: 'sandbox155be01191ff49929c48ce437f0feb28.mailgun.org' });
 
 export async function handler(event) {
     var from, msg
@@ -10,12 +10,10 @@ export async function handler(event) {
         msg = 1
     }
     else {
-        var body = event.body
+        var body = JSON.parse(event.body)
         from = body.name + ' <' + body.email + '>'
         msg = body.message
     }
-    console.log(1, event.body)
-
     try {
         var res = await mailg.messages().send({
             from: from,
@@ -24,10 +22,10 @@ export async function handler(event) {
             text: msg
         })
 
-    } catch (error) { console.log(error) }
+    } catch (error) { console.log(1, error) }
 
     return {
         statusCode: 200,
-        body: JSON.stringify(1)
+        body: JSON.stringify(res)
     }
 }

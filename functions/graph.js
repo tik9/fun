@@ -1,8 +1,8 @@
 
 import axios from "axios";
 
-const query = `
-  query issues {
+var query_issue = `
+  query {
     repository(owner:"tik9", name:"fun") {
       issues(last:3) {
        totalCount,
@@ -18,14 +18,22 @@ const query = `
     }
   }`;
 
+var query_file = `query {
+    repository(owner:"tik9", name:"fun") {
+        object(expression: "main:public/js") {
+        ... on Tree{
+          entries{
+            name
+            size
+          }
+        }
+      }
+    } 
+  }`
+
 export const handler = async (event) => {
-    // var res = await (await fetch('https://api.github.com/graphql', {
-    //     method: 'POST',
-    //     body: JSON.stringify({ query }),
-    //     headers: {
-    //         'Authorization': `Bearer ${process.env.ghtoken}`,
-    //     }
-    // })).json()
+    var params = event.queryStringParameters
+    var query = params.para1 == 'issues' ? query_issue : query_file
 
     var options = {
         url: 'https://api.github.com/graphql',
@@ -35,9 +43,8 @@ export const handler = async (event) => {
     };
     var res = (await axios.request(options)).data
 
-    // console.log(1, res.data.repository.issues)
     return {
         statusCode: 200,
-        body: JSON.stringify(res.data.repository.issues)
+        body: JSON.stringify(res.data.repository)
     }
 }

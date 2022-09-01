@@ -1,19 +1,14 @@
 
-// sys()
+sys()
 
-function mon() { return '/.netlify/functions/mongo?coll=' }
+function mon() { return '/.netlify/functions/mongo?para1=' }
 
 async function sys() {
-    // var a = table([{ 1: 2 }], '1')
     var jstab = []
     var sys = arguments.callee.name
     var res = []
     var res = await (await fetch(mon() + sys)).json()
-    // var res = JSON.parse(JSON.stringify(await getjson(), ['host', 'category', 'info', 'value']))
-    // console.log(res)
-    // return
     res = groupByKey(res, 'host')
-    // res = (res[Object.keys(res)[0]])
     for (var key in res) {
         var arr = []
         for (var elem2 of res[key]) {
@@ -23,7 +18,7 @@ async function sys() {
             arr.push({ category, info, value })
         }
         var head = document.createElement('h5')
-        head.classList.add('mt-5')
+        head.classList.add('mt-4')
         head.textContent = 'Host: ' + key
 
         var tab = table(arr, sys)

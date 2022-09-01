@@ -8,8 +8,8 @@ var modal = `<div id="mymodal" style="display:none;" class="modal fade" role="di
     </div>
     <div id="modal-content" class="modal-body"></div>
     <div class="modal-footer">
-      <button id=mail_btn class="btn btn-default send_btn">Send</button>
-      <button id=final_close data-bs-dismiss=modal class="btn btn-default">Close</button>
+      <button id=mail_btn class="btn btn-primary send_btn">Send</button>
+      <button id=final_close data-bs-dismiss=modal class="btn btn-primary">Close</button>
     </div>
   </div>
 </div>
@@ -18,9 +18,6 @@ var modal = `<div id="mymodal" style="display:none;" class="modal fade" role="di
 document.body.insertAdjacentHTML("afterbegin", modal);
 
 var modalTitle = document.getElementById('modal-title')
-var mail_btn = document.getElementById('mail_btn')
-
-// modalDiv.addEventListener('shown.bs.modal', () => {modalContent.focus()})
 
 var asset_dir = ''
 var container = document.getElementById('container')
@@ -28,7 +25,7 @@ var dateformat = /^\d{4}-\d{2}-\d{2}/
 var github = 'https://github.com/'
 var git = github + 'tik9/'
 var git2 = git + 'fun'
-var gitBase = git2 + '/blob/master/'
+var gitBase = git2 + '/blob/main/'
 var tiko = "Tiko's"
 
 document.title += tiko;
@@ -43,6 +40,7 @@ var bootstrap_root_cdn = { cdn: 'https://cdnjs.cloudflare.com/ajax/libs/', boots
 
 add_css()
 create_icon()
+git_code()
 // includes()
 navbottom()
 
@@ -61,21 +59,22 @@ function create_icon() {
     document.head.appendChild(icon);
 }
 
-
 async function css_js(cdn, type) {
-    var res = await (await fetch('/.netlify/functions/file?dir=' + type)).json()
+    var res = await (await fetch('/.netlify/functions/graph?para1=files')).json()
     // console.log(1, asset_dir)
     cdn.push(...res.map(str => (asset_dir + type + '/' + str)))
     return cdn
 }
 
-function git_code(js_arr2) {
-    for (var elem of js_arr2) {
+async function git_code() {
+    var res = await (await fetch('/.netlify/functions/graph?para1=files')).json()
+    res = res.object.entries
+    for (var elem of res) {
         var li = document.createElement("li");
         var aref = document.createElement("a");
         li.appendChild(aref);
-        aref.href = gitBase + 'public/' + elem
-        aref.textContent = elem.split('/')[1];
+        aref.href = gitBase + 'public/js/' + elem.name
+        aref.textContent = elem.name
         ghUlLinks.append(li);
     }
     var ghDivLink = document.getElementById("git_code");
@@ -92,7 +91,7 @@ function includes() {
     script_(arr)
 }
 
-function list(arr, name = '') {
+function list(arr, name) {
     var ul = document.createElement('ul')
     for (var elem in arr) {
         var val = arr[elem]
@@ -103,7 +102,15 @@ function list(arr, name = '') {
             li.style.display = 'inline-block'
             li.classList.add('me-3')
         }
-        li.appendChild(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
+        else if (name == 'geo' && elem == 'map') {
+            var aref = document.createElement('a')
+            aref.textContent = 'Map'
+            aref.href = val
+            li.append(aref)
+
+        }
+        else
+            li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
         ul.appendChild(li)
     }
     return ul

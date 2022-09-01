@@ -1,5 +1,8 @@
 
-var apiheaders = { joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', transcript: 'Fetch transcripts - tbd', clock: 'Get current UTC Time' }
+var apiheaders = {
+    joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', clock: 'Get UTC Time',
+    //  transcript: 'Fetch transcripts - tbd' 
+}
 
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 var api_div = document.getElementById('apis')
@@ -7,15 +10,14 @@ var api_div = document.getElementById('apis')
 creategui()
 
 async function creategui() {
-    await sleep(100)
-    i = 1
+    var count = 1
     for (var elem in apiheaders) {
         var div = document.createElement('div')
-        div.classList.add('mt-5')
+        div.classList.add('mt-4')
         div.id = elem
         api_div.append(div)
         var head = document.createElement('h5')
-        head.innerText = i + '. ' + apiheaders[elem]
+        head.innerText = count + '. ' + apiheaders[elem]
         div.append(head)
         if (elem == 'stock') {
             var symbol = 'symbols'
@@ -36,13 +38,12 @@ async function creategui() {
         btn.setAttribute('data-test', btnElem)
         if (!['transcript', 'clock'].includes(elem)) {
             var input = document.createElement('input')
-            btn.addEventListener('click', async (event) => { rapid(event.target.id.slice(3), input) })
             var inputElem = 'input' + elem
             input.id = inputElem
             input.classList.add('mt-3')
             input.required = true
-            input.setAttribute('data-test', inputElem)
             if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
+            input.setAttribute('data-test', inputElem)
             div.append(input, btn)
         } else div.append(btn)
 
@@ -53,11 +54,17 @@ async function creategui() {
         res.textContent = '.. ' + elem + ' waits ..'
         res.setAttribute('data-test', resElem)
         div.append(res)
-        i++
+        count++
     }
 
+    document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
+    document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
+    document.getElementById('btnclock').addEventListener('click', event => rapid('clock'))
+}
+
+function transcript_to_func() {
     var btntrans = document.getElementById('btntranscript')
-    btntrans.focus()
+
     btntrans.addEventListener('click', async (event) => {
         document.getElementById('restranscript').innerText = ''
         var modalDiv = document.getElementById('mymodal')
@@ -72,34 +79,27 @@ async function creategui() {
             console.log('err here', error)
             endres = 'No result'
         }
-        // await sleep(4000)
         modalTitle.textContent = 'Loading finished, you can close the window'
-        // var res = 'end'
         document.getElementById('restranscript').innerText = 'Result: ' + endres
-        // myModal.hide()    
-    })
-
-    document.getElementById('btnclock').addEventListener('click', async (event) => {
-        var res = await (await fetch('http://worldclockapi.com/api/json/utc/now')).json()
-        document.getElementById('resclock').innerText = res.currentDateTime.split('T')[1].slice(0, 5) + ' hours'
     })
 }
 
 async function rapid(type, input) {
-    input.innerText = ''
     var resdiv = document.getElementById('res' + type)
+    resdiv.innerHTML = ''
+    var inputval = typeof (input) == 'undefined' ? '' : '&input=' + input.value
     try {
-        var res = await (await fetch('/.netlify/functions/rapid?type=' + type + '&input=' + input.value)).json()
+        var res = await (await fetch('/.netlify/functions/rapid?type=' + type + inputval)).json()
         if (type == 'joke') {
             res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
             resdiv.append(table(res, 'joke'))
         }
+        else if (type == 'clock') resdiv.innerHTML = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
         else {
             res = res["Monthly Time Series"]
             res = res[Object.keys(res)[0]]['1. open']
             resdiv.innerText = Number(res.split('.')[0])
         }
     } catch (err) { console.log(err) }
+    finally { }
 }
-
-function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
