@@ -2,7 +2,7 @@
 import { exec } from 'node:child_process'
 
 import os from "os"
-import * as utils from './modules/utils'
+import * as utils from './utils'
 import * as mongo from './mongo'
 
 

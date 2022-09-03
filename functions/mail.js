@@ -1,3 +1,4 @@
+
 import mailgun from 'mailgun-js';
 
 const mailg = mailgun({ apiKey: process.env.mailgun, domain: 'sandbox155be01191ff49929c48ce437f0feb28.mailgun.org' });

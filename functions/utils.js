@@ -1,4 +1,13 @@
 
+function sleep() {
+    return new Promise(r => setTimeout(r, 3000))
+}
+
+export async function handler(event) {
+    await sleep()
+    return { body: JSON.stringify(1), statusCode: 200 }
+}
+
 export function sort(property) {
     // console.log(1, property[0])
     var sortOrder = 1;

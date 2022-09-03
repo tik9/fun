@@ -28,12 +28,11 @@ async function includes() {
   script_(arr)
 }
 
-function locale_date(date = '') {
+function locale_date(date) {
   var today = new Date()
-  var todayDate = today.toISOString().substring(0, 10);
   var dateformat = { day: '2-digit', month: '2-digit', year: 'numeric' }
 
-  return date == todayDate ? 'today' : new Date(today.setDate(today.getDate() - 1)).toISOString().substring(0, 10) == date ? 'yesterday' : new Date(date).toLocaleDateString('de-de', dateformat)
+  return date == today.toISOString().substring(0, 10) ? 'today' : new Date(today.setDate(today.getDate() - 1)).toISOString().substring(0, 10) == date ? 'yesterday' : new Date(date).toLocaleDateString('de-de', dateformat)
 }
 
 

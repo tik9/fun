@@ -4,7 +4,6 @@ import { join, resolve } from 'path'
 import { promises as fs, readdirSync, statSync } from "fs"
 
 var asset_dir = './public/'
-var all = 'all.json'
 var filepath = resolve(asset_dir, 'json')
 
 export async function handler(event) {

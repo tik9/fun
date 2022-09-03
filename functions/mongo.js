@@ -8,18 +8,12 @@ var dbWeb = "website"
 export function main() { return new MongoClient(process.env.mongo).connect() }
 
 export async function handler(event) {
-    var searchkey = 'tool'
-    var searchval = 'api'
-    var key = 'name'
-    var val = ''
-    var coll = 'repos'
-
     var res
     var params = event.queryStringParameters
     if (typeof (params.para1) != 'undefined') {
         res = await find(params.para1)
         // console.log('nr in coll', await count(params.coll))
-        console.log(res)
+        // console.log(res)
         return { statusCode: 200, body: JSON.stringify(res) }
     }
     // res = await index_get()
@@ -45,9 +39,7 @@ export async function count(coll) { return (await main()).db(dbWeb).collection(c
 
 async function create_coll(coll) { console.log(await (await main()).db(dbWeb).createCollection(coll)) }
 
-async function index_create() {
-    (await main()).db(dbWeb).collection('geo').createIndex({ "ip": 1 }, { unique: true })
-}
+async function index_create() { (await main()).db(dbWeb).collection('geo').createIndex({ "ip": 1 }, { unique: true }) }
 
 export async function index_get() { return (await main()).db(dbWeb).collection('geo').getIndexes() }
 
@@ -55,13 +47,11 @@ export async function find(coll, limit = 0) { return (await main()).db(dbWeb).co
 
 export async function find_one(coll, value, field = 'info') { return (await main()).db(dbWeb).collection(coll).findOne({ [field]: value }, { _id: 0 }) }
 
-export async function insert_val(coll, values) {
-    return (await main()).db(dbWeb).collection(coll).insertMany(values)
-}
+export async function insert_one(coll, obj) { return (await main()).db(dbWeb).collection(coll).insertOne(obj) }
 
-async function list_coll() {
-    return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name)
-}
+export async function insert_val(coll, obj) { return (await main()).db(dbWeb).collection(coll).insertMany(obj) }
+
+async function list_coll() { return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name) }
 
 async function remove_coll(coll) { (await main()).db(dbWeb).collection(coll).drop() }
 

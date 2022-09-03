@@ -86,9 +86,19 @@ function includes() {
     var minjs = '.min.js'
     var arr = [
         bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'js/bootstrap' + minjs,
-        bootstrap_root_cdn.cdn + 'jquery/3.6.0/jquery' + minjs,
+        // bootstrap_root_cdn.cdn + 'jquery/3.6.0/jquery' + minjs,
     ]
     script_(arr)
+}
+
+function li_aref(text, href) {
+    console.log()
+    var aref = document.createElement('a')
+    aref.textContent = text
+    aref.href = href
+    var li = document.createElement('li')
+    li.append(aref)
+    return li
 }
 
 function list(arr, name) {
@@ -102,13 +112,9 @@ function list(arr, name) {
             li.style.display = 'inline-block'
             li.classList.add('me-3')
         }
-        else if (name == 'geo' && elem == 'map') {
-            var aref = document.createElement('a')
-            aref.textContent = 'Map'
-            aref.href = val
-            li.append(aref)
-
-        }
+        else if (name == 'geo' && elem == 'map') li = li_aref('Map', val)
+        else if (name == 'cloud_accounts')
+            li = li_aref(elem, val)
         else
             li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
         ul.appendChild(li)

@@ -1,16 +1,18 @@
 
 import * as mongo from './mongo'
 import { IPinfoWrapper } from "node-ipinfo"
+import axios from 'axios';
 
-export const handler = async (event) => {
 
+export const handler = async (event, context) => {
+    var res
     const ipinfo = new IPinfoWrapper(process.env.ipgeo);
-    // var res = await ipinfo.lookupIp('1.1.1.1')
-    var res = await (await fetch("https://ipinfo.io/json?token=" + process.env.ipgeo)).json()
-    // var map = (await ipinfo.getMap([res.ip])
-    // console.log(map);
+    res = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
     res.map = (await ipinfo.getMap([res.ip])).reportUrl
+    res.date = new Date()
 
-    // mongo.insert_val('geo', [res])
+    // console.log(res, 2, event.headers.host);
+    if (event.headers.host != 'localhost:8888')
+        mongo.insert_one('geo', res)
     return { body: JSON.stringify(res), statusCode: 200 }
 }

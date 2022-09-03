@@ -7,7 +7,6 @@ var apiheaders = {
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 var api_div = document.getElementById('apis')
 
-creategui()
 
 async function creategui() {
     var count = 1
@@ -56,11 +55,12 @@ async function creategui() {
         div.append(res)
         count++
     }
-
-    document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
-    document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
-    document.getElementById('btnclock').addEventListener('click', event => rapid('clock'))
 }
+creategui()
+
+document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
+document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
+document.getElementById('btnclock').addEventListener('click', event => rapid('clock'))
 
 function transcript_to_func() {
     var btntrans = document.getElementById('btntranscript')
@@ -101,5 +101,4 @@ async function rapid(type, input) {
             resdiv.innerText = Number(res.split('.')[0])
         }
     } catch (err) { console.log(err) }
-    finally { }
 }

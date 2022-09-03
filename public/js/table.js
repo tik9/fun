@@ -79,7 +79,7 @@ function table(arr = [], src) {
                     td.append(aref(elem, val))
                     // console.log(elem)
                 } else
-                    td.innerHTML = (elem2 == 'createdAt') ? locale_date(val) : val
+                    td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
             else td.innerHTML = val
             tr.appendChild(td);

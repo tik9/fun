@@ -32,10 +32,5 @@ export const handler = async (event) => {
             statusCode: 200,
             body: JSON.stringify(res)
         }
-    } catch (err) {
-        return {
-            statusCode: 404,
-            body: console.log('error here', err)
-        };
-    }
+    } catch (err) { return { body: console.log('error here', err) }; }
 }

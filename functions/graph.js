@@ -9,6 +9,7 @@ var query_issue = `
         edges {
           node {
             createdAt
+            updatedAt
               body
               title
               url
@@ -36,7 +37,7 @@ export const handler = async (event) => {
     var query = params.para1 == 'issues' ? query_issue : query_file
 
     var options = {
-        url: 'https://api.github.com/graphql',
+        url: process.env.gh_graph,
         method: 'POST',
         data: JSON.stringify({ query }),
         headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
