@@ -27,7 +27,7 @@ export async function handler(event) {
     // res = await list_coll()
     // remove_coll(coll)
     // remove_field(coll, searchkey, searchval, 'del')
-    // rename_field(coll, old, newf)
+    rename_coll('geo', 'client')
     // remove_many(coll, key, val)
     // if (Object.keys(values).length != 0) insert_val(coll, values)
     // update_one(coll, searchkey, searchval, key, val)

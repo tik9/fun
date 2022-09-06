@@ -38,19 +38,10 @@ topnav.classList.add('fixed-top', 'bg-dark')
 
 var bootstrap_root_cdn = { cdn: 'https://cdnjs.cloudflare.com/ajax/libs/', boots: 'twitter-bootstrap/5.0.0/' }
 
-add_css()
 create_icon()
-git_code()
-// includes()
+// git_code()
+includes()
 navbottom()
-
-
-async function add_css() {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'css/bootstrap.min.css'
-    document.head.appendChild(link);
-}
 
 function create_icon() {
     var icon = document.createElement("link");
@@ -59,16 +50,16 @@ function create_icon() {
     document.head.appendChild(icon);
 }
 
-async function css_js(cdn, type) {
-    var res = await (await fetch('/.netlify/functions/graph?para1=files')).json()
-    // console.log(1, asset_dir)
-    cdn.push(...res.map(str => (asset_dir + type + '/' + str)))
-    return cdn
+async function css_js(type) {
+    var res = await (await fetch('/.netlify/functions/files?dir=' + type)).json()
+    res = res.object.entries.map(str => type + '/' + str.name)
+    // console.log(1, res)
+    return res
 }
 
 async function git_code() {
-    var res = await (await fetch('/.netlify/functions/graph?para1=files')).json()
-    res = res.object.entries
+    var res = (await (await fetch('/.netlify/functions/files?dir=js')).json()).object.entries
+    // res = res.object.entries
     for (var elem of res) {
         var li = document.createElement("li");
         var aref = document.createElement("a");
@@ -82,14 +73,32 @@ async function git_code() {
     ghDivLink.append(ghUlLinks);
 }
 
-function includes() {
-    var minjs = '.min.js'
-    var arr = [
-        bootstrap_root_cdn.cdn + bootstrap_root_cdn.boots + 'js/bootstrap' + minjs,
-        // bootstrap_root_cdn.cdn + 'jquery/3.6.0/jquery' + minjs,
-    ]
-    script_(arr)
+async function includes() {
+    var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
+    var boots = 'twitter-bootstrap/5.0.0/'
+
+    css_arr = await css_js('css')
+    css_arr.push(cdn + boots + 'css/bootstrap.min.css')
+
+    includes_load([cdn + boots + 'js/bootstrap.min.js'])
+
+    for (var elem of css_arr) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = elem;
+        document.head.appendChild(link);
+    }
 }
+function includes_load(arr) {
+    for (var elem of arr) {
+        console.log(elem)
+        if (elem == 'js/api.js') continue
+        var script = document.createElement("script")
+        script.src = elem
+        document.head.append(script)
+    }
+}
+
 
 function li_aref(text, href) {
     console.log()
@@ -112,7 +121,7 @@ function list(arr, name) {
             li.style.display = 'inline-block'
             li.classList.add('me-3')
         }
-        else if (name == 'geo' && elem == 'map') li = li_aref('Map', val)
+        else if (name == 'client' && elem == 'map') li = li_aref('Map', val)
         else if (name == 'cloud_accounts')
             li = li_aref(elem, val)
         else
@@ -136,13 +145,5 @@ function navbottom() {
         aref.classList.add('nav')
 
         bottomnav.append(aref)
-    }
-}
-
-function script_(arr) {
-    for (var elem of arr) {
-        var script = document.createElement("script")
-        script.src = elem
-        document.head.prepend(script)
     }
 }

@@ -1,6 +1,5 @@
 
-// includes()
-navtop()
+includes()
 navtop_head()
 
 
@@ -22,10 +21,10 @@ function helper(sub, sup = 'cloud') {
 }
 
 async function includes() {
-  var arr = await css_js([], 'js')
+  var arr = await css_js('js')
   arr.sort()
   git_code(arr)
-  script_(arr)
+  includes_load(arr)
 }
 
 function locale_date(date) {
@@ -46,19 +45,18 @@ function navhelp(arr) {
   }
 }
 
-function navtop() {
+function navtop_head() {
   var aref = document.createElement("a");
   aref.classList.add('nav', 'active')
   aref.href = '#container';
   aref.textContent = 'Index'
   topnav.append(aref)
-}
 
-function navtop_head() {
   var arr = []
-  var headers = { client: 'Infos on client', cloud: 'Social cloud actvities', sys: 'Node server in use', apis: 'Apis I favour' }
+  var headers = { apis: 'Apis I favour', client: 'Infos on client', cloud: 'Social cloud actvities', sys: 'Node server in use' }
   for (var elem in headers) {
-    var div = document.getElementById(elem)
+    var div = document.createElement(elem)
+    container.append(div)
     div.classList.add('mt-4')
     arr.push(elem)
     var head = document.createElement('h4')

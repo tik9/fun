@@ -1,19 +1,28 @@
 
+import axios from 'axios'
 import * as utils from './utils.js'
 import * as mongo from './mongo.js'
 
+var url = 'https://api.github.com/graphql'
 
 export async function handler(event) {
-    var gh_url = 'https://api.github.com/users/tik9/repos'
-    var repos = 'repos'
-    try {
-        var res = await (await fetch(gh_url)).json()
-        res = res.map(obj => ({ repo: obj.name, stars: obj.watchers, description: obj.description, date: obj.updated_at.slice(0, 10) }))
+    var query = `{repositoryOwner(login: "tik9") { repositories (orderBy: { field: PUSHED_AT, direction: DESC }, first: 3) { nodes { name description homepageUrl pushedAt }}}}`
 
-        res = res.sort(utils.sort('-date')).slice(0, 5)
-        mongo.truncate_coll(repos)
-        mongo.insert_val(repos, res)
-        // console.log(res)
-        return { statusCode: 200, body: JSON.stringify(1) }
-    } catch (error) { console.log(error) }
+    var res = (await axios.request({
+        url: url,
+        method: 'POST',
+        headers: { "Authorization": "bearer " + process.env.ghtoken, },
+        data: JSON.stringify({ query })
+    })).data
+    res = res.data.repositoryOwner.repositories.nodes
+
+    res = res.map(({ name, description, homepageUrl: url, pushedAt, ...rest }) => ({ name, description, date: pushedAt.substring(0, 10), url, ...rest }))
+
+    // mongo.truncate_coll(repos)
+    // mongo.insert_val(repos, res)
+
+    console.log(res)
+
+    return { statusCode: 200, body: JSON.stringify(res) }
+
 }
