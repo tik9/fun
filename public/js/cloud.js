@@ -1,19 +1,21 @@
 
-// commits()
-// cloud_accounts()
-// repos()
-// issues_with_this_repo()
+accounts()
+commits()
+repos()
+issues_with_this_repo()
 
-async function cloud_accounts() {
-  try {
-    var res = await (await fetch('/.netlify/functions/accounts')).json()
+async function accounts() {
+  await sleep(100)
+  await indexfun('cloud')
+  var res = await (await fetch(netfun + arguments.callee.name)).json()
 
-    helper(arguments.callee.name).append(list(res, arguments.callee.name))
-  } catch (error) { console.log(error) }
+  var div = helper(arguments.callee.name)
+  div.append(list(res, arguments.callee.name))
 }
 
 async function commits() {
-  var res = await (await fetch('/.netlify/functions/commits')).json()
+  var commits = arguments.callee.name
+  var res = await (await fetch(netfun + commits)).json()
   res = res[0].node.target.history.edges
   var arr = []
   for (var elem of res) {
@@ -29,11 +31,25 @@ async function commits() {
     }
     arr.push(obj)
   }
-  helper(arguments.callee.name).append(table(arr, arguments.callee.name))
+  helper(commits).append(table(arr, commits))
+}
+
+function helper(sub) {
+  var sup = 'cloud'
+  var div = document.createElement('div')
+  div.id = sub
+  var sup = document.getElementById(sup)
+  // console.log(1, sub, sup)
+  var head = document.createElement('h5')
+  if (sub != 'accounts') head.classList.add('mt-3',)
+  head.classList.add('mb-3')
+  head.textContent = sub[0].toUpperCase() + sub.slice(1).replace(/_/g, ' ')
+  sup.append(head, div)
+  return div
 }
 
 async function issues_with_this_repo() {
-  var res = await (await fetch('/.netlify/functions/issues')).json()
+  var res = await (await fetch(netfun + 'issues')).json()
   var arr_field = ['title', 'body', 'url']
   var arr_date = ['createdAt', 'updatedAt']
   arr_field = arr_field.concat(arr_date)
@@ -43,7 +59,6 @@ async function issues_with_this_repo() {
   for (var elem of res) {
     var obj = {};
     for (var elem2 of arr_field) {
-
       var elem3 = elem2
       var val = elem.node[elem2]
       if (arr_date.includes(elem2)) {
@@ -59,6 +74,6 @@ async function issues_with_this_repo() {
 
 async function repos() {
   var repos = arguments.callee.name
-  var res = await (await fetch('/.netlify/functions/' + repos)).json()
+  var res = await (await fetch(netfun + repos)).json()
   helper(repos).append(table(res, repos))
 }

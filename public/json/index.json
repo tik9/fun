@@ -1,0 +1,26 @@
+[
+    {
+        "category": "further-fun",
+        "name": "apis",
+        "title": "Apis I favour",
+        "text": "Apis I use here"
+    },
+    {
+        "category": "further-fun",
+        "name": "cloud",
+        "title": "Social cloud actvities",
+        "text": "social clouds related to programming"
+    },
+    {
+        "category": "further-fun",
+        "name": "div",
+        "title": "Div topics",
+        "text": "E.g. convert feet to cm"
+    },
+    {
+        "category": "rest",
+        "name": "intro",
+        "title": "Welcome to Tiko's site",
+        "text": "A website for - frontend first - programmers and in programming interested!"
+    }
+]

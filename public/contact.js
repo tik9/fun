@@ -8,6 +8,8 @@ var arr = ['name', email_contact, 'message', 'nl_input']
 var contact_input = document.getElementById(email_contact)
 var nl_input = document.getElementById('nl_input')
 
+git_code(['contact.js', 'client.js'])
+
 async function mail(type = 'mail') {
     var obj = getObj()
     delete Object.assign(obj, { ['email']: obj[email_contact] })[email_contact];
@@ -15,7 +17,7 @@ async function mail(type = 'mail') {
     if (type == 'news') obj = { name: 'news', email: nl_input.value, message: 'Newsletter abo' }
 
     try {
-        return (await fetch('/.netlify/functions/mail', { method: "post", body: JSON.stringify(obj) })).json()
+        return (await fetch(netfun+'/mail', { method: "post", body: JSON.stringify(obj) })).json()
     } catch (error) { console.log('err', error) }
 }
 

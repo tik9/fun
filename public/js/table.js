@@ -8,7 +8,7 @@ function aref(elem, val) {
 }
 
 function table(arr = [], src) {
-    var excludes = ['_id', '__v', 'cat', 'url', 'page', 'api']
+    var excludes = ['_id', '__v', 'api', 'category', 'name', 'page', 'url']
     var table_ = document.createElement('table')
     var columns = []
     var thead = document.createElement('thead')
@@ -38,7 +38,7 @@ function table(arr = [], src) {
             if (src == 'index') {
                 if (elem2 == 'title') {
                     var ahref = document.createElement('a')
-                    ahref.href = '#' + elem.page
+                    ahref.href = '#' + elem.name
                     ahref.textContent = val
                     td.append(ahref)
                 }
@@ -48,7 +48,7 @@ function table(arr = [], src) {
                 if (['date', 'description'].includes(elem2)) {
                     td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
                 }
-                else if (elem2 == 'name') {
+                else if (elem2 == 'repo') {
                     var ahref = document.createElement('a')
                     ahref.href = git + elem.repo
                     ahref.textContent = val

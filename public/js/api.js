@@ -6,15 +6,19 @@ var apiheaders = {
 
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 
-creategui()
-async function creategui() {
+apis()
+async function apis() {
+    await sleep(100)
+    var apis = arguments.callee.name
+    await indexfun(apis)
     var count = 1
     for (var elem in apiheaders) {
         var div = document.createElement('div')
         div.classList.add('mt-4')
         div.id = elem
-        container.append(div)
+        document.getElementById(apis).append(div)
         var head = document.createElement('h5')
+        head.classList.add('mb-2')
         head.innerText = count + '. ' + apiheaders[elem]
         div.append(head)
         if (elem == 'stock') {
@@ -29,12 +33,12 @@ async function creategui() {
             div.append(headsym, sym)
         }
         var btn = document.createElement('button')
-        btn.classList.add('ms-2', 'btn', 'btn-primary')
+        btn.classList.add('ms-2', 'mt-2', 'btn', 'btn-primary')
         var btnElem = 'btn' + elem
         btn.id = btnElem
         btn.textContent = 'Fetch'
         btn.setAttribute('data-test', btnElem)
-        if (!['transcript', 'clock'].includes(elem)) {
+        if (!['clock'].includes(elem)) {
             var input = document.createElement('input')
             var inputElem = 'input' + elem
             input.id = inputElem
@@ -54,11 +58,13 @@ async function creategui() {
         div.append(res)
         count++
     }
-}
 
-document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
-document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
-document.getElementById('btnclock').addEventListener('click', event => rapid('clock'))
+    document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
+    document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
+    document.getElementById('btnclock').addEventListener('click', event =>
+        rapid('clock')
+    )
+}
 
 function transcript_to_func() {
     var btntrans = document.getElementById('btntranscript')
@@ -71,7 +77,7 @@ function transcript_to_func() {
         mail_btn.style.display = 'none'
         modalTitle.textContent = 'The api is loading'
         try {
-            var res = await (await fetch('/.netlify/functions/transcript')).json()
+            var res = await (await fetch(netfun + 'transcript')).json()
             var endres = res
         } catch (error) {
             console.log('err here', error)
@@ -87,7 +93,7 @@ async function rapid(type, input) {
     resdiv.innerHTML = ''
     var inputval = typeof (input) == 'undefined' ? '' : '&input=' + input.value
     try {
-        var res = await (await fetch('/.netlify/functions/rapid?type=' + type + inputval)).json()
+        var res = await (await fetch(netfun + 'rapid?type=' + type + inputval)).json()
         if (type == 'joke') {
             res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
             resdiv.append(table(res, 'joke'))

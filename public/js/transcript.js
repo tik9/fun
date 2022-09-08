@@ -2,8 +2,6 @@
 var audio = "https://bit.ly/3yxKEIY"
 var url = 'https://api.assemblyai.com/v2/transcript'
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
-
 // out()
 async function out() { console.log(await transcript()) }
 

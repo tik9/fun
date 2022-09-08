@@ -1,7 +1,5 @@
 
 import axios from 'axios'
-import * as utils from './utils.js'
-import * as mongo from './mongo.js'
 
 var url = 'https://api.github.com/graphql'
 
@@ -16,13 +14,8 @@ export async function handler(event) {
     })).data
     res = res.data.repositoryOwner.repositories.nodes
 
-    res = res.map(({ name, description, homepageUrl: url, pushedAt, ...rest }) => ({ name, description, date: pushedAt.substring(0, 10), url, ...rest }))
+    res = res.map(({ name: repo, description, homepageUrl: url, pushedAt, ...rest }) => ({ repo, description, date: pushedAt.substring(0, 10), url, ...rest }))
 
-    // mongo.truncate_coll(repos)
-    // mongo.insert_val(repos, res)
-
-    console.log(res)
-
+    // console.log(res)
     return { statusCode: 200, body: JSON.stringify(res) }
-
 }

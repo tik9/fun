@@ -1,24 +1,6 @@
 
 import axios from "axios";
 
-var query_issue = `
-  query {
-    repository(owner:"tik9", name:"fun") {
-      issues(last:3) {
-       totalCount,
-        edges {
-          node {
-            createdAt
-            updatedAt
-              body
-              title
-              url
-          }
-        }
-      }
-    }
-  }`;
-
 var query_file = `query file($expression: String) {
     repository(owner:"tik9", name:"fun") {
         object(expression:$expression ) {
@@ -30,14 +12,9 @@ var query_file = `query file($expression: String) {
       }
     } 
   }`
-// query_file = `query ($expression:String){repository(owner:"google", name:"gson") {object(expression: $expression) {... on Tree{entries{name         }   }}} }`
-
-// var expression = "gson-2.4:gson"
 
 export const handler = async (event) => {
-  var params = event.queryStringParameters
-
-  var expression = "main:public/" + params.dir
+  var expression = "main:public/" + event.queryStringParameters.dir
 
   var options = {
     url: process.env.gh_graph,

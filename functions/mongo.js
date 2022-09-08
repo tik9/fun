@@ -1,7 +1,7 @@
 
-import * as file from './file'
+import { resolve } from 'path'
 import { MongoClient } from 'mongodb'
-import { join } from 'path'
+import { promises as fs } from 'fs'
 
 var dbWeb = "website"
 
@@ -11,10 +11,8 @@ export async function handler(event) {
     var res
     var params = event.queryStringParameters
     if (typeof (params.para1) != 'undefined') {
-        res = await find(params.para1)
-        // console.log('nr in coll', await count(params.coll))
-        // console.log(res)
-        return { statusCode: 200, body: JSON.stringify(res) }
+        // console.log('', await find(params.para1))
+        return { statusCode: 200, body: JSON.stringify(await find(params.para1)) }
     }
     // res = await index_get()
     // res = await index_create()
@@ -24,10 +22,13 @@ export async function handler(event) {
     // create_coll(coll)
     // res = await find(coll)
     // res = await find_one('sys', 'node version')
+    // res = JSON.parse(await fs.readFile(resolve('public', 'json', 'index.json')))
+    // console.log(res)
+    // insert_val('index', res)
     // res = await list_coll()
     // remove_coll(coll)
     // remove_field(coll, searchkey, searchval, 'del')
-    rename_coll('geo', 'client')
+    // rename_coll('geo', 'client')
     // remove_many(coll, key, val)
     // if (Object.keys(values).length != 0) insert_val(coll, values)
     // update_one(coll, searchkey, searchval, key, val)
@@ -39,13 +40,13 @@ export async function count(coll) { return (await main()).db(dbWeb).collection(c
 
 async function create_coll(coll) { console.log(await (await main()).db(dbWeb).createCollection(coll)) }
 
-async function index_create() { (await main()).db(dbWeb).collection('geo').createIndex({ "ip": 1 }, { unique: true }) }
-
-export async function index_get() { return (await main()).db(dbWeb).collection('geo').getIndexes() }
-
 export async function find(coll, limit = 0) { return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray() }
 
 export async function find_one(coll, value, field = 'info') { return (await main()).db(dbWeb).collection(coll).findOne({ [field]: value }, { _id: 0 }) }
+
+async function index_create() { (await main()).db(dbWeb).collection('geo').createIndex({ "ip": 1 }, { unique: true }) }
+
+export async function index_get() { return (await main()).db(dbWeb).collection('geo').getIndexes() }
 
 export async function insert_one(coll, obj) { return (await main()).db(dbWeb).collection(coll).insertOne(obj) }
 
@@ -79,5 +80,5 @@ export async function exportjs() {
     console.log(res)
     res = JSON.parse(JSON.stringify(res, obj, 4));
 
-    file.writeJs(join('sys'), res)
+    file.writeJs(resolve('sys'), res)
 }

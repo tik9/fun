@@ -17,9 +17,8 @@ export async function handler(event) {
             var name = json.split('.')[0]
             // obj[name] = cont
             // arr.push(obj)
-            // console.log(1, name, cont, json)
+            console.log(1, cont, json)
         }
-
         return {
             statusCode: 200,
             body: JSON.stringify(res)

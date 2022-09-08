@@ -1,30 +1,35 @@
 
-includes()
-navtop_head()
+// navtop_head()
 
+var str = document.currentScript.src
+var thisone = str.substring(str.lastIndexOf("/") + 1, str.length).split('.')[0]
+// indexfun()
+index()
+include_js()
+
+async function include_js() {
+  var res = await css_js('js')
+  includes_script(res)
+  await sleep(100)
+  git_code(res)
+}
 
 function groupByKey(list, key) {
   return list.reduce((hash, { [key]: value, ...rest }) =>
     ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
 }
 
-function helper(sub, sup = 'cloud') {
-  var div = document.createElement('div')
-  div.id = sub
-  var sup = document.getElementById(sup)
-  var head = document.createElement('h5')
-  if (sub != 'accounts') head.classList.add('mt-3',)
-  head.classList.add('mb-3')
-  head.textContent = sub[0].toUpperCase() + sub.slice(1).replace(/_/g, ' ')
-  sup.append(head, div)
-  return div
-}
+async function index() {
+  var index = arguments.callee.name
+  await indexfun(index)
+  var res = await (await fetch(netfun + 'mongo?para1=' + index)).json()
+  // console.log(res)
+  res = res.filter(val => val.category.match(new RegExp(/further-fun/)));
 
-async function includes() {
-  var arr = await css_js('js')
-  arr.sort()
-  git_code(arr)
-  includes_load(arr)
+  var div = document.getElementById(index)
+  res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
+  div.append(table(res, index))
+  div.classList.add('mt-5')
 }
 
 function locale_date(date) {
@@ -45,34 +50,7 @@ function navhelp(arr) {
   }
 }
 
-function navtop_head() {
-  var aref = document.createElement("a");
-  aref.classList.add('nav', 'active')
-  aref.href = '#container';
-  aref.textContent = 'Index'
-  topnav.append(aref)
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
-  var arr = []
-  var headers = { apis: 'Apis I favour', client: 'Infos on client', cloud: 'Social cloud actvities', sys: 'Node server in use' }
-  for (var elem in headers) {
-    var div = document.createElement(elem)
-    container.append(div)
-    div.classList.add('mt-4')
-    arr.push(elem)
-    var head = document.createElement('h4')
-    head.innerText = headers[elem]
-    head.classList.add('mt-5')
-    div.prepend(head)
-  }
-
-  for (var elem of arr) {
-    var aref = document.createElement('a')
-    aref.textContent = elem
-    aref.href = '#' + elem
-    aref.classList.add('nav')
-    topnav.append(aref)
-  }
-  container.prepend(topnav)
-}
 
 //# sourceURL=dynamicScript.js

@@ -5,7 +5,8 @@
 
 /* Style the links inside the navigation bar */
 #topnav a,
-#bottomnav a {
+#bottomnav a,
+#bottomnav div {
     font-size: 17px;
     float: left;
     color: #f2f2f2;
