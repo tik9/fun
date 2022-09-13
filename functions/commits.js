@@ -36,7 +36,7 @@ export async function handler(event) {
     var res
     try {
         res = (await axios.request({ url: process.env.gh_graph, method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken, }, data: JSON.stringify({ query }) })).data
-        res = res.data.repository.refs.edges
+        res = res.data.repository.refs.edges[0].node.target.history.edges
 
         // console.log(1, res)
         // mongo.truncate_coll(commits);

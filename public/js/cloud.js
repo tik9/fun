@@ -1,12 +1,14 @@
 
+var alias_cloud = 'social_cloud'
+
 accounts()
 commits()
-repos()
 issues_with_this_repo()
+posts()
+repos()
 
 async function accounts() {
-  await sleep(100)
-  await indexfun('cloud')
+  await indexfun(alias_cloud)
   var res = await (await fetch(netfun + arguments.callee.name)).json()
 
   var div = helper(arguments.callee.name)
@@ -15,10 +17,9 @@ async function accounts() {
 
 async function commits() {
   var commits = arguments.callee.name
-  var res = await (await fetch(netfun + commits)).json()
-  res = res[0].node.target.history.edges
-  var arr = []
-  for (var elem of res) {
+  var arr = await (await fetch(netfun + commits)).json()
+  var res = []
+  for (var elem of arr) {
     var obj = {}
     for (var elem2 in elem.node) {
       var val = elem.node[elem2]
@@ -29,34 +30,28 @@ async function commits() {
 
       obj[elem2] = val
     }
-    arr.push(obj)
+    res.push(obj)
   }
-  helper(commits).append(table(arr, commits))
+  helper(commits).append(table(res, commits))
 }
 
 function helper(sub) {
-  var sup = 'cloud'
   var div = document.createElement('div')
   div.id = sub
-  var sup = document.getElementById(sup)
-  // console.log(1, sub, sup)
   var head = document.createElement('h5')
-  if (sub != 'accounts') head.classList.add('mt-3',)
-  head.classList.add('mb-3')
+  head.classList.add('mt-3', 'mb-3')
   head.textContent = sub[0].toUpperCase() + sub.slice(1).replace(/_/g, ' ')
-  sup.append(head, div)
+  document.getElementById(alias_cloud).append(head, div)
   return div
 }
 
 async function issues_with_this_repo() {
-  var res = await (await fetch(netfun + 'issues')).json()
   var arr_field = ['title', 'body', 'url']
   var arr_date = ['createdAt', 'updatedAt']
   arr_field = arr_field.concat(arr_date)
-  res = res.issues.edges
 
   var arr = []
-  for (var elem of res) {
+  for (var elem of await (await fetch(netfun + 'issues')).json()) {
     var obj = {};
     for (var elem2 of arr_field) {
       var elem3 = elem2
@@ -70,6 +65,11 @@ async function issues_with_this_repo() {
     arr.push(obj)
   }
   helper(arguments.callee.name).append(table(arr, 'issues'))
+}
+
+async function posts() {
+  var posts = arguments.callee.name
+  helper(posts).append(table(await (await fetch(netfun + posts)).json(), posts))
 }
 
 async function repos() {

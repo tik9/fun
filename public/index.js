@@ -1,6 +1,4 @@
 
-// navtop_head()
-
 var str = document.currentScript.src
 var thisone = str.substring(str.lastIndexOf("/") + 1, str.length).split('.')[0]
 // indexfun()
@@ -23,7 +21,6 @@ async function index() {
   var index = arguments.callee.name
   await indexfun(index)
   var res = await (await fetch(netfun + 'mongo?para1=' + index)).json()
-  // console.log(res)
   res = res.filter(val => val.category.match(new RegExp(/further-fun/)));
 
   var div = document.getElementById(index)

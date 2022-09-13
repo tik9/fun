@@ -1,42 +1,58 @@
 
-convert(6, 5)
-function convert(feet, inches) {
-    const cmTotal = feet * 30.48 + inches * 2.54;
+var ul = document.createElement('ul')
 
-    const feetNew = Math.floor(cmTotal / 30.48);
-    const inchesNew = (cmTotal - feetNew * 30.48) * 0.393701;
+convert()
+async function convert() {
+    var elem = await indexfun(arguments.callee.name + '_feet_cm')
+    convertHelp('incm', 170, 204, 1)
+    convertHelp('infeet', 4, 7, 0.1)
+    elem.append(ul)
+}
 
-    var input = document.createElement('input')
+function convertHelp(type, ...args) {
+    var out = document.createElement("div");
+    out.classList.add('mt-3')
+    var to = document.createElement("select");
 
+    to.id = 'select_' + type
+    to.setAttribute('data-test', to.id)
+    // to.classList.add('form-control', 'w-auto')
+    // to.style.width = 'auto'
+    out.id = 'out_' + type
+    out.setAttribute('data-test', out.id)
+    out.textContent = 'Result waits..'
+    var decimal = (type == 'incm') ? 0 : 1
 
-    var convertdiv = document.getElementById('convert_feet')
-    var btn = document.createElement('btn')
-    btn.classList.add('btn', 'btn-primary')
-    btn.addEventListener('click', event => {
+    var typeSlice = type.slice(0, 2) + ' ' + type.slice(2)
+    to.innerHTML = '<option>' + typeSlice + '</option>'
 
-        var items = ["New York", "Amsterdam"];
+    var [start, stop, step] = args
+    var range = Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 
-        var select = document.createElement("select");
-        select.name = "city";
-        select.id = "city"
+    to.innerHTML += range.map(x => '<option val=' + x.toFixed(decimal) + '>' + x.toFixed(decimal) + '</option>')
+    var li = document.createElement('li')
+    li.style.display = 'inline-block'
+    li.classList.add('me-4')
+    ul.append(li)
+    li.append(to, out)
 
-        for (const val of items) {
-            var option = document.createElement("option");
-            option.value = val;
-            option.text = val.charAt(0).toUpperCase() + val.slice(1);
-            select.appendChild(option);
+    to.addEventListener('change', (event) => {
+        out.textContent = ''
+        var input = to.value
+        var output = document.createElement('span')
+        // console.log(1, input);
+        if (type == 'infeet') {
+            var inputSplit = input.split('.')
+            output.textContent = ', output: ' + (inputSplit[0] * 30.48 + inputSplit[1] * 2.54).toFixed() + ' cm'
+        } else {
+            var inches = (input * 0.393700787).toFixed();
+            var feet = Math.floor(inches / 12);
+            inches %= 12;
+            output.textContent = ', output: ' + feet + ' feet, ' + inches + ' inches';
         }
-
-        var label = document.createElement("label");
-        label.innerHTML = "Select your City from the list: "
-        label.htmlFor = "city";
-
-        document.getElementById("list").appendChild(label).appendChild(select);
-
-        var div = document.createElement('div')
-        div.id = 'res'
-        div.textContent = 'In cm: ' + cmTotal
-        helper('info_' + arguments.callee.name, 'convert').append()
-        // console.log(cmTotal)
+        var inputspan = document.createElement('span')
+        inputspan.textContent = 'input ' + typeSlice + ': ' + input
+        inputspan.style.fontWeight = 'bold'
+        out.append(inputspan, output)
     });
 }

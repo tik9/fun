@@ -26,10 +26,10 @@ export const handler = async (event) => {
     data: { query: query },
     headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
   };
-  var res = (await axios.request(options)).data
+  var res = (await axios.request(options)).data.data.repository.issues.edges
 
   return {
     statusCode: 200,
-    body: JSON.stringify(res.data.repository)
+    body: JSON.stringify(res)
   }
 }

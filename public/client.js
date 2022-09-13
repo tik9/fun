@@ -1,24 +1,4 @@
 
-var modal = `<div id="mymodal" style="display:none;" class="modal fade" role="dialog">
-<div class="modal-dialog">  
-  <div class="modal-content">
-    <div class="modal-header">
-    <h5 id=modal-title class="modal-title" data-test="success_msg"></h5>
-    <button class="close" data-bs-dismiss="modal">&times;</button>
-    </div>
-    <div id="modal-content" class="modal-body"></div>
-    <div class="modal-footer">
-      <button id=mail_btn class="btn btn-primary send_btn">Send</button>
-      <button id=final_close data-bs-dismiss=modal class="btn btn-primary">Close</button>
-    </div>
-  </div>
-</div>
-</div>`
-
-document.body.insertAdjacentHTML("afterbegin", modal);
-
-var modalTitle = document.getElementById('modal-title')
-
 var asset_dir = ''
 var container = document.getElementById('container')
 var dateformat = /^\d{4}-\d{2}-\d{2}/
@@ -30,18 +10,13 @@ var netfun = '/.netlify/functions/'
 var tiko = "Tiko's"
 
 document.title += tiko;
+document.body.style.paddingTop = '90px'
 
 container.style.paddingBottom = '80px'
 
-var topnav = document.getElementById('topnav')
-topnav.id = 'topnav'
-topnav.classList.add('fixed-top', 'bg-dark')
-
-var bootstrap_root_cdn = { cdn: 'https://cdnjs.cloudflare.com/ajax/libs/', boots: 'twitter-bootstrap/5.0.0/' }
-
 create_icon()
 includes()
-navbottom()
+navbottom_top()
 
 function create_icon() {
     var icon = document.createElement("link");
@@ -52,14 +27,11 @@ function create_icon() {
 
 async function css_js(type) {
     var res = await (await fetch(netfun + 'files?dir=' + type)).json()
-    // console.log(netfun, res)
     res = res.object.entries.map(str => type + '/' + str.name)
     return res
 }
 
 async function git_code(arr) {
-    // console.log(1, arr)
-
     var ghUlLinks = document.createElement('ul')
     ghUlLinks.style.marginBottom = '70px'
     for (var elem of arr) {
@@ -81,18 +53,31 @@ async function git_code(arr) {
 
 async function includes() {
     var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
-    var boots = 'twitter-bootstrap/5.0.0/'
+    var boots = 'twitter-bootstrap/5.2.1/'
+    // var boots = 'twitter-bootstrap/4.6.0/'
+    var boots_sel = 'bootstrap-select/1.13.18/'
+
+    includes_script([
+        // cdn + 'popper.js/1.12.9/umd/popper.min.js',
+        // cdn + 'jquery/3.6.0/jquery.min.js',
+        // 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js',
+        // 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js'
+        cdn + boots + 'js/bootstrap.min.js',
+        // cdn + boots_sel + 'js/bootstrap-select.min.js'
+    ])
 
     css_arr = await css_js('css')
-    css_arr.push(cdn + boots + 'css/bootstrap.min.css')
-
-    includes_script([cdn + boots + 'js/bootstrap.min.js'])
-
+    css_arr.push(
+        cdn + boots + 'css/bootstrap.min.css',
+        // 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css',
+        // 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css'
+        // cdn + boots_sel + 'css/bootstrap-select.min.css'
+    )
     for (var elem of css_arr) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = elem;
-        document.head.appendChild(link);
+        document.body.appendChild(link);
     }
 }
 
@@ -100,7 +85,7 @@ function includes_script(arr) {
     for (var elem of arr) {
         var script = document.createElement("script")
         script.src = elem
-        document.head.append(script)
+        document.body.append(script)
     }
 }
 
@@ -151,7 +136,6 @@ function li_aref(text, href) {
 }
 
 function list(arr, name) {
-    // console.log(1, arr, name)
     var ul = document.createElement('ul')
     for (var elem in arr) {
         var val = arr[elem]
@@ -172,7 +156,10 @@ function list(arr, name) {
     return ul
 }
 
-function navbottom() {
+function navbottom_top() {
+    var topnav = document.getElementById('topnav')
+    topnav.id = 'topnav'
+    topnav.classList.add('fixed-top', 'bg-dark')
     var aref = document.createElement("a");
     bottomnav.classList.add('fixed-bottom', 'bg-dark')
     aref.textContent = tiko;

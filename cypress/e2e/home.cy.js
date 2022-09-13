@@ -2,9 +2,19 @@
 describe('my site', () => {
   beforeEach(() => { cy.visit("http://localhost:8888") })
 
+  it.only('cm select', () => {
+    cy.getByData('select_incm').select('170')
+    cy.getByData('out_incm').should('exist').contains('5 feet, 7 inches')
+  })
+
+  it.only('feet select', () => {
+    cy.getByData('select_infeet').select('6.4')
+    cy.getByData('out_infeet').should('exist').contains('193 cm')
+  })
+
   it("btn is correct", () => { cy.get('button').eq(0).contains('Fetch') })
 
-  it.only('get jokes', () => {
+  it('get jokes', () => {
     // cy.getByData('inputjoke').scrollIntoView().should('be.visible')
     // cy.getByData('inputjoke').scrollIntoView().type('abc', { force: true })
     cy.getByData('btnjoke').scrollIntoView().click({ force: true })
@@ -19,7 +29,7 @@ describe('my site', () => {
     cy.getByData('resstock').invoke('text').should('match', /^\d{3}$/)
   })
 
-  it.only('get utc', () => {
+  it('get utc', () => {
     cy.getByData('btnclock').scrollIntoView().click({ force: true })
     cy.getByData('resclock').invoke('text').should('match', /^\d{2}:\d{2} hours$/)
   })

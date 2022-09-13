@@ -1,7 +1,11 @@
 
-## [home]
+<div class=container id=container>
+<div id=topnav>
+        <a href="/" class="active">Home</a>
+</div>
+<div data-test=imprint>
 
-### Declaration of Data Protection Policy
+##### Declaration of Data Protection Policy
 
 General info
 
@@ -12,7 +16,7 @@ Personal data is all data which can be used for identity of yourself.
 
 You get further information regarding data protection in the declaration that follows.
 
-### Who is Responsible for the Data acquisition on this website?
+##### Who is Responsible for the Data acquisition on this website?
 
 The data processing will be realized by the content owner of this site.
 
@@ -32,5 +36,9 @@ Responsible for the website:
 Timo Körner
 
 Hepberg, Germany
+
+<div id=bottomnav></div>
+</div></div>
+<script src=client.js></script>
 
 [home]: /public/index.html

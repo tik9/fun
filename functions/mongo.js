@@ -11,7 +11,7 @@ export async function handler(event) {
     var res
     var params = event.queryStringParameters
     if (typeof (params.para1) != 'undefined') {
-        // console.log('', await find(params.para1))
+        console.log(1, await find(params.para1))
         return { statusCode: 200, body: JSON.stringify(await find(params.para1)) }
     }
     // res = await index_get()
@@ -21,7 +21,7 @@ export async function handler(event) {
     // res = await count(coll)
     // create_coll(coll)
     // res = await find(coll)
-    // res = await find_one('sys', 'node version')
+    // res = await find_one('index', 'div', 'name')
     // res = JSON.parse(await fs.readFile(resolve('public', 'json', 'index.json')))
     // console.log(res)
     // insert_val('index', res)
@@ -31,7 +31,7 @@ export async function handler(event) {
     // rename_coll('geo', 'client')
     // remove_many(coll, key, val)
     // if (Object.keys(values).length != 0) insert_val(coll, values)
-    // update_one(coll, searchkey, searchval, key, val)
+    update_one('index', 'name', 'div', 'name', 'convert_feet_cm')
 
     return { statusCode: 200, body: JSON.stringify(res) }
 }

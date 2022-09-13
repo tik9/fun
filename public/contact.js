@@ -1,4 +1,23 @@
 
+var modal = `<div id="mymodal" style="display:none;" class="modal fade" role="dialog">
+<div class="modal-dialog">  
+  <div class="modal-content">
+    <div class="modal-header">
+    <h5 id=modal-title class="modal-title" data-test="success_msg"></h5>
+    <button class="close" data-dismiss="modal">&times;</button>
+    </div>
+    <div id="modal-content" class="modal-body"></div>
+    <div class="modal-footer">
+      <button id=mail_btn class="btn btn-primary send_btn">Send</button>
+      <button id=final_close data-bs-dismiss=modal class="btn btn-primary">Close</button>
+    </div>
+  </div>
+</div>
+</div>`
+
+document.body.insertAdjacentHTML("afterbegin", modal);
+
+var modalTitle = document.getElementById('modal-title')
 var modalContent = document.getElementById('modal-content')
 
 var reg_mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -14,10 +33,10 @@ async function mail(type = 'mail') {
     var obj = getObj()
     delete Object.assign(obj, { ['email']: obj[email_contact] })[email_contact];
 
-    if (type == 'news') obj = { name: 'news', email: nl_input.value, message: 'Newsletter abo' }
+    if (type == 'news') obj = { name: 'news', email: nl_input.value, message: 'Newsletter Fun from ' + nl_input.value }
 
     try {
-        return (await fetch(netfun+'/mail', { method: "post", body: JSON.stringify(obj) })).json()
+        return (await fetch(netfun + '/mail', { method: "post", body: JSON.stringify(obj) })).json()
     } catch (error) { console.log('err', error) }
 }
 
