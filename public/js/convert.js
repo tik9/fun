@@ -36,11 +36,10 @@ function convertHelp(type, ...args) {
     ul.append(li)
     li.append(to, out)
 
-    to.addEventListener('change', (event) => {
+    to.addEventListener('change', () => {
         out.textContent = ''
         var input = to.value
         var output = document.createElement('span')
-        // console.log(1, input);
         if (type == 'infeet') {
             var inputSplit = input.split('.')
             output.textContent = ', output: ' + (inputSplit[0] * 30.48 + inputSplit[1] * 2.54).toFixed() + ' cm'

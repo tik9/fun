@@ -3,8 +3,9 @@ sys()
 async function sys() {
     var jstab = []
     var sys = arguments.callee.name
-    var res = await (await fetch(netfun + 'mongo?para1=' + sys)).json()
-    res = groupByKey(res, 'host')
+    var res = await (await fetch(netfun + 'mongo?op=find&coll=' + sys)).json()
+    res = res.reduce((hash, { ['host']: value, ...rest }) =>
+        ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
     for (var key in res) {
         var arr = []
         for (var elem2 of res[key]) {

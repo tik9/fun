@@ -61,48 +61,30 @@ async function apis() {
 
     document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
     document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
-    document.getElementById('btnclock').addEventListener('click', event =>
-        rapid('clock')
-    )
-}
 
-function transcript_to_func() {
-    var btntrans = document.getElementById('btntranscript')
+    document.getElementById('btnclock').addEventListener('click', async () => {
+        var res = await (await fetch('http://worldtimeapi.org/api/timezone/Europe/london')).json()
+        res = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
+        console.log(1, res)
+        var resdiv = document.getElementById('resclock')
+        resdiv.innerHTML = res
 
-    btntrans.addEventListener('click', async (event) => {
-        document.getElementById('restranscript').innerText = ''
-        var modalDiv = document.getElementById('mymodal')
-        var myModal = new bootstrap.Modal(modalDiv)
-        myModal.show();
-        mail_btn.style.display = 'none'
-        modalTitle.textContent = 'The api is loading'
-        try {
-            var res = await (await fetch(netfun + 'transcript')).json()
-            var endres = res
-        } catch (error) {
-            console.log('err here', error)
-            endres = 'No result'
-        }
-        modalTitle.textContent = 'Loading finished, you can close the window'
-        document.getElementById('restranscript').innerText = 'Result: ' + endres
     })
 }
+
 
 async function rapid(type, input) {
     var resdiv = document.getElementById('res' + type)
     resdiv.innerHTML = ''
     var inputval = typeof (input) == 'undefined' ? '' : '&input=' + input.value
-    try {
-        var res = await (await fetch(netfun + 'rapid?type=' + type + inputval)).json()
-        if (type == 'joke') {
-            res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
-            resdiv.append(table(res, 'joke'))
-        }
-        else if (type == 'clock') resdiv.innerHTML = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
-        else {
-            res = res["Monthly Time Series"]
-            res = res[Object.keys(res)[0]]['1. open']
-            resdiv.innerText = Number(res.split('.')[0])
-        }
-    } catch (err) { console.log(err) }
+    var res = await (await fetch(netfun + 'rapid?type=' + type + inputval)).json()
+    if (type == 'joke') {
+        res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
+        resdiv.append(table(res, 'joke'))
+    }
+    else {
+        res = res["Monthly Time Series"]
+        res = res[Object.keys(res)[0]]['1. open']
+        resdiv.innerText = Number(res.split('.')[0])
+    }
 }

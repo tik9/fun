@@ -1,6 +1,7 @@
 
+'use strict'
+
 var asset_dir = ''
-var container = document.getElementById('container')
 var dateformat = /^\d{4}-\d{2}-\d{2}/
 var github = 'https://github.com/'
 var git = github + 'tik9/'
@@ -54,23 +55,18 @@ async function git_code(arr) {
 async function includes() {
     var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
     var boots = 'twitter-bootstrap/5.2.1/'
-    // var boots = 'twitter-bootstrap/4.6.0/'
     var boots_sel = 'bootstrap-select/1.13.18/'
 
     includes_script([
         // cdn + 'popper.js/1.12.9/umd/popper.min.js',
         // cdn + 'jquery/3.6.0/jquery.min.js',
-        // 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js',
-        // 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js'
         cdn + boots + 'js/bootstrap.min.js',
         // cdn + boots_sel + 'js/bootstrap-select.min.js'
     ])
 
-    css_arr = await css_js('css')
+    var css_arr = await css_js('css')
     css_arr.push(
         cdn + boots + 'css/bootstrap.min.css',
-        // 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css',
-        // 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css'
         // cdn + boots_sel + 'css/bootstrap-select.min.css'
     )
     for (var elem of css_arr) {
@@ -85,6 +81,7 @@ function includes_script(arr) {
     for (var elem of arr) {
         var script = document.createElement("script")
         script.src = elem
+        if (elem == 'js/transcript.js') continue
         document.body.append(script)
     }
 }
@@ -92,16 +89,9 @@ function includes_script(arr) {
 // var respage
 async function indexfun(head = 'intro') {
     var hIntro = document.createElement("h4");
-    // var intro = document.createElement('div')
-    // if (head == 'index') {
-    // respage = await (await fetch(netfun + 'mongo?para1=index')).json()
-    // var res = respage.filter(val => val.name == head)
-    // res = res.reduce((a, b) => Object.assign(a, b), {})
+
     hIntro.innerHTML = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
-    // intro.textContent = res.text
-    // }
-    hIntro.classList.add('mt-5');
-    // intro.classList.add('mt-3', 'mb-3')
+    hIntro.classList.add('mt-5', 'mb-3');
 
     var elem = document.createElement('div')
     container.append(elem)
@@ -112,15 +102,12 @@ async function indexfun(head = 'intro') {
     aHref.classList.add('nav')
     aHref.href = '#' + head
     topnav.append(aHref)
-    if (head == 'intro') {
-        hIntro.style.fontSize = 'xx-large'
-        hIntro.classList.remove('mt-5')
+    if (head == 'index') {
         aHref.classList.add('active', 'nav')
         aHref.href = '#container'
-    }
-    if (head == 'tests') {
-        aHref.setAttribute('data-test', 'tests-href')
-        elem.setAttribute('data-test', 'tests-div')
+    } else if (head == 'tests') {
+        aHref.setAttribute('data-test', 'tests_href')
+        elem.setAttribute('data-test', 'tests_div')
     }
     return elem
 }
@@ -157,8 +144,6 @@ function list(arr, name) {
 }
 
 function navbottom_top() {
-    var topnav = document.getElementById('topnav')
-    topnav.id = 'topnav'
     topnav.classList.add('fixed-top', 'bg-dark')
     var aref = document.createElement("a");
     bottomnav.classList.add('fixed-bottom', 'bg-dark')

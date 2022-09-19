@@ -1,9 +1,14 @@
 
 var str = document.currentScript.src
 var thisone = str.substring(str.lastIndexOf("/") + 1, str.length).split('.')[0]
-// indexfun()
 index()
 include_js()
+
+
+function groupByKey(list, key) {
+  return list.reduce((hash, { [key]: value, ...rest }) =>
+    ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
+}
 
 async function include_js() {
   var res = await css_js('js')
@@ -12,16 +17,11 @@ async function include_js() {
   git_code(res)
 }
 
-function groupByKey(list, key) {
-  return list.reduce((hash, { [key]: value, ...rest }) =>
-    ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
-}
-
 async function index() {
   var index = arguments.callee.name
   await indexfun(index)
-  var res = await (await fetch(netfun + 'mongo?para1=' + index)).json()
-  res = res.filter(val => val.category.match(new RegExp(/further-fun/)));
+  var res = await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()
+  res = res.filter(val => val.category.match(new RegExp(/further/)));
 
   var div = document.getElementById(index)
   res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
