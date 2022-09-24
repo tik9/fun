@@ -1,88 +1,37 @@
 
-import { Handler } from '@netlify/functions'
 import axios from 'axios'
 import { exec } from 'node:child_process'
-
+import { format_bytes, truncate } from './utils'
+import { Handler } from '@netlify/functions'
+import { insert_one } from './mongo'
+import { IPinfoWrapper } from "node-ipinfo"
 import os from "os"
 
 export const handler: Handler = async (event) => {
-    let url = process.env.URL + '/.netlify/functions/'
-    let url_utils = url + 'utils?'
-    let url_mongo = url + 'mongo'
-
-    interface one_sys {
-        info: string
-        value: string
-        category: string
-        date?: string
-        host?: string
-        // [key: string]: string;
+    var server = {
+        architecture: os.arch(),
+        cores: os.cpus().length.toString(),
+        date: new Date().toISOString().slice(0, 10),
+        'free memory': format_bytes(os.freemem()),
+        host_server: truncate(os.hostname(), 15),
+        'memory': format_bytes(os.totalmem()),
+        "node": process.versions.node.split(".")[0],
+        "npm": await execPromise('npm -v') as string,
+        'os': truncate(os.version(), 30),
+        platform: os.platform(),
+        release: os.release(),
+        'speed cpu mhz': os.cpus()[0].speed.toString(),
     }
 
-    var sys: one_sys[] = [
-        {
-            "info": "npm version",
-            "value": await execPromise('npm -v') as string,
-            "category": "node"
-        },
-        {
-            "info": "architecture",
-            "value": os.arch(),
-            "category": "hardware"
-        },
+    const ipinfo = new IPinfoWrapper(process.env.ipgeo!);
+    var client = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
 
-        {
-            "info": 'os version',
-            "value": url_utils + 'truncate&param=' + os.version() + 'length=30',
-            "category": "os"
-        },
-        {
-            "info": "platform",
-            "value": os.platform(),
-            "category": "os"
-        },
-        {
-            "info": "release",
-            "value": os.release(),
-            "category": "os"
-        },
-        {
-            "info": "cores",
-            "value": os.cpus().length.toString(),
-            "category": "hardware"
-        },
-        {
-            "info": 'speed cpu mhz',
-            "value": os.cpus()[0].speed.toString(),
-            "category": "hardware"
-        },
-        {
-            "info": 'total memory',
-            "value": (await axios.get(url_utils + 'fun=bytes&param=' + os.totalmem())).data,
-            "category": "hardware"
-        },
-        {
-            "info": 'free memory',
-            "value": (await axios.get(url_utils + 'fun=bytes&param=' + os.freemem())).data,
-            "category": "hardware"
-        },
-        {
-            "info": "node version",
-            "value": process.versions.node.split(".")[0],
-            "category": "node"
-        },
-    ]
+    client.client_map = (await ipinfo.getMap([client.ip])).reportUrl
+    client.tik = 2
 
-    for (var elem of sys) {
-        elem.date = new Date().toISOString().slice(0, 10)
-        elem.host = (await axios.get(url_utils + 'fun=truncate&param=' + os.hostname() + '&length=13')).data
-    }
-    console.log(sys)
-    // sys.sort(utils.sort('category'))
-    if (event.headers.host != 'localhost:80') {
-        await axios.post(url_mongo, { body: { coll: 'sys', val: sys } })
-    }
-    return { statusCode: 200, body: JSON.stringify(sys) }
+    var res = { ...server, ...client }
+    if (event.headers.host != 'localhost') insert_one('sys', res)
+    return { statusCode: 200, body: JSON.stringify(res) }
 }
 
 function execPromise(command: string) {

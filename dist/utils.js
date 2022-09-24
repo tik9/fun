@@ -11,13 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.truncate = exports.sort = exports.formatBytes = exports.handler = void 0;
 const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
-    var { fun, param, length } = event.queryStringParameters;
-    // console.log(1, fun, param, length)
+    var { param } = event.queryStringParameters;
     var res;
-    if (fun == 'bytes')
+    if (typeof (event.body) == 'undefined')
         res = formatBytes(Number(param));
-    else
-        res = truncate(param, Number(length));
+    else {
+        var body = JSON.parse(event.body);
+        // console.log(1, body, 2, 2, typeof (event.body) == 'undefined')
+        res = truncate(body.body.key, Number(body.body.length));
+    }
     return { body: JSON.stringify(res), statusCode: 200 };
 });
 exports.handler = handler;

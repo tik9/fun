@@ -8,40 +8,35 @@ var dbWeb = "website"
 function main() { return new MongoClient(process.env.mongo!).connect() }
 
 export const handler: Handler = async (event) => {
-    // console.log(1, Object.keys(event.body!).length, 2, event.body)
     var res
-    var params = event.queryStringParameters!
-    // let coll: string = Object(event.body).body.coll ? Object(event.body).body.coll : params.coll
-    if (typeof (event.body) != 'undefined') {
-        // let arr: []
+    if (typeof (event.body) == 'undefined') {
+        var params = event.queryStringParameters!
+        var coll = params.coll!
+        if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll)
+        else if (params.op == 'count') res = await count(coll)
+        // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
+    } else {
+        // console.log(1, Object.keys(event.body!).length, 2, typeof (event.body) == 'undefined')
         var body = JSON.parse(event.body!);
-        var coll = body.body.coll
-        // console.log(3, coll, body)
-        let arr = body.body.val
-        res = [coll, arr]
-        insert(coll, arr)
+        res = insert_one(body.body.coll, body.body.val)
     }
-    else if (Object.keys(params).length != 0) {
-        if (params.op == 'find') res = await find(params.coll!)
-        else if (params.op == 'count') res = await count(params.coll!)
-        else if (params.op == 'del') remove_many(params.coll!, params.key!, params.val!)
-        // console.log(3, res)
-    }
+
+    // console.log(1, coll!, res)
 
     // create_coll(coll)
     // res = await datatype(coll, 2)
     // res = await find(coll)
     // res = await find_one(coll, params.key!, params.val!)
-    // res = JSON.parse(await fs.readFile(resolve('public', 'json', 'index.json')))
-    // index_create(coll, params.field!)
-    // res = await index_get(coll)
-    // insert('index', [])
+    // index_create(coll!, params!.key!)
+    // res = await index_get(coll!)
+    // res = await index_remove(coll!, params!.key!)
+    // insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
     // insert_val('index', res)
     // res = await list_coll()
-    // remove_coll(coll)
+    // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
     // rename_coll('geo', 'client')
-    // truncate(coll)
+    // truncate(coll!)
     // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
 
     return { statusCode: 200, body: JSON.stringify(res) }
@@ -65,15 +60,20 @@ async function index_create(coll: string, key: string) { (await main()).db(dbWeb
 
 async function index_get(coll: string) { return (await main()).db(dbWeb).collection(coll).indexes() }
 
-async function insert_one(coll: string, obj: object) { return (await main()).db(dbWeb).collection(coll).insertOne(obj) }
+async function index_remove(coll: string, key: string) { return (await main()).db(dbWeb).collection(coll).dropIndex(key) }
+
+export async function insert_one(coll: string, obj: object) {
+    try {
+        return await (await main()).db(dbWeb).collection(coll).insertOne(obj)
+    }
+    catch (error) { console.log(1, error) }
+}
 
 async function insert(coll: string, obj: []) {
-    var res
     try {
-        res = await (await main()).db(dbWeb).collection(coll).insertMany(obj)
+        return await (await main()).db(dbWeb).collection(coll).insertMany(obj)
     }
     catch (error) { }
-    return res
 }
 
 async function list_coll() { return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name) }

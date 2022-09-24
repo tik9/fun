@@ -32,5 +32,6 @@ describe('my site', () => {
   it('get utc', () => {
     cy.getByData('btnclock').scrollIntoView().click({ force: true })
     cy.getByData('resclock').invoke('text').should('match', /^\d{2}:\d{2} hours$/)
+    cy.getByData('resclock').invoke('text').should('exist').contains((new Date()).toUTCHours() + ':' + (new Date()).toUTCMinutes() + ' hours')
   })
 })

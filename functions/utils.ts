@@ -1,18 +1,14 @@
 
 import { Handler } from "@netlify/functions";
 
-export const handler: Handler = async (event) => {
-    var { fun, param, length } = event.queryStringParameters!
-    // console.log(1, fun, param, length)
+export const handler: Handler = async () => {
+    // var { param } = event.queryStringParameters!
     var res
-    if (fun == 'bytes') res = formatBytes(Number(param))
-    else res = truncate(param!, Number(length))
     return { body: JSON.stringify(res), statusCode: 200 }
 }
 
-export function formatBytes(bytes: number) {
+export function format_bytes(bytes: number) {
     if (bytes === 0) return '0 Bytes';
-
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));

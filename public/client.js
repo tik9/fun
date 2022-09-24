@@ -86,7 +86,6 @@ function includes_script(arr) {
     }
 }
 
-// var respage
 async function indexfun(head = 'intro') {
     var hIntro = document.createElement("h4");
 
@@ -113,7 +112,6 @@ async function indexfun(head = 'intro') {
 }
 
 function li_aref(text, href) {
-    console.log()
     var aref = document.createElement('a')
     aref.textContent = text
     aref.href = href
@@ -134,7 +132,7 @@ function list(arr, name) {
             li.classList.add('me-3')
             li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
         }
-        else if (name == 'client' && elem == 'map') li = li_aref('Map', val)
+        else if (name == 'client' && elem == 'client_map') li = li_aref('Map', val)
         else if (name == 'accounts') li = li_aref(elem, val)
         else
             li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))

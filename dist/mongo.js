@@ -14,42 +14,36 @@ const mongodb_1 = require("mongodb");
 var dbWeb = "website";
 function main() { return new mongodb_1.MongoClient(process.env.mongo).connect(); }
 const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log(1, Object.keys(event.body!).length, 2, event.body)
     var res;
-    var params = event.queryStringParameters;
-    // let coll: string = Object(event.body).body.coll ? Object(event.body).body.coll : params.coll
-    if (typeof (event.body) != 'undefined') {
-        // let arr: []
-        var body = JSON.parse(event.body);
-        var coll = body.body.coll;
-        // console.log(3, coll, body)
-        let arr = body.body.val;
-        res = [coll, arr];
-        insert(coll, arr);
-    }
-    else if (Object.keys(params).length != 0) {
-        if (params.op == 'find')
-            res = yield find(params.coll);
+    if (typeof (event.body) == 'undefined') {
+        var params = event.queryStringParameters;
+        var coll = params.coll;
+        if (params.op == 'find' || typeof (params.op) == 'undefined')
+            res = yield find(coll);
         else if (params.op == 'count')
-            res = yield count(params.coll);
-        else if (params.op == 'del')
-            remove_many(params.coll, params.key, params.val);
-        // console.log(3, res)
+            res = yield count(coll);
+        // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     }
+    else {
+        // console.log(1, Object.keys(event.body!).length, 2, typeof (event.body) == 'undefined')
+        var body = JSON.parse(event.body);
+        res = insert_one(body.body.coll, body.body.val);
+    }
+    // console.log(1, coll!, res)
     // create_coll(coll)
     // res = await datatype(coll, 2)
     // res = await find(coll)
     // res = await find_one(coll, params.key!, params.val!)
-    // res = JSON.parse(await fs.readFile(resolve('public', 'json', 'index.json')))
-    // index_create(coll, params.field!)
-    // res = await index_get(coll)
-    // insert('index', [])
+    // index_create(coll!, params!.key!)
+    // res = await index_get(coll!)
+    // res = await index_remove(coll!, params!.key!)
+    // insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
     // insert_val('index', res)
     // res = await list_coll()
-    // remove_coll(coll)
+    // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
     // rename_coll('geo', 'client')
-    // truncate(coll)
+    // truncate(coll!)
     // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
     return { statusCode: 200, body: JSON.stringify(res) };
 });
@@ -80,17 +74,25 @@ function index_create(coll, key) {
 function index_get(coll) {
     return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).indexes(); });
 }
+function index_remove(coll, key) {
+    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).dropIndex(key); });
+}
 function insert_one(coll, obj) {
-    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).insertOne(obj); });
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield (yield main()).db(dbWeb).collection(coll).insertOne(obj);
+        }
+        catch (error) {
+            console.log(1, error);
+        }
+    });
 }
 function insert(coll, obj) {
     return __awaiter(this, void 0, void 0, function* () {
-        var res;
         try {
-            res = yield (yield main()).db(dbWeb).collection(coll).insertMany(obj);
+            return yield (yield main()).db(dbWeb).collection(coll).insertMany(obj);
         }
         catch (error) { }
-        return res;
     });
 }
 function list_coll() {

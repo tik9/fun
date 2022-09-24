@@ -59,16 +59,12 @@ async function apis() {
         count++
     }
 
-    document.getElementById('btnjoke').addEventListener('click', event => rapid('joke', document.getElementById('inputjoke')))
-    document.getElementById('btnstock').addEventListener('click', event => rapid('stock', document.getElementById('inputstock')))
+    document.getElementById('btnjoke').addEventListener('click', () => rapid('joke', document.getElementById('inputjoke')))
+    document.getElementById('btnstock').addEventListener('click', () => rapid('stock', document.getElementById('inputstock')))
 
     document.getElementById('btnclock').addEventListener('click', async () => {
         var res = await (await fetch('http://worldtimeapi.org/api/timezone/Europe/london')).json()
-        res = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
-        console.log(1, res)
-        var resdiv = document.getElementById('resclock')
-        resdiv.innerHTML = res
-
+        document.getElementById('resclock').innerHTML = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
     })
 }
 
