@@ -17,18 +17,22 @@ const axios_1 = __importDefault(require("axios"));
 const utils_1 = require("./utils");
 function handler() {
     return __awaiter(this, void 0, void 0, function* () {
-        let url_utils = process.env.URL + '/.netlify/functions/utils';
-        var res = (yield axios_1.default.get('https://api.stackexchange.com/2.2/users/1705829/comments?site=stackoverflow&filter=withbody')).data;
-        res = res.items.slice(0, 2);
-        res = res.map(({ creation_date: date, body: text }) => ({
-            date: new Date(date * 1000).toISOString().substring(0, 10),
-            text: (0, utils_1.truncate)(text, 100),
-            url: 'https://stackexchange.com/users/1886776/timo?tab=activity',
-        }));
-        // res = await Promise.all(res.map())
-        console.log(1, res);
+        var arr = [];
+        for (var elem of ['posts', 'comments']) {
+            var res = (yield axios_1.default.get('https://api.stackexchange.com/2.2/users/1705829/' + elem + '?site=stackoverflow&sort=votes&filter=withbody')).data;
+            res = res.items.slice(0, 3);
+            res = res.map(({ body: text, creation_date: date, post_id, score }) => ({
+                date: new Date(date * 1000).toISOString().substring(0, 10),
+                text: (0, utils_1.truncate)(text, 100),
+                url: 'https://stackoverflow.com/questions/' + post_id,
+                score,
+            }));
+            arr.push(res);
+        }
+        arr = [...arr[0], ...arr[1]];
+        // console.log(1, arr)
         return {
-            body: JSON.stringify(res),
+            body: JSON.stringify(arr),
             statusCode: 200
         };
     });

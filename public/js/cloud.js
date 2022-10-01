@@ -1,8 +1,6 @@
 
 var alias_cloud = 'social_cloud'
 
-accounts(); commits(); issues_with_this_repo(); posts(); repos()
-
 async function accounts() {
   await indexfun(alias_cloud)
   var res = await (await fetch(netfun + arguments.callee.name)).json()

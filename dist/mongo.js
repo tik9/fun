@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
+exports.insert_one = exports.handler = void 0;
 const mongodb_1 = require("mongodb");
 var dbWeb = "website";
 function main() { return new mongodb_1.MongoClient(process.env.mongo).connect(); }
 const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
     var res;
-    if (typeof (event.body) == 'undefined') {
+    if (typeof (event.body) == 'undefined' || event.body == '{}') {
         var params = event.queryStringParameters;
         var coll = params.coll;
         if (params.op == 'find' || typeof (params.op) == 'undefined')
@@ -25,11 +25,11 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     }
     else {
-        // console.log(1, Object.keys(event.body!).length, 2, typeof (event.body) == 'undefined')
+        console.log(1, event.body, 2, typeof (event.body) == 'undefined');
         var body = JSON.parse(event.body);
         res = insert_one(body.body.coll, body.body.val);
     }
-    // console.log(1, coll!, res)
+    // console.log(1, res)
     // create_coll(coll)
     // res = await datatype(coll, 2)
     // res = await find(coll)
@@ -42,7 +42,7 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // rename_coll('geo', 'client')
+    // rename_field('index', 'category', 'cat')
     // truncate(coll!)
     // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
     return { statusCode: 200, body: JSON.stringify(res) };
@@ -87,6 +87,7 @@ function insert_one(coll, obj) {
         }
     });
 }
+exports.insert_one = insert_one;
 function insert(coll, obj) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

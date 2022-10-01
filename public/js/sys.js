@@ -1,19 +1,33 @@
 
-// sys()
-async function sys() {
-    var jstab = []
-    var sys = arguments.callee.name
-    var res = await (await fetch(netfun + 'mongo?op=find&coll=' + sys)).json()
-    for (var elem of res) {
+function orderKeys(obj) {
+    var keys = Object.keys(obj).sort((k1, k2) => {
+        if (k1 < k2) return -1;
+        else if (k1 > k2) return +1;
+        else return 0;
+    });
+
+    var helpArr = {};
+    for (var elem of keys) {
+        helpArr[elem] = obj[elem];
+        delete obj[elem];
+        obj[elem] = helpArr[elem]
     }
-    var head = document.createElement('h5')
-    head.classList.add('mt-4')
-    head.textContent = 'Host: ' + key
+    return obj;
+}
 
-    var tab = table(arr, sys)
-    jstab.push(tab);
+var arr = ['date', 'hostname', 'ip', 'loc', 'org', 'postal', 'tik']
+async function client() {
+    var client = arguments.callee.name
+    var res = await (await fetch(netfun + 'sys')).json()
+    arr_client = ['architecture', "cores", 'free memory', 'host_server', 'memory', 'node', 'npm_version', 'os', 'platform', 'release', 'speed cpu mhz', ...arr].forEach(e => delete res[e]);
+    res.userAgent = navigator.userAgent;
+    orderKeys(res);
+    (await indexfun('info_about_' + client)).append(list(res, client))
+}
 
-    (await indexfun('server_system')).append(head, tab)
-
-    for (elem of jstab) { new JSTable(elem, { perPage: 5 }) }
+async function server() {
+    var server = arguments.callee.name
+    var res = await (await fetch(netfun + 'sys')).json()
+    arr_server = ['city', 'client_map', 'country', 'region', 'timezone', ...arr].forEach(e => delete res[e]);
+    (await indexfun('info_about_' + server)).append(list(res, server))
 }

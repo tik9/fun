@@ -1,14 +1,11 @@
 
 var apiheaders = {
     joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', clock: 'Get UTC Time',
-    //  transcript: 'Fetch transcripts - tbd' 
 }
 
 var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 
-apis()
 async function apis() {
-    await sleep(100)
     var apis = arguments.callee.name
     await indexfun(apis)
     var count = 1
@@ -40,11 +37,12 @@ async function apis() {
         btn.setAttribute('data-test', btnElem)
         if (!['clock'].includes(elem)) {
             var input = document.createElement('input')
+            input.placeholder = 'abc or piz or ..'
             var inputElem = 'input' + elem
             input.id = inputElem
             input.classList.add('mt-3')
             input.required = true
-            if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
+            // if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
             input.setAttribute('data-test', inputElem)
             div.append(input, btn)
         } else div.append(btn)
@@ -63,7 +61,7 @@ async function apis() {
     document.getElementById('btnstock').addEventListener('click', () => rapid('stock', document.getElementById('inputstock')))
 
     document.getElementById('btnclock').addEventListener('click', async () => {
-        var res = await (await fetch('http://worldtimeapi.org/api/timezone/Europe/london')).json()
+        var res = await (await fetch('https://worldtimeapi.org/api/timezone/Europe/london')).json()
         document.getElementById('resclock').innerHTML = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
     })
 }

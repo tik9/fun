@@ -15,36 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = void 0;
 const axios_1 = __importDefault(require("axios"));
 const node_child_process_1 = require("node:child_process");
+const utils_1 = require("./utils");
+const mongo_1 = require("./mongo");
 const node_ipinfo_1 = require("node-ipinfo");
 const os_1 = __importDefault(require("os"));
 const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
-    let url = process.env.URL + '/.netlify/functions/';
-    let url_utils = url + 'utils?';
-    let url_mongo = url + 'mongo';
     var server = {
         architecture: os_1.default.arch(),
         cores: os_1.default.cpus().length.toString(),
         date: new Date().toISOString().slice(0, 10),
-        'free memory': (yield axios_1.default.get(url_utils + 'fun=bytes&param=' + os_1.default.freemem())).data,
-        host_server: (yield axios_1.default.post(url_utils, { body: { key: os_1.default.hostname(), length: 15 } })).data,
-        'memory': (yield axios_1.default.get(url_utils + 'fun=bytes&param=' + os_1.default.totalmem())).data,
+        'free memory': (0, utils_1.format_bytes)(os_1.default.freemem()),
+        host_server: (0, utils_1.truncate)(os_1.default.hostname(), 15),
+        'memory': (0, utils_1.format_bytes)(os_1.default.totalmem()),
         "node": process.versions.node.split(".")[0],
-        "npm": yield execPromise('npm -v'),
-        'os': (yield axios_1.default.post(url_utils, {
-            body: { key: os_1.default.version(), length: 30 }
-        })).data,
+        'os': (0, utils_1.truncate)(os_1.default.version(), 30),
         platform: os_1.default.platform(),
         release: os_1.default.release(),
         'speed cpu mhz': os_1.default.cpus()[0].speed.toString(),
+        npm_version: ''
     };
+    if (event.headers.host == 'localhost')
+        server.npm_version = (yield execPromise('npm -v'));
     const ipinfo = new node_ipinfo_1.IPinfoWrapper(process.env.ipgeo);
     var client = (yield axios_1.default.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data;
     client.client_map = (yield ipinfo.getMap([client.ip])).reportUrl;
     client.tik = 2;
-    var res = Object.assign(Object.assign({}, server), client);
-    if (event.headers.host != 'localhost') {
-        yield axios_1.default.post(url_mongo, { body: { coll: 'sys', val: res } });
-    }
+    const server_sorted = Object.keys(server).sort().reduce((r, k) => (Object.assign(Object.assign({}, r), { [k]: server[k] })), {});
+    var res = Object.assign(Object.assign({}, server_sorted), client);
+    if (event.headers.host != 'localhost')
+        (0, mongo_1.insert_one)('sys', res);
     return { statusCode: 200, body: JSON.stringify(res) };
 });
 exports.handler = handler;

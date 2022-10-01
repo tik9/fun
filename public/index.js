@@ -1,9 +1,6 @@
 
-var str = document.currentScript.src
-var thisone = str.substring(str.lastIndexOf("/") + 1, str.length).split('.')[0]
 index()
 include_js()
-
 
 function groupByKey(list, key) {
   return list.reduce((hash, { [key]: value, ...rest }) =>
@@ -20,13 +17,18 @@ async function include_js() {
 async function index() {
   var index = arguments.callee.name
   await indexfun(index)
+
   var res = await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()
-  res = res.filter(val => val.category.match(new RegExp(/further/)));
+  res = res.filter(val => val.cat.match(new RegExp(/further/)));
 
   var div = document.getElementById(index)
   res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
   div.append(table(res, index))
   div.classList.add('mt-5')
+
+  client()
+  server()
+  accounts(); apis(); commits(); convert(); issues_with_this_repo(); posts(); repos()
 }
 
 function locale_date(date) {

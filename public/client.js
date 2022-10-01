@@ -55,20 +55,13 @@ async function git_code(arr) {
 async function includes() {
     var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
     var boots = 'twitter-bootstrap/5.2.1/'
-    var boots_sel = 'bootstrap-select/1.13.18/'
 
     includes_script([
-        // cdn + 'popper.js/1.12.9/umd/popper.min.js',
-        // cdn + 'jquery/3.6.0/jquery.min.js',
         cdn + boots + 'js/bootstrap.min.js',
-        // cdn + boots_sel + 'js/bootstrap-select.min.js'
     ])
 
     var css_arr = await css_js('css')
-    css_arr.push(
-        cdn + boots + 'css/bootstrap.min.css',
-        // cdn + boots_sel + 'css/bootstrap-select.min.css'
-    )
+    css_arr.push(cdn + boots + 'css/bootstrap.min.css')
     for (var elem of css_arr) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
@@ -81,7 +74,7 @@ function includes_script(arr) {
     for (var elem of arr) {
         var script = document.createElement("script")
         script.src = elem
-        if (elem == 'js/transcript.js') continue
+        if (elem == 'js/client.js') continue
         document.body.append(script)
     }
 }

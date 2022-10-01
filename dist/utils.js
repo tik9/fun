@@ -9,29 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.truncate = exports.sort = exports.formatBytes = exports.handler = void 0;
-const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
-    var { param } = event.queryStringParameters;
+exports.truncate = exports.sort = exports.format_bytes = exports.handler = void 0;
+const handler = () => __awaiter(void 0, void 0, void 0, function* () {
+    // var { param } = event.queryStringParameters!
     var res;
-    if (typeof (event.body) == 'undefined')
-        res = formatBytes(Number(param));
-    else {
-        var body = JSON.parse(event.body);
-        // console.log(1, body, 2, 2, typeof (event.body) == 'undefined')
-        res = truncate(body.body.key, Number(body.body.length));
-    }
     return { body: JSON.stringify(res), statusCode: 200 };
 });
 exports.handler = handler;
-function formatBytes(bytes) {
+function format_bytes(bytes) {
     if (bytes === 0)
         return '0 Bytes';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toFixed() + ' ' + sizes[i];
+    return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
 }
-exports.formatBytes = formatBytes;
+exports.format_bytes = format_bytes;
 function sort(property) {
     var sortOrder = 1;
     if (property[0] === "-") {

@@ -1,7 +1,6 @@
 
 var ul = document.createElement('ul')
 
-convert()
 async function convert() {
     var elem = await indexfun(arguments.callee.name + '_feet_cm')
     convertHelp('incm', 170, 204, 1)

@@ -10,9 +10,8 @@ export const handler: Handler = async () => {
 export function format_bytes(bytes: number) {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toFixed() + ' ' + sizes[i];
+    return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
 }
 
 export function sort(property: string) {

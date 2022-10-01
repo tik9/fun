@@ -8,7 +8,7 @@ function aref(elem, val) {
 }
 
 function table(arr = [], src) {
-    var excludes = ['_id', '__v', 'api', 'category', 'name', 'page', 'url']
+    var excludes = ['_id', '__v', 'api', 'cat', 'name', 'page', 'url']
     var table_ = document.createElement('table')
     var columns = []
     var thead = document.createElement('thead')
@@ -44,6 +44,22 @@ function table(arr = [], src) {
                 }
                 else if (elem2 != 'page') td.innerHTML = val
             }
+            else if (src == 'apis') {
+                if (elem2 == 'description') td.append(aref({ url: '#' + elem.api }, val))
+            }
+            else if (['commits', 'posts'].includes(src)) {
+                if (elem2 == 'date') td.append(aref(elem, val))
+                else td.innerHTML = val
+            }
+
+            else if (src == 'issues') {
+                if (elem2 == 'title') {
+                    td.append(aref(elem, val))
+                } else
+                    td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
+            }
+            else if (src == 'joke') td.append(aref(elem, elem.value))
+
             else if (src == 'repos') {
                 if (['date', 'description'].includes(elem2)) {
                     td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
@@ -55,10 +71,6 @@ function table(arr = [], src) {
                     td.append(ahref)
                 }
             }
-            else if (['commits', 'posts'].includes(src)) {
-                if (elem2 == 'date') td.append(aref(elem, val))
-                else td.innerHTML = val
-            }
             else if (src == 'tests') {
                 if (['lines', 'ext', 'date'].includes(elem2)) {
                     td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
@@ -69,17 +81,6 @@ function table(arr = [], src) {
                     ahref.textContent = val
                     td.append(ahref)
                 }
-            }
-            else if (src == 'apis') {
-                if (elem2 == 'description') td.append(aref({ url: '#' + elem.api }, val))
-            }
-            else if (src == 'joke') td.append(aref(elem, elem.value))
-            else if (src == 'issues') {
-                if (elem2 == 'title') {
-                    td.append(aref(elem, val))
-                    // console.log(elem)
-                } else
-                    td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
             else td.innerHTML = val
             tr.appendChild(td);

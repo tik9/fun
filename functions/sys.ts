@@ -16,12 +16,13 @@ export const handler: Handler = async (event) => {
         host_server: truncate(os.hostname(), 15),
         'memory': format_bytes(os.totalmem()),
         "node": process.versions.node.split(".")[0],
-        "npm": await execPromise('npm -v') as string,
         'os': truncate(os.version(), 30),
         platform: os.platform(),
         release: os.release(),
         'speed cpu mhz': os.cpus()[0].speed.toString(),
+        npm_version: ''
     }
+    if (event.headers.host == 'localhost') server.npm_version = await execPromise('npm -v') as string
 
     const ipinfo = new IPinfoWrapper(process.env.ipgeo!);
     var client = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
@@ -29,7 +30,9 @@ export const handler: Handler = async (event) => {
     client.client_map = (await ipinfo.getMap([client.ip])).reportUrl
     client.tik = 2
 
-    var res = { ...server, ...client }
+    const server_sorted = (Object.keys(server) as Array<keyof typeof server>).sort().reduce((r: any, k) => ({ ...r, [k]: server[k] }), {});
+
+    var res = { ...server_sorted, ...client }
     if (event.headers.host != 'localhost') insert_one('sys', res)
     return { statusCode: 200, body: JSON.stringify(res) }
 }

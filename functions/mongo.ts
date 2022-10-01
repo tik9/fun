@@ -9,19 +9,19 @@ function main() { return new MongoClient(process.env.mongo!).connect() }
 
 export const handler: Handler = async (event) => {
     var res
-    if (typeof (event.body) == 'undefined') {
+    if (typeof (event.body) == 'undefined' || event.body == '{}') {
         var params = event.queryStringParameters!
         var coll = params.coll!
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll)
         else if (params.op == 'count') res = await count(coll)
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     } else {
-        // console.log(1, Object.keys(event.body!).length, 2, typeof (event.body) == 'undefined')
+        console.log(1, event.body, 2, typeof (event.body) == 'undefined')
         var body = JSON.parse(event.body!);
         res = insert_one(body.body.coll, body.body.val)
     }
 
-    // console.log(1, coll!, res)
+    // console.log(1, res)
 
     // create_coll(coll)
     // res = await datatype(coll, 2)
@@ -35,7 +35,7 @@ export const handler: Handler = async (event) => {
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // rename_coll('geo', 'client')
+    // rename_field('index', 'category', 'cat')
     // truncate(coll!)
     // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
 
