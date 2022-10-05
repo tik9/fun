@@ -17,6 +17,7 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
     var res;
     if (typeof (event.body) == 'undefined' || event.body == '{}') {
         var params = event.queryStringParameters;
+        console.log(1, params.op, 2, typeof (params.op) == 'undefined');
         var coll = params.coll;
         if (params.op == 'find' || typeof (params.op) == 'undefined')
             res = yield find(coll);
@@ -25,7 +26,7 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     }
     else {
-        console.log(1, event.body, 2, typeof (event.body) == 'undefined');
+        // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
         var body = JSON.parse(event.body);
         res = insert_one(body.body.coll, body.body.val);
     }
@@ -37,7 +38,7 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
     // index_create(coll!, params!.key!)
     // res = await index_get(coll!)
     // res = await index_remove(coll!, params!.key!)
-    // insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
+    // insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
     // insert_val('index', res)
     // res = await list_coll()
     // remove_coll(coll!)
@@ -45,7 +46,10 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
     // rename_field('index', 'category', 'cat')
     // truncate(coll!)
     // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
-    return { statusCode: 200, body: JSON.stringify(res) };
+    return {
+        // headers: { "Access-Control-Allow-Origin": "*" },
+        statusCode: 200, body: JSON.stringify(res)
+    };
 });
 exports.handler = handler;
 function count(coll) {
@@ -78,23 +82,11 @@ function index_remove(coll, key) {
     return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).dropIndex(key); });
 }
 function insert_one(coll, obj) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            return yield (yield main()).db(dbWeb).collection(coll).insertOne(obj);
-        }
-        catch (error) {
-            console.log(1, error);
-        }
-    });
+    return __awaiter(this, void 0, void 0, function* () { return yield (yield main()).db(dbWeb).collection(coll).insertOne(obj); });
 }
 exports.insert_one = insert_one;
 function insert(coll, obj) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            return yield (yield main()).db(dbWeb).collection(coll).insertMany(obj);
-        }
-        catch (error) { }
-    });
+    return __awaiter(this, void 0, void 0, function* () { return yield (yield main()).db(dbWeb).collection(coll).insertMany(obj); });
 }
 function list_coll() {
     return __awaiter(this, void 0, void 0, function* () { return (yield (yield main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name); });

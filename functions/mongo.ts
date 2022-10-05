@@ -10,13 +10,15 @@ function main() { return new MongoClient(process.env.mongo!).connect() }
 export const handler: Handler = async (event) => {
     var res
     if (typeof (event.body) == 'undefined' || event.body == '{}') {
+
         var params = event.queryStringParameters!
+        console.log(1, params.op, 2, typeof (params.op) == 'undefined')
         var coll = params.coll!
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll)
         else if (params.op == 'count') res = await count(coll)
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     } else {
-        console.log(1, event.body, 2, typeof (event.body) == 'undefined')
+        // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
         var body = JSON.parse(event.body!);
         res = insert_one(body.body.coll, body.body.val)
     }
@@ -30,7 +32,7 @@ export const handler: Handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_get(coll!)
     // res = await index_remove(coll!, params!.key!)
-    // insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
+    // insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
     // insert_val('index', res)
     // res = await list_coll()
     // remove_coll(coll!)
@@ -38,8 +40,10 @@ export const handler: Handler = async (event) => {
     // rename_field('index', 'category', 'cat')
     // truncate(coll!)
     // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
-
-    return { statusCode: 200, body: JSON.stringify(res) }
+    return {
+        // headers: { "Access-Control-Allow-Origin": "*" },
+        statusCode: 200, body: JSON.stringify(res)
+    }
 }
 
 async function count(coll: string) { return (await main()).db(dbWeb).collection(coll).countDocuments() }
@@ -62,19 +66,9 @@ async function index_get(coll: string) { return (await main()).db(dbWeb).collect
 
 async function index_remove(coll: string, key: string) { return (await main()).db(dbWeb).collection(coll).dropIndex(key) }
 
-export async function insert_one(coll: string, obj: object) {
-    try {
-        return await (await main()).db(dbWeb).collection(coll).insertOne(obj)
-    }
-    catch (error) { console.log(1, error) }
-}
+export async function insert_one(coll: string, obj: object) { return await (await main()).db(dbWeb).collection(coll).insertOne(obj) }
 
-async function insert(coll: string, obj: []) {
-    try {
-        return await (await main()).db(dbWeb).collection(coll).insertMany(obj)
-    }
-    catch (error) { }
-}
+async function insert(coll: string, obj: []) { return await (await main()).db(dbWeb).collection(coll).insertMany(obj) }
 
 async function list_coll() { return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name) }
 

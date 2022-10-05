@@ -17,7 +17,7 @@ container.style.paddingBottom = '80px'
 
 create_icon()
 includes()
-navbottom_top()
+navbottom()
 
 function create_icon() {
     var icon = document.createElement("link");
@@ -32,33 +32,11 @@ async function css_js(type) {
     return res
 }
 
-async function git_code(arr) {
-    var ghUlLinks = document.createElement('ul')
-    ghUlLinks.style.marginBottom = '70px'
-    for (var elem of arr) {
-        var li = document.createElement("li");
-        var aref = document.createElement("a");
-        li.appendChild(aref);
-        aref.href = gitBase + 'public/' + elem
-        aref.textContent = elem.slice(elem.lastIndexOf('/') + 1, elem.length)
-        ghUlLinks.append(li);
-    }
-    var ghDivLink = document.createElement('div')
-    var head = document.createElement('h5')
-    head.textContent = 'Links'
-    container.append(ghDivLink)
-    ghDivLink.id = "git_code"
-    ghDivLink.classList.add('mt-5', 'mb-5')
-    ghDivLink.append(head, ghUlLinks);
-}
-
 async function includes() {
     var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
     var boots = 'twitter-bootstrap/5.2.1/'
 
-    includes_script([
-        cdn + boots + 'js/bootstrap.min.js',
-    ])
+    includes_script([cdn + boots + 'js/bootstrap.min.js'])
 
     var css_arr = await css_js('css')
     css_arr.push(cdn + boots + 'css/bootstrap.min.css')
@@ -104,37 +82,7 @@ async function indexfun(head = 'intro') {
     return elem
 }
 
-function li_aref(text, href) {
-    var aref = document.createElement('a')
-    aref.textContent = text
-    aref.href = href
-    var li = document.createElement('li')
-    li.append(aref)
-    return li
-}
-
-function list(arr, name) {
-    var ul = document.createElement('ul')
-    for (var elem in arr) {
-        var val = arr[elem]
-        val = dateformat.test(val) ? locale_date(val) : val
-
-        var li = document.createElement('li')
-        if (name == 'symbols') {
-            li.style.display = 'inline-block'
-            li.classList.add('me-3')
-            li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
-        }
-        else if (name == 'client' && elem == 'client_map') li = li_aref('Map', val)
-        else if (name == 'accounts') li = li_aref(elem, val)
-        else
-            li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
-        ul.appendChild(li)
-    }
-    return ul
-}
-
-function navbottom_top() {
+function navbottom() {
     topnav.classList.add('fixed-top', 'bg-dark')
     var aref = document.createElement("a");
     bottomnav.classList.add('fixed-bottom', 'bg-dark')

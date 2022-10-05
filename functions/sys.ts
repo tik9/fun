@@ -27,7 +27,7 @@ export const handler: Handler = async (event) => {
     const ipinfo = new IPinfoWrapper(process.env.ipgeo!);
     var client = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
 
-    client.client_map = (await ipinfo.getMap([client.ip])).reportUrl
+    client.map = (await ipinfo.getMap([client.ip])).reportUrl
     client.tik = 2
 
     const server_sorted = (Object.keys(server) as Array<keyof typeof server>).sort().reduce((r: any, k) => ({ ...r, [k]: server[k] }), {});

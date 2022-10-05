@@ -17,7 +17,7 @@ const axios_1 = __importDefault(require("axios"));
 const utils_1 = require("./utils");
 function handler() {
     return __awaiter(this, void 0, void 0, function* () {
-        var arr = [];
+        let arr = [];
         for (var elem of ['posts', 'comments']) {
             var res = (yield axios_1.default.get('https://api.stackexchange.com/2.2/users/1705829/' + elem + '?site=stackoverflow&sort=votes&filter=withbody')).data;
             res = res.items.slice(0, 3);
@@ -29,8 +29,9 @@ function handler() {
             }));
             arr.push(res);
         }
-        arr = [...arr[0], ...arr[1]];
-        // console.log(1, arr)
+        arr = arr.flat();
+        (0, utils_1.sort)(arr, 'score');
+        // arr.sort((a, b) => a.score > b.score ? 1 : a.score < b.score ? -1 : 0)
         return {
             body: JSON.stringify(arr),
             statusCode: 200

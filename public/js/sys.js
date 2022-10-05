@@ -20,7 +20,7 @@ async function client() {
     var client = arguments.callee.name
     var res = await (await fetch(netfun + 'sys')).json()
     arr_client = ['architecture', "cores", 'free memory', 'host_server', 'memory', 'node', 'npm_version', 'os', 'platform', 'release', 'speed cpu mhz', ...arr].forEach(e => delete res[e]);
-    res.userAgent = navigator.userAgent;
+    // res.userAgent = navigator.userAgent;
     orderKeys(res);
     (await indexfun('info_about_' + client)).append(list(res, client))
 }

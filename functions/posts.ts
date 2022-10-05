@@ -1,10 +1,10 @@
 
 import axios from 'axios';
 
-import { truncate } from './utils'
+import { sort, truncate } from './utils'
 
 export async function handler() {
-    var arr: string[] = []
+    let arr: Array<{ score: number, text: string, url: string, date: string }> = []
     for (var elem of ['posts', 'comments']) {
         var res = (await axios.get('https://api.stackexchange.com/2.2/users/1705829/' + elem + '?site=stackoverflow&sort=votes&filter=withbody')).data
 
@@ -20,8 +20,10 @@ export async function handler() {
             }))
         arr.push(res)
     }
-    arr = [...arr[0], ...arr[1]]
-    // console.log(1, arr)
+    arr = arr.flat()
+    sort(arr, 'score')
+    // arr.sort((a, b) => a.score > b.score ? 1 : a.score < b.score ? -1 : 0)
+
     return {
         body: JSON.stringify(arr),
         statusCode: 200

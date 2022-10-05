@@ -4,51 +4,11 @@
     </div>
     <div id="contact">
         <h3 class=mb-4>Contact</h3>
-        <form id=contact accept-charset="utf-8" onsubmit="return false" novalidate>
 
-            <table class="table">
-                <tr>
-                    <td>
-                        <label for="name">Full Name</label>
-                    </td>
-                    <td>
-                        <input type="text" name="name" id="name" data-test="name" placeholder="First and Last"
-                            class=form-control-sm>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="email">Email Address</label>
-                    </td>
-                    <td>
-                        <input type="email" name="email" id="contact_input" placeholder="email@dom.tld"
-                            data-test="contact_input" class=form-control-sm>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="message">Comments</label>
-                    </td>
-                    <td>
-                        <textarea rows="3" class=form-control-sm name="message" id="message" data-test="message"
-                            placeholder="message"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <input type=submit id="send1" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mymodal"
-                value="submit" data-test="contact_btn" />
-
-            <button id="reset" class="btn btn-primary" style="margin-left: 10px;">Reset</button>
-        </form>
-    </div>
-    <div id="newsletter">
-        <h5 class="mt-5">Get newsletter</h5>
-        <input type="email" name="email" id="nl_input" placeholder="subscribe for update" data-test="nl_input">
-        <button id="news_btn" class="btn btn-primary send_btn" data-bs-target="#mymodal" data-bs-toggle="modal"
-            style="margin-left: 10px;" data-test="nl_btn">Get News</button>
+        <h4 data-test="email">timo at tik1.net</h4>
+        <h4 data-test="phone">Phone: +49 1573 95 98 220</h4>
     </div>
     <div id="bottomnav" class="nav"></div>
 </div>
 
 <script src="client.js"></script>
-<script src="contact.js"></script>

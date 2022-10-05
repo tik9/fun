@@ -38,7 +38,7 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
         server.npm_version = (yield execPromise('npm -v'));
     const ipinfo = new node_ipinfo_1.IPinfoWrapper(process.env.ipgeo);
     var client = (yield axios_1.default.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data;
-    client.client_map = (yield ipinfo.getMap([client.ip])).reportUrl;
+    client.map = (yield ipinfo.getMap([client.ip])).reportUrl;
     client.tik = 2;
     const server_sorted = Object.keys(server).sort().reduce((r, k) => (Object.assign(Object.assign({}, r), { [k]: server[k] })), {});
     var res = Object.assign(Object.assign({}, server_sorted), client);
