@@ -1,12 +1,26 @@
 
-var alias_cloud = 'social_cloud'
-
 async function accounts() {
-  await indexfun(alias_cloud)
-  var res = await (await fetch(netfun + arguments.callee.name)).json()
+  var url = 'http://api.stackexchange.com/'
+  if (location.host == 'localhost') url = 'http://localhost:8010/proxy/'
+  var cloud_arr = [
+    {
+      name: "stack", url:
+        url + '2.2/users/1705829?site=stackoverflow',
+      link: 'link'
+    },
+    { name: "git", url: 'http://api.github.com/users/tik9', link: 'html_url' }
+  ]
+  var obj = {}
+  for (var elem of cloud_arr) {
+    var res = await (await fetch(elem.url)).json()
+    let name = elem.name
+    if (name == 'stack') {
+      res = Object.values(res.items)[0]
+    }
+    obj[name] = res[elem.link]
+  }
 
-  var div = helper(arguments.callee.name)
-  div.append(list(res, arguments.callee.name))
+  helper(arguments.callee.name).append(list(obj, arguments.callee.name))
 }
 
 async function commits() {
@@ -31,6 +45,7 @@ async function commits() {
 
 function helper(sub) {
   var div = document.createElement('div')
+
   div.id = sub
   var head = document.createElement('h5')
   head.classList.add('mt-3', 'mb-3')
@@ -40,21 +55,18 @@ function helper(sub) {
 }
 
 async function issues_with_this_repo() {
-  var arr_field = ['title', 'body', 'url']
-  var arr_date = ['createdAt', 'updatedAt']
-  arr_field = arr_field.concat(arr_date)
+  var arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
 
   var arr = []
   for (var elem of await (await fetch(netfun + 'issues')).json()) {
     var obj = {};
     for (var elem2 of arr_field) {
-      var elem3 = elem2
       var val = elem.node[elem2]
-      if (arr_date.includes(elem2)) {
+      if ('updatedAt' == elem2) {
         val = val.slice(0, 10)
-        elem3 = elem2.slice(0, -2)
-      }
-      obj[elem3] = val
+        elem2 = 'updated'
+      } else if (elem2 == 'state') val = val.toLowerCase()
+      obj[elem2] = val
     }
     arr.push(obj)
   }

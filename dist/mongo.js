@@ -1,28 +1,22 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.insert_one = exports.handler = void 0;
 const mongodb_1 = require("mongodb");
 var dbWeb = "website";
-function main() { return new mongodb_1.MongoClient(process.env.mongo).connect(); }
-const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
+function main() {
+    // console.log(1, process.env.mongo?.slice(-5))
+    return new mongodb_1.MongoClient(process.env.mongo).connect();
+}
+const handler = async (event) => {
     var res;
     if (typeof (event.body) == 'undefined' || event.body == '{}') {
         var params = event.queryStringParameters;
-        console.log(1, params.op, 2, typeof (params.op) == 'undefined');
+        // console.log(1, params.op, 2, typeof (params.op) == 'undefined')
         var coll = params.coll;
         if (params.op == 'find' || typeof (params.op) == 'undefined')
-            res = yield find(coll);
+            res = await find(coll);
         else if (params.op == 'count')
-            res = yield count(coll);
+            res = await count(coll);
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     }
     else {
@@ -43,78 +37,44 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
+    // remove_many('index', 'name', 'intro')
     // rename_field('index', 'category', 'cat')
     // truncate(coll!)
-    // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
+    // update_one('index', 'name', 'apis', 'cat', 'rest')
     return {
         // headers: { "Access-Control-Allow-Origin": "*" },
         statusCode: 200, body: JSON.stringify(res)
     };
-});
+};
 exports.handler = handler;
-function count(coll) {
-    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).countDocuments(); });
+async function count(coll) { return (await main()).db(dbWeb).collection(coll).countDocuments(); }
+async function create_coll(coll) { console.log(await (await main()).db(dbWeb).createCollection(coll)); }
+async function datatype(coll, val) {
+    return (await main()).db(dbWeb).collection(coll).aggregate([
+        { $match: { tik: 2 } },
+        { $addFields: { tikDataType: { $type: "$tik" } } }
+    ]);
 }
-function create_coll(coll) {
-    return __awaiter(this, void 0, void 0, function* () { console.log(yield (yield main()).db(dbWeb).createCollection(coll)); });
+async function find(coll, limit = 0) {
+    try {
+        return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray();
+    }
+    catch (error) { }
 }
-function datatype(coll, val) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return (yield main()).db(dbWeb).collection(coll).aggregate([
-            { $match: { tik: 2 } },
-            { $addFields: { tikDataType: { $type: "$tik" } } }
-        ]);
-    });
-}
-function find(coll, limit = 0) {
-    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray(); });
-}
-function find_one(coll, key, val) {
-    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).findOne({ [key]: val }); });
-}
-function index_create(coll, key) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).createIndex({ [key]: 1 }, { unique: true }); });
-}
-function index_get(coll) {
-    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).indexes(); });
-}
-function index_remove(coll, key) {
-    return __awaiter(this, void 0, void 0, function* () { return (yield main()).db(dbWeb).collection(coll).dropIndex(key); });
-}
-function insert_one(coll, obj) {
-    return __awaiter(this, void 0, void 0, function* () { return yield (yield main()).db(dbWeb).collection(coll).insertOne(obj); });
-}
+async function find_one(coll, key, val) { return (await main()).db(dbWeb).collection(coll).findOne({ [key]: val }); }
+async function index_create(coll, key) { (await main()).db(dbWeb).collection(coll).createIndex({ [key]: 1 }, { unique: true }); }
+async function index_get(coll) { return (await main()).db(dbWeb).collection(coll).indexes(); }
+async function index_remove(coll, key) { return (await main()).db(dbWeb).collection(coll).dropIndex(key); }
+async function insert_one(coll, obj) { return await (await main()).db(dbWeb).collection(coll).insertOne(obj); }
 exports.insert_one = insert_one;
-function insert(coll, obj) {
-    return __awaiter(this, void 0, void 0, function* () { return yield (yield main()).db(dbWeb).collection(coll).insertMany(obj); });
-}
-function list_coll() {
-    return __awaiter(this, void 0, void 0, function* () { return (yield (yield main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name); });
-}
-function remove_coll(coll) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).drop(); });
-}
-function remove_field(coll, searchkey, searchval, del) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $unset: { [del]: "" } }); });
-}
-function remove_field_all(coll, del) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).updateMany({}, { $unset: { [del]: '' } }); });
-}
-function remove_many(coll, field, val) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).deleteMany({ [field]: val }); });
-}
-function rename_coll(old, newcoll) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(old).rename(newcoll); });
-}
-function rename_field(coll, old, newf) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).updateMany({}, { $rename: { [old]: newf } }); });
-}
-function truncate(coll) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).deleteMany({}); });
-}
-function update_one(coll, searchkey, searchval, key, val) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }); });
-}
-function update_many(coll, field, val) {
-    return __awaiter(this, void 0, void 0, function* () { (yield main()).db(dbWeb).collection(coll).updateMany({}, { $set: { [field]: val } }); });
-}
+async function insert(coll, obj) { return await (await main()).db(dbWeb).collection(coll).insertMany(obj); }
+async function list_coll() { return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name); }
+async function remove_coll(coll) { (await main()).db(dbWeb).collection(coll).drop(); }
+async function remove_field(coll, searchkey, searchval, del) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $unset: { [del]: "" } }); }
+async function remove_field_all(coll, del) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $unset: { [del]: '' } }); }
+async function remove_many(coll, field, val) { (await main()).db(dbWeb).collection(coll).deleteMany({ [field]: val }); }
+async function rename_coll(old, newcoll) { (await main()).db(dbWeb).collection(old).rename(newcoll); }
+async function rename_field(coll, old, newf) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $rename: { [old]: newf } }); }
+async function truncate(coll) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
+async function update_one(coll, searchkey, searchval, key, val) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }); }
+async function update_many(coll, field, val) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $set: { [field]: val } }); }

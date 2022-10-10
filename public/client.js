@@ -1,12 +1,7 @@
 
 'use strict'
 
-var asset_dir = ''
-var dateformat = /^\d{4}-\d{2}-\d{2}/
 var github = 'https://github.com/'
-var git = github + 'tik9/'
-var git2 = git + 'fun'
-var gitBase = git2 + '/blob/main/'
 var netfun = '/.netlify/functions/'
 var tiko = "Tiko's"
 

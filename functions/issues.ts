@@ -8,7 +8,7 @@ var query = `
        totalCount,
         edges {
           node {
-            createdAt
+            state
             updatedAt
               body
               title
@@ -27,7 +27,7 @@ export const handler = async () => {
     headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
   };
   var res = (await axios.request(options)).data.data.repository.issues.edges
-
+  // console.log(res)
   return {
     statusCode: 200,
     body: JSON.stringify(res)

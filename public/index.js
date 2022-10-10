@@ -2,23 +2,20 @@
 index()
 include_js()
 
+var alias_cloud = 'social_cloud'
+var dateformat = /^\d{4}-\d{2}-\d{2}/
+var git = github + 'tik9/'
+var git2 = git + 'fun'
+var gitBase = git2 + '/blob/main/'
+
 async function git_code(arr) {
-  var ghUlLinks = document.createElement('ul')
-  ghUlLinks.style.marginBottom = '70px'
-  for (var elem of arr) {
-    var li = document.createElement("li");
-    var aref = document.createElement("a");
-    li.appendChild(aref);
-    aref.href = gitBase + 'public/' + elem
-    aref.textContent = elem.slice(elem.lastIndexOf('/') + 1, elem.length)
-    ghUlLinks.append(li);
-  }
+  ghUlLinks = list(arr, arguments.callee.name)
   var ghDivLink = document.createElement('div')
   var head = document.createElement('h5')
   head.textContent = 'Links'
   container.append(ghDivLink)
-  ghDivLink.id = "git_code"
-  ghDivLink.classList.add('mt-5', 'mb-5')
+  ghDivLink.id = arguments.callee.name
+  ghDivLink.classList.add('mb-4', 'mt-4')
   ghDivLink.append(head, ghUlLinks);
 }
 
@@ -37,19 +34,27 @@ async function include_js() {
 async function index() {
   var index = arguments.callee.name
   await indexfun(index)
+  await indexfun(alias_cloud)
 
-  var res = await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()
-console.log(1,res)
+  var res = []
+  res = await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()
   res = res.filter(val => val.cat.match(new RegExp(/further/)));
+  res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
 
   var div = document.getElementById(index)
-  res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
   div.append(table(res, index))
   div.classList.add('mt-5')
 
+  // await sleep(500)
+  // accounts();
+  // apis();
   client()
-  server()
-  accounts(); apis(); commits(); convert(); issues_with_this_repo(); posts(); repos()
+  // commits();
+  // convert();
+  issues_with_this_repo();
+  posts();
+  repos()
+  // server()
 }
 
 function li_aref(text, href) {
@@ -75,6 +80,10 @@ function list(arr, name) {
     }
     else if (name == 'client' && elem == 'map') li = li_aref('Map', val)
     else if (name == 'accounts') li = li_aref(elem, val)
+    else if (name == 'git_code') {
+      var text = val.slice(val.lastIndexOf('/') + 1)
+      li = li_aref(text, gitBase + 'public/' + val)
+    }
     else
       li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
     ul.appendChild(li)

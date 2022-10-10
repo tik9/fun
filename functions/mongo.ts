@@ -5,14 +5,17 @@ import { promises as fs } from 'fs'
 import { resolve } from 'path'
 var dbWeb = "website"
 
-function main() { return new MongoClient(process.env.mongo!).connect() }
+function main() {
+    // console.log(1, process.env.mongo?.slice(-5))
+    return new MongoClient(process.env.mongo!).connect()
+}
 
 export const handler: Handler = async (event) => {
     var res
     if (typeof (event.body) == 'undefined' || event.body == '{}') {
 
         var params = event.queryStringParameters!
-        console.log(1, params.op, 2, typeof (params.op) == 'undefined')
+        // console.log(1, params.op, 2, typeof (params.op) == 'undefined')
         var coll = params.coll!
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll)
         else if (params.op == 'count') res = await count(coll)
@@ -37,9 +40,11 @@ export const handler: Handler = async (event) => {
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
+    // remove_many('index', 'name', 'intro')
     // rename_field('index', 'category', 'cat')
     // truncate(coll!)
-    // update_one('index', 'name', 'cloud', 'name', 'social_cloud')
+    // update_one('index', 'name', 'apis', 'cat', 'rest')
+
     return {
         // headers: { "Access-Control-Allow-Origin": "*" },
         statusCode: 200, body: JSON.stringify(res)
@@ -56,8 +61,12 @@ async function datatype(coll: string, val: string | number) {
         { $addFields: { tikDataType: { $type: "$tik" } } }
     ])
 }
-async function find(coll: string, limit = 0) { return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray() }
+async function find(coll: string, limit = 0) {
+    try {
+        return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray()
 
+    } catch (error) { }
+}
 async function find_one(coll: string, key: string, val: string | number) { return (await main()).db(dbWeb).collection(coll).findOne({ [key]: val }) }
 
 async function index_create(coll: string, key: string) { (await main()).db(dbWeb).collection(coll).createIndex({ [key]: 1 }, { unique: true }) }

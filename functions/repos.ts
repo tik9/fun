@@ -4,8 +4,8 @@ import axios from 'axios'
 
 var url = 'https://api.github.com/graphql'
 
-export const handler: Handler = async (event) => {
-    var query = `{repositoryOwner(login: "tik9") { repositories (orderBy: { field: PUSHED_AT, direction: DESC }, first: 3) { nodes { name description homepageUrl pushedAt }}}}`
+export const handler: Handler = async () => {
+    var query = `{repositoryOwner(login: "tik9") { repositories (orderBy: { field: PUSHED_AT, direction: DESC }, first: 4) { nodes { name description homepageUrl pushedAt }}}}`
 
     var res = (await axios.request({
         url: url,

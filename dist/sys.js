@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -19,7 +10,7 @@ const utils_1 = require("./utils");
 const mongo_1 = require("./mongo");
 const node_ipinfo_1 = require("node-ipinfo");
 const os_1 = __importDefault(require("os"));
-const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
+const handler = async (event) => {
     var server = {
         architecture: os_1.default.arch(),
         cores: os_1.default.cpus().length.toString(),
@@ -35,17 +26,17 @@ const handler = (event) => __awaiter(void 0, void 0, void 0, function* () {
         npm_version: ''
     };
     if (event.headers.host == 'localhost')
-        server.npm_version = (yield execPromise('npm -v'));
+        server.npm_version = await execPromise('npm -v');
     const ipinfo = new node_ipinfo_1.IPinfoWrapper(process.env.ipgeo);
-    var client = (yield axios_1.default.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data;
-    client.map = (yield ipinfo.getMap([client.ip])).reportUrl;
+    var client = (await axios_1.default.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data;
+    client.map = (await ipinfo.getMap([client.ip])).reportUrl;
     client.tik = 2;
-    const server_sorted = Object.keys(server).sort().reduce((r, k) => (Object.assign(Object.assign({}, r), { [k]: server[k] })), {});
-    var res = Object.assign(Object.assign({}, server_sorted), client);
+    const server_sorted = Object.keys(server).sort().reduce((r, k) => ({ ...r, [k]: server[k] }), {});
+    var res = { ...server_sorted, ...client };
     if (event.headers.host != 'localhost')
         (0, mongo_1.insert_one)('sys', res);
     return { statusCode: 200, body: JSON.stringify(res) };
-});
+};
 exports.handler = handler;
 function execPromise(command) {
     return new Promise((resolve, reject) => {

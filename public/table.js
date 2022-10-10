@@ -53,9 +53,8 @@ function table(arr = [], src) {
             }
 
             else if (src == 'issues') {
-                if (elem2 == 'title') {
-                    td.append(aref(elem, val))
-                } else
+                if (elem2 == 'title') td.append(aref(elem, val))
+                else
                     td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
             else if (src == 'joke') td.append(aref(elem, elem.value))
