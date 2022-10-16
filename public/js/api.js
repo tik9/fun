@@ -1,9 +1,7 @@
 
 var apiheaders = {
-    joke: 'Fetch Joke - enter keyword', stock: 'Fetch stock data - Result is probably in dollars', clock: 'Get UTC Time',
+    joke: 'Fetch Jokes - enter keyword e.g. abc', trans: 'Fetch translation en -> de - e.g. ace ', clock: 'Get UTC Time',
 }
-
-var symbols = { abc: 'amerisourcebergen', aapl: 'apple', amzn: 'amazon' }
 
 async function apis() {
     var apis = arguments.callee.name
@@ -18,17 +16,7 @@ async function apis() {
         head.classList.add('mb-2')
         head.innerText = count + '. ' + apiheaders[elem]
         div.append(head)
-        if (elem == 'stock') {
-            var symbol = 'symbols'
-            var sym = document.createElement('div')
-            var headsym = document.createElement('h6')
-            sym.id = symbol
-            sym.classList.add('mt-2')
-            headsym.classList.add('mt-2')
-            headsym.textContent = symbol + ' - Companies:'
-            sym.append(list(symbols, symbol))
-            div.append(headsym, sym)
-        }
+
         var btn = document.createElement('button')
         btn.classList.add('ms-2', 'mt-2', 'btn', 'btn-primary')
         var btnElem = 'btn' + elem
@@ -42,7 +30,7 @@ async function apis() {
             input.id = inputElem
             input.classList.add('mt-3')
             input.required = true
-            // if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
+            if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
             input.setAttribute('data-test', inputElem)
             div.append(input, btn)
         } else div.append(btn)
@@ -58,27 +46,31 @@ async function apis() {
     }
 
     document.getElementById('btnjoke').addEventListener('click', () => rapid('joke', document.getElementById('inputjoke')))
-    document.getElementById('btnstock').addEventListener('click', () => rapid('stock', document.getElementById('inputstock')))
+    document.getElementById('btntrans').addEventListener('click', () => rapid('trans', document.getElementById('inputtrans')))
 
     document.getElementById('btnclock').addEventListener('click', async () => {
+        var innerHtml = document.getElementById('resclock')
+        innerHtml.innerHTML = ''
         var res = await (await fetch('https://worldtimeapi.org/api/timezone/Europe/london')).json()
-        document.getElementById('resclock').innerHTML = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
+        innerHtml.innerHTML = res.utc_datetime.split('T')[1].slice(0, 5) + ' hours'
     })
 }
 
-
+// rapid('joke', { value: 'abc' })
 async function rapid(type, input) {
     var resdiv = document.getElementById('res' + type)
     resdiv.innerHTML = ''
-    var inputval = typeof (input) == 'undefined' ? '' : '&input=' + input.value
-    var res = await (await fetch(netfun + 'rapid?type=' + type + inputval)).json()
+    var inputval = typeof (input) == 'undefined' ? '' : 'input=' + input.value
     if (type == 'joke') {
+        var res = await (await fetch(netfun + 'rapid?' + inputval)).json()
         res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
         resdiv.append(table(res, 'joke'))
     }
     else {
-        res = res["Monthly Time Series"]
-        res = res[Object.keys(res)[0]]['1. open']
-        resdiv.innerText = Number(res.split('.')[0])
+        var res = await (await fetch(netfun + 'rapid', {
+            method: 'post', body: JSON.stringify({ q: input.value })
+        })).json()
+
+        resdiv.innerText = res.data.translations[0].translatedText
     }
 }

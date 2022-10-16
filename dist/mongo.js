@@ -37,7 +37,7 @@ const handler = async (event) => {
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('index', 'name', 'intro')
+    // remove_many('tools', 'tool', 'intro')
     // rename_field('index', 'category', 'cat')
     // truncate(coll!)
     // update_one('index', 'name', 'apis', 'cat', 'rest')

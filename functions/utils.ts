@@ -24,11 +24,11 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
             sortOrder = -1
             // Typescript is not yet smart enough to infer that substring is keyof T
             key = arg.slice(1) as keyof T
-        } else {
+        } else
             // Likewise it is not yet smart enough to infer that arg here is keyof T
             key = arg as keyof T
-        }
-        return function (a: T, b: T) {
+
+        return (a: T, b: T) => {
             const result = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0
             return result * sortOrder
         }

@@ -15,8 +15,6 @@ function convertHelp(type, ...args) {
 
     to.id = 'select_' + type
     to.setAttribute('data-test', to.id)
-    // to.classList.add('form-control', 'w-auto')
-    // to.style.width = 'auto'
     out.id = 'out_' + type
     out.setAttribute('data-test', out.id)
     out.textContent = 'Result waits..'

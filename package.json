@@ -2,15 +2,10 @@
   "type": "module",
   "dependencies": {
     "@netlify/functions": "^1.2.0",
-    "@types/mailgun-js": "^0.22.12",
     "axios": "^0.27.2",
-    "cypress": "^10.7.0",
     "dotenv": "^16.0.1",
-    "mailgun-js": "^0.22.0",
     "mongodb": "^4.8.1",
-    "netlify-cli": "^10.17.4",
-    "node-ipinfo": "^3.1.1",
-    "tsc": "^2.0.4"
+    "node-ipinfo": "^3.1.1"
   },
   "name": "netlify",
   "description": "serverless functions",
@@ -23,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/tik9/netlify/issues"
   },
-  "homepage": "https://github.com/tik9/netlify#readme"
+  "homepage": "https://github.com/tik9/netlify#readme",
+  "devDependencies": {
+    "tsc": "^2.0.4",
+    "@types/qs": "^6.9.7",
+    "cypress": "^10.7.0"
+  }
 }

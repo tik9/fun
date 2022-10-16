@@ -1,6 +1,6 @@
 
 index()
-include_js()
+// include_js()
 
 var alias_cloud = 'social_cloud'
 var dateformat = /^\d{4}-\d{2}-\d{2}/
@@ -25,36 +25,58 @@ function groupByKey(list, key) {
 }
 
 async function include_js() {
-  var res = await css_js('js')
-  includes_script(res)
-  await sleep(100)
-  git_code(res)
+  for (var elem of await css_js('js')) {
+    var script = document.createElement("script")
+    script.src = elem
+    document.body.append(script)
+  }
+  // await sleep(100);git_code(res)
 }
 
 async function index() {
-  var index = arguments.callee.name
-  await indexfun(index)
-  await indexfun(alias_cloud)
+  // var index = arguments.callee.name; 
+  await indexfun()
+  // await indexfun(alias_cloud)
 
-  var res = []
-  res = await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()
-  res = res.filter(val => val.cat.match(new RegExp(/further/)));
-  res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
+  // var res = []
+  // res = await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()
+  // res = res.filter(val => val.cat.match(new RegExp(/further/)));
+  // res = res.map(obj => ({ ...obj, url: '#' + obj.name }))
 
-  var div = document.getElementById(index)
-  div.append(table(res, index))
-  div.classList.add('mt-5')
+  // var div = document.getElementById(index);div.append(table(res, index));div.classList.add('mt-5')
 
   // await sleep(500)
   // accounts();
-  // apis();
-  client()
+  apis();
+  // client()
   // commits();
   // convert();
-  issues_with_this_repo();
-  posts();
-  repos()
+  // issues_with_this_repo();
+  // posts();
+  // repos()
   // server()
+}
+
+async function indexfun(head = 'index') {
+  var elem = document.createElement('div')
+  container.append(elem)
+  elem.id = head
+  if (head == 'index') {
+    var aHref = document.createElement("a");
+    aHref.textContent = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
+    aHref.classList.add('nav')
+    aHref.href = '#' + head
+    topnav.append(aHref)
+    aHref.classList.add('active', 'nav')
+    aHref.href = '#container'
+  }
+  // else {
+  //   var hIntro = document.createElement("h4");
+  //   elem.prepend(hIntro)
+  //   hIntro.innerHTML = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
+  //   // hIntro.classList.add('mt-5', 'mb-3');
+  // }
+  return elem
 }
 
 function li_aref(text, href) {
@@ -73,12 +95,8 @@ function list(arr, name) {
     val = dateformat.test(val) ? locale_date(val) : val
 
     var li = document.createElement('li')
-    if (name == 'symbols') {
-      li.style.display = 'inline-block'
-      li.classList.add('me-3')
-      li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
-    }
-    else if (name == 'client' && elem == 'map') li = li_aref('Map', val)
+
+    if (name == 'client' && elem == 'map') li = li_aref('Map', val)
     else if (name == 'accounts') li = li_aref(elem, val)
     else if (name == 'git_code') {
       var text = val.slice(val.lastIndexOf('/') + 1)

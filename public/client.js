@@ -31,8 +31,6 @@ async function includes() {
     var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
     var boots = 'twitter-bootstrap/5.2.1/'
 
-    includes_script([cdn + boots + 'js/bootstrap.min.js'])
-
     var css_arr = await css_js('css')
     css_arr.push(cdn + boots + 'css/bootstrap.min.css')
     for (var elem of css_arr) {
@@ -41,40 +39,6 @@ async function includes() {
         link.href = elem;
         document.body.appendChild(link);
     }
-}
-
-function includes_script(arr) {
-    for (var elem of arr) {
-        var script = document.createElement("script")
-        script.src = elem
-        if (elem == 'js/client.js') continue
-        document.body.append(script)
-    }
-}
-
-async function indexfun(head = 'intro') {
-    var hIntro = document.createElement("h4");
-
-    hIntro.innerHTML = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
-    hIntro.classList.add('mt-5', 'mb-3');
-
-    var elem = document.createElement('div')
-    container.append(elem)
-    elem.id = head
-    elem.prepend(hIntro)
-    var aHref = document.createElement("a");
-    aHref.textContent = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
-    aHref.classList.add('nav')
-    aHref.href = '#' + head
-    topnav.append(aHref)
-    if (head == 'index') {
-        aHref.classList.add('active', 'nav')
-        aHref.href = '#container'
-    } else if (head == 'tests') {
-        aHref.setAttribute('data-test', 'tests_href')
-        elem.setAttribute('data-test', 'tests_div')
-    }
-    return elem
 }
 
 function navbottom() {

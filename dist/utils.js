@@ -23,11 +23,10 @@ function byPropertiesOf(sortBy) {
             // Typescript is not yet smart enough to infer that substring is keyof T
             key = arg.slice(1);
         }
-        else {
+        else
             // Likewise it is not yet smart enough to infer that arg here is keyof T
             key = arg;
-        }
-        return function (a, b) {
+        return (a, b) => {
             const result = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
             return result * sortOrder;
         };

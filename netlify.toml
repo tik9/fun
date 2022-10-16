@@ -10,3 +10,4 @@
 
 [dev]
   port=80
+  autoLaunch = false

@@ -1,27 +1,39 @@
 
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { Handler } from '@netlify/functions';
+import qs from 'qs';
 
 export const handler: Handler = async (event) => {
-    var res
-    var params = event.queryStringParameters!
-    params = (Object.keys(params).length !== 0) ? params : { type: 'joke', input: 'abc' }
 
-    var url: string
-    if (params.type == 'joke') url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search'
-    else url = 'https://alpha-vantage.p.rapidapi.com/query'
+    var url = 'https://google-translate1.p.rapidapi.com/language/translate/v2'
+    var method = 'post'
+    var input, body
 
-    var res = (await axios.request({
-        method: 'get',
+    if (typeof (event.queryStringParameters!.input) != 'undefined') {
+        input = event.queryStringParameters!.input
+        url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search'
+        method = 'get'
+    }
+    else {
+        body = {
+            target: "de",
+            q: JSON.parse(event.body!).q
+        }
+    }
+    const options = {
+        method: method,
         url: url,
-        params: {
-            query: params.input,
-            function: 'time_series_monthly',
-            symbol: params.input,
-            interval: '5min'
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'X-RapidAPI-Key': process.env.rapid!
         },
-        headers: { 'x-rapidapi-key': process.env.rapid! }
-    })).data
+        params: { query: input },
+        data: qs.stringify(body)
+    };
+    var res
+    try {
+        res = (await axios.request(options)).data
+    } catch (error) { console.log(1, error) }
 
     return { statusCode: 200, body: JSON.stringify(res) }
 }
