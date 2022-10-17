@@ -1,26 +1,8 @@
 [
     {
-        "category": "further-fun",
-        "name": "apis",
-        "title": "Apis I favour",
-        "text": "Apis I use here"
-    },
-    {
-        "category": "further",
-        "name": "cloud",
-        "title": "Social cloud actvities",
-        "text": "social clouds related to programming"
-    },
-    {
-        "category": "further-fun",
-        "name": "convert_feet_cm",
-        "title": "converter",
-        "text": "convert feet to cm"
-    },
-    {
-        "category": "rest",
-        "name": "intro",
-        "title": "Welcome to Tiko's site",
-        "text": "A website for - frontend first - programmers and in programming interested!"
+        "category": "further expr",
+        "name": "about",
+        "title": "Über mich",
+        "text": "Mein Werdegang als Nachhilfelehrer"
     }
 ]

@@ -14,12 +14,8 @@ export const handler: Handler = async (event) => {
         url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search'
         method = 'get'
     }
-    else {
-        body = {
-            target: "de",
-            q: JSON.parse(event.body!).q
-        }
-    }
+    else body = { target: "de", q: JSON.parse(event.body!).q }
+
     const options = {
         method: method,
         url: url,
@@ -31,9 +27,7 @@ export const handler: Handler = async (event) => {
         data: qs.stringify(body)
     };
     var res
-    try {
-        res = (await axios.request(options)).data
-    } catch (error) { console.log(1, error) }
-
+    try { res = (await axios.request(options)).data } catch (error) { console.log(1, error) }
+    console.log(1, res)
     return { statusCode: 200, body: JSON.stringify(res) }
 }

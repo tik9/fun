@@ -8,17 +8,18 @@ function aref(elem, val) {
 }
 
 function table(arr = [], src) {
-    var excludes = ['_id', '__v', 'api', 'cat', 'name', 'page', 'url']
+    var excludes = ['_id', '__v', 'api', 'category', 'name', 'url']
     var table_ = document.createElement('table')
-    var columns = []
     var thead = document.createElement('thead')
     var tr = document.createElement('tr')
     thead.appendChild(tr)
+    var columns = []
     for (var elem of arr) {
         for (var key in elem) {
             if (excludes.includes(key)) continue
             if (elem.hasOwnProperty(key) && !columns.includes(key)) {
                 columns.push(key);
+                if (key == 'value') continue
 
                 var th = document.createElement('th')
                 th.appendChild(document.createTextNode(key[0].toUpperCase() + key.slice(1)));
@@ -42,7 +43,7 @@ function table(arr = [], src) {
                     ahref.textContent = val
                     td.append(ahref)
                 }
-                else if (elem2 != 'page') td.innerHTML = val
+                else if (elem2 != 'name') td.innerHTML = val
             }
             else if (src == 'apis') {
                 if (elem2 == 'description') td.append(aref({ url: '#' + elem.api }, val))

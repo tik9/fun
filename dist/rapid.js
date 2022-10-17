@@ -15,12 +15,8 @@ const handler = async (event) => {
         url = 'https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/search';
         method = 'get';
     }
-    else {
-        body = {
-            target: "de",
-            q: JSON.parse(event.body).q
-        };
-    }
+    else
+        body = { target: "de", q: JSON.parse(event.body).q };
     const options = {
         method: method,
         url: url,
@@ -38,6 +34,7 @@ const handler = async (event) => {
     catch (error) {
         console.log(1, error);
     }
+    console.log(1, res);
     return { statusCode: 200, body: JSON.stringify(res) };
 };
 exports.handler = handler;

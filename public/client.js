@@ -37,7 +37,8 @@ async function includes() {
         var link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = elem;
-        document.body.appendChild(link);
+        // console.log(elem)
+        if (elem != 'css/jstable.css') document.body.appendChild(link);
     }
 }
 

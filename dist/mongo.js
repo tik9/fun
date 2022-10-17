@@ -24,7 +24,7 @@ const handler = async (event) => {
         var body = JSON.parse(event.body);
         res = insert_one(body.body.coll, body.body.val);
     }
-    // console.log(1, res)
+    console.log(1, res);
     // create_coll(coll)
     // res = await datatype(coll, 2)
     // res = await find(coll)
@@ -32,15 +32,15 @@ const handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_get(coll!)
     // res = await index_remove(coll!, params!.key!)
-    // insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
+    // insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
     // insert_val('index', res)
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
     // remove_many('tools', 'tool', 'intro')
-    // rename_field('index', 'category', 'cat')
+    // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'apis', 'cat', 'rest')
+    // update_one('index', 'name', 'tools', 'name', 'subjects')
     return {
         // headers: { "Access-Control-Allow-Origin": "*" },
         statusCode: 200, body: JSON.stringify(res)
