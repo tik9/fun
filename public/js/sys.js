@@ -16,6 +16,7 @@ function orderKeys(obj) {
 }
 
 var arr = ['date', 'hostname', 'ip', 'loc', 'org', 'postal', 'tik']
+
 async function client() {
     var client = arguments.callee.name
     var res = await (await fetch(netfun + 'sys')).json()
@@ -26,6 +27,7 @@ async function client() {
 }
 
 async function server() {
+    // optional: a) show 1)info, 2)value, 3)category, b) store hosts on mongo
     var server = arguments.callee.name
     var res = await (await fetch(netfun + 'sys')).json()
     arr_server = ['city', 'client_map', 'country', 'region', 'timezone', ...arr].forEach(e => delete res[e]);

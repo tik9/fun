@@ -27,6 +27,8 @@ export const handler: Handler = async (event) => {
     const ipinfo = new IPinfoWrapper(process.env.ipgeo!);
     var client = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
 
+    var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete client[element] });
+
     client.map = (await ipinfo.getMap([client.ip])).reportUrl
     client.tik = 2
 
@@ -34,6 +36,7 @@ export const handler: Handler = async (event) => {
 
     var res = { ...server_sorted, ...client }
     if (event.headers.host != 'localhost') insert_one('sys', res)
+    // console.log(new_arr, res)
     return { statusCode: 200, body: JSON.stringify(res) }
 }
 

@@ -20,3 +20,19 @@ export const handler: Handler = async () => {
     // console.log(res)
     return { statusCode: 200, body: JSON.stringify(res) }
 }
+
+export default async function repos() {
+    var res = ((await axios.get('https://api.github.com/users/tik9/repos')).data).slice(0, 3)
+
+    //@ts-ignore
+    res = res.map(obj => ({ repo: obj.name, description: obj.description, update: obj.updated_at.slice(0, 10), url: obj.html_url }))
+    return res
+}
+
+export async function rate() {
+    var gh_url = 'https://api.github.com/rate_limit'
+    try {
+        var res = (await axios.get(gh_url)).data
+    } catch (error) { console.log('err') }
+    console.log(res.resources.core)
+}

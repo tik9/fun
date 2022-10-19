@@ -3,7 +3,7 @@ var apiheaders = {
     joke: 'Fetch Jokes - enter keyword e.g. abc', trans: 'Fetch translation en -> de - e.g. ace ', clock: 'Get UTC Time',
 }
 
-async function apis() {
+async function api() {
     var apis = arguments.callee.name
     await indexfun(apis)
     var count = 1
@@ -64,7 +64,9 @@ async function rapid(type, input) {
     if (type == 'joke') {
         var res = await (await fetch(netfun + 'rapid?' + inputval)).json()
         res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
-        resdiv.append(table(res, 'joke'))
+        var tab = table(res, 'joke')
+        resdiv.append(tab)
+        new JSTable(tab)
     }
     else {
         var res = await (await fetch(netfun + 'rapid', {

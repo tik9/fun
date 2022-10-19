@@ -5,14 +5,12 @@ import { promises as fs } from 'fs'
 import { resolve } from 'path'
 var dbWeb = "website"
 
-function main() {
-    // console.log(1, process.env.mongo?.slice(-5))
-    return new MongoClient(process.env.mongo!).connect()
-}
+function main() { return new MongoClient(process.env.mongo!).connect() }
 
 export const handler: Handler = async (event) => {
     var res
-    if (typeof (event.body) == 'undefined' || event.body == '{}') {
+    if (typeof (event.body) == 'undefined' || event.body == '{}' || event.body == '') {
+        // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
 
         var params = event.queryStringParameters!
         // console.log(1, params.op, 2, typeof (params.op) == 'undefined')
@@ -21,12 +19,11 @@ export const handler: Handler = async (event) => {
         else if (params.op == 'count') res = await count(coll)
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
     } else {
-        // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
         var body = JSON.parse(event.body!);
         res = insert_one(body.body.coll, body.body.val)
     }
 
-    console.log(1, res)
+    // console.log(2, res)
 
     // create_coll(coll)
     // res = await datatype(coll, 2)
@@ -35,10 +32,10 @@ export const handler: Handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_get(coll!)
     // res = await index_remove(coll!, params!.key!)
-    // insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
-    // insert_val('index', res)
+    // res=insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
+    // res=insert_val('index', res)
     // res = await list_coll()
-    // remove_coll(coll!)
+    // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
     // remove_many('tools', 'tool', 'intro')
     // rename_field('index', 'cat', 'category')
@@ -48,6 +45,7 @@ export const handler: Handler = async (event) => {
     return {
         // headers: { "Access-Control-Allow-Origin": "*" },
         statusCode: 200, body: JSON.stringify(res)
+        // statusCode: 200, body: JSON.stringify(res + '1' + event.body + '2' + typeof (event.body) == 'undefined')
     }
 }
 

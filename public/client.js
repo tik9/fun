@@ -1,6 +1,7 @@
 
 'use strict'
 
+var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
 var github = 'https://github.com/'
 var netfun = '/.netlify/functions/'
 var tiko = "Tiko's"
@@ -28,17 +29,20 @@ async function css_js(type) {
 }
 
 async function includes() {
-    var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
     var boots = 'twitter-bootstrap/5.2.1/'
 
     var css_arr = await css_js('css')
-    css_arr.push(cdn + boots + 'css/bootstrap.min.css')
+    css_arr.push(cdn + boots + 'css/bootstrap.min.css', 'css/jstable.css',
+
+        cdn + 'font-awesome/6.2.0/css/fontawesome.min.css',
+        cdn + 'font-awesome/6.2.0/css/solid.min.css'
+    )
     for (var elem of css_arr) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = elem;
         // console.log(elem)
-        if (elem != 'css/jstable.css') document.body.appendChild(link);
+        document.body.appendChild(link);
     }
 }
 

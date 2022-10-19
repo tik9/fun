@@ -29,12 +29,14 @@ const handler = async (event) => {
         server.npm_version = await execPromise('npm -v');
     const ipinfo = new node_ipinfo_1.IPinfoWrapper(process.env.ipgeo);
     var client = (await axios_1.default.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data;
+    var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete client[element]; });
     client.map = (await ipinfo.getMap([client.ip])).reportUrl;
     client.tik = 2;
     const server_sorted = Object.keys(server).sort().reduce((r, k) => ({ ...r, [k]: server[k] }), {});
     var res = { ...server_sorted, ...client };
     if (event.headers.host != 'localhost')
         (0, mongo_1.insert_one)('sys', res);
+    // console.log(new_arr, res)
     return { statusCode: 200, body: JSON.stringify(res) };
 };
 exports.handler = handler;

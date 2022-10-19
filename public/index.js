@@ -25,11 +25,19 @@ function groupByKey(list, key) {
 }
 
 async function include_js() {
-  for (var elem of await css_js('js')) {
+  var anijs = 'AniJS/0.9.3/'
+  var arr = await css_js('js')
+  arr.push(cdn + anijs + 'anijs-min.js',
+    cdn + anijs + 'helpers/dom/anijs-helper-dom-min.js')
+
+  for (var elem of arr) {
     var script = document.createElement("script")
     script.src = elem
     document.body.append(script)
   }
+  var script = document.createElement("script")
+  script.src = 'js/jstable.js'
+  document.body.append(script)
   // await sleep(100);git_code(res)
 }
 
@@ -37,11 +45,12 @@ async function index() {
   await indexfun()
   await indexfun(alias_cloud)
 
-  // var index = arguments.callee.name;var res = (await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category.match(new RegExp(/further$/))).map(obj => ({ ...obj, url: '#' + obj.name }));var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
+  var index = arguments.callee.name; var res = (await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category.match(new RegExp(/further$/))).map(obj => ({ ...obj, url: '#' + obj.name }));
+  var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   await sleep(400)
   // accounts();
-  apis();
+  api();
   // client()
   // commits();
   // convert();
@@ -61,15 +70,15 @@ async function indexfun(head = 'index') {
     aHref.classList.add('active', 'nav')
     aHref.href = '#container'
   }
-  else {
-    var elem = document.createElement('div')
-    container.append(elem)
-    elem.id = head
-    var hIntro = document.createElement("h4");
-    elem.prepend(hIntro)
-    hIntro.innerHTML = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
-    hIntro.classList.add('mt-5', 'mb-3');
-  }
+  // else {
+  var elem = document.createElement('div')
+  container.append(elem)
+  elem.id = head
+  var hIntro = document.createElement("h4");
+  elem.prepend(hIntro)
+  hIntro.innerHTML = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
+  hIntro.classList.add('mt-5', 'mb-3');
+  // }
   return elem
 }
 
