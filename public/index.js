@@ -33,11 +33,13 @@ async function include_js() {
   for (var elem of arr) {
     var script = document.createElement("script")
     script.src = elem
+    // console.log(elem)
+    if (elem == 'js/jstable.js') continue
     document.body.append(script)
   }
-  var script = document.createElement("script")
-  script.src = 'js/jstable.js'
-  document.body.append(script)
+  // var script = document.createElement("script")
+  // script.src = 'js/jstable.js'
+  // document.body.append(script)
   // await sleep(100);git_code(res)
 }
 
@@ -50,23 +52,24 @@ async function index() {
 
   await sleep(400)
   // accounts();
-  api();
+  ani()
+  // api();
   // client()
   // commits();
   // convert();
-  issues_with_this_repo();
+  // issues_with_this_repo();
   // posts();
   // repos()
   // server()
 }
 
 async function indexfun(head = 'index') {
+  var aHref = document.createElement("a");
+  aHref.textContent = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
+  aHref.classList.add('nav')
+  aHref.href = '#' + head
+  topnav.append(aHref)
   if (head == 'index') {
-    var aHref = document.createElement("a");
-    aHref.textContent = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
-    aHref.classList.add('nav')
-    aHref.href = '#' + head
-    topnav.append(aHref)
     aHref.classList.add('active', 'nav')
     aHref.href = '#container'
   }

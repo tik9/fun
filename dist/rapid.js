@@ -34,7 +34,6 @@ const handler = async (event) => {
     catch (error) {
         console.log(1, error);
     }
-    console.log(1, res);
     return { statusCode: 200, body: JSON.stringify(res) };
 };
 exports.handler = handler;

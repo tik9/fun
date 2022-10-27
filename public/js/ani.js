@@ -7,7 +7,7 @@ function ani() {
     var h2 = document.createElement('h2')
     h2.classList.add('tab')
     div.append(h2)
-    h2.textContent = 'Rollender Ball'
+    h2.textContent = 'Rolling'
     var ptag = document.createElement('p')
     div.append(ptag)
     var itag = document.createElement('i')

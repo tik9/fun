@@ -6,6 +6,8 @@ var dbWeb = "website";
 function main() { return new mongodb_1.MongoClient(process.env.mongo).connect(); }
 const handler = async (event) => {
     var res;
+    // console.log(1, JSON.parse(event.body!))
+    // return
     if (typeof (event.body) == 'undefined' || event.body == '{}' || event.body == '') {
         // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
         var params = event.queryStringParameters;
@@ -19,9 +21,12 @@ const handler = async (event) => {
     }
     else {
         var body = JSON.parse(event.body);
-        res = insert_one(body.body.coll, body.body.val);
+        coll = body.coll;
+        var val = body.val;
+        res = coll + val;
+        // res = insert_one(coll, val)
     }
-    // console.log(2, res)
+    console.log(2, res);
     // create_coll(coll)
     // res = await datatype(coll, 2)
     // res = await find(coll)
@@ -34,14 +39,13 @@ const handler = async (event) => {
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('tools', 'tool', 'intro')
+    // remove_many('sys', 'date', '1')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'tools', 'name', 'subjects')
+    // update_one('index', 'name', 'apis', 'name', 'api')
     return {
-        // headers: { "Access-Control-Allow-Origin": "*" },
+        headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)
-        // statusCode: 200, body: JSON.stringify(res + '1' + event.body + '2' + typeof (event.body) == 'undefined')
     };
 };
 exports.handler = handler;

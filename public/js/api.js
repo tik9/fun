@@ -62,11 +62,13 @@ async function rapid(type, input) {
     resdiv.innerHTML = ''
     var inputval = typeof (input) == 'undefined' ? '' : 'input=' + input.value
     if (type == 'joke') {
-        var res = await (await fetch(netfun + 'rapid?' + inputval)).json()
-        res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
-        var tab = table(res, 'joke')
-        resdiv.append(tab)
-        new JSTable(tab)
+        try {
+            var res = await (await fetch(netfun + 'rapid?' + inputval)).json()
+            res = res.result.map(({ categories, created_at, icon_url, id, updated_at, ...keepAttrs }) => keepAttrs)
+            var tab = table(res, 'joke')
+            resdiv.append(tab)
+            new JSTable(tab)
+        } catch (error) { console.log(1, error) }
     }
     else {
         var res = await (await fetch(netfun + 'rapid', {

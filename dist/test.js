@@ -4,9 +4,11 @@ exports.handler = void 0;
 const mongodb_1 = require("mongodb");
 var handler = async (event) => {
     console.log(1, event.body);
+    // return
+    var res;
     var mc = await new mongodb_1.MongoClient(process.env.mongo).connect();
-    var res = await mc.db('website').collection('index').countDocuments();
-    // console.log(1, res)
-    return { statusCode: 200, body: process.env.mongo.slice(0, 10) + ', numbers ' + res + ',event ' + JSON.stringify(event.body) };
+    res = await mc.db('website').collection('sys').countDocuments();
+    console.log(1, res);
+    return { statusCode: 200, body: res + JSON.stringify(event.body) };
 };
 exports.handler = handler;
