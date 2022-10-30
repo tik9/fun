@@ -51,8 +51,8 @@ async function index() {
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   await sleep(400)
-  // accounts();
-  ani()
+  accounts();
+  // ani()
   // api();
   // client()
   // commits();

@@ -23,26 +23,28 @@ const handler = async (event) => {
         var body = JSON.parse(event.body);
         coll = body.coll;
         var val = body.val;
-        res = coll + val;
-        // res = insert_one(coll, val)
+        // res = coll + val
+        // try { 
+        res = await insert_one(coll, val);
+        //  } catch (error) { }
     }
-    console.log(2, res);
     // create_coll(coll)
     // res = await datatype(coll, 2)
     // res = await find(coll)
     // res = await find_one(coll, params.key!, params.val!)
     // index_create(coll!, params!.key!)
-    // res = await index_get(coll!)
     // res = await index_remove(coll!, params!.key!)
+    // res = await index_get(coll!)
     // res=insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
     // res=insert_val('index', res)
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('sys', 'date', '1')
+    // remove_many('sys', 'date', '2022-10-19')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
     // update_one('index', 'name', 'apis', 'name', 'api')
+    console.log(1, res);
     return {
         headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)
@@ -67,7 +69,15 @@ async function find_one(coll, key, val) { return (await main()).db(dbWeb).collec
 async function index_create(coll, key) { (await main()).db(dbWeb).collection(coll).createIndex({ [key]: 1 }, { unique: true }); }
 async function index_get(coll) { return (await main()).db(dbWeb).collection(coll).indexes(); }
 async function index_remove(coll, key) { return (await main()).db(dbWeb).collection(coll).dropIndex(key); }
-async function insert_one(coll, obj) { return await (await main()).db(dbWeb).collection(coll).insertOne(obj); }
+async function insert_one(coll, obj) {
+    try {
+        var res = await (await main()).db(dbWeb).collection(coll).insertOne(obj);
+        return res;
+    }
+    catch (error) {
+        console.log(1, error);
+    }
+}
 exports.insert_one = insert_one;
 async function insert(coll, obj) { return await (await main()).db(dbWeb).collection(coll).insertMany(obj); }
 async function list_coll() { return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name); }
