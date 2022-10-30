@@ -19,17 +19,19 @@ var arr = ['date', 'hostname', 'ip', 'loc', 'org', 'postal', 'tik']
 
 async function client() {
     var client = arguments.callee.name
-    var res = await (await fetch(netfun + 'sys')).json()
+    var res = await (await fetch(net_fun + 'sys')).json()
     arr_client = ['architecture', "cores", 'free memory', 'host_server', 'memory', 'node', 'npm_version', 'os', 'platform', 'release', 'speed cpu mhz', ...arr].forEach(e => delete res[e]);
     // res.userAgent = navigator.userAgent;
     orderKeys(res);
     (await indexfun('info_about_' + client)).append(list(res, client))
+    // res = await (await fetch(net_fun + 'sys')).json()
+
 }
 
 async function server() {
     // optional: a) show 1)info, 2)value, 3)category, b) store hosts on mongo
     var server = arguments.callee.name
-    var res = await (await fetch(netfun + 'sys')).json()
-    arr_server = ['city', 'client_map', 'country', 'region', 'timezone', ...arr].forEach(e => delete res[e]);
+    var res = await (await fetch(net_fun + 'sys')).json()
+    arr_server = ['city', 'map', 'country', 'region', 'timezone', ...arr].forEach(e => delete res[e]);
     (await indexfun('info_about_' + server)).append(list(res, server))
 }

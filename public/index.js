@@ -47,20 +47,23 @@ async function index() {
   await indexfun()
   await indexfun(alias_cloud)
 
-  var index = arguments.callee.name; var res = (await (await fetch(netfun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category.match(new RegExp(/further$/))).map(obj => ({ ...obj, url: '#' + obj.name }));
+  var index = arguments.callee.name;
+  var res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category.match(new RegExp(/further$/))).map(obj => ({ ...obj, url: '#' + obj.name }));
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
-  await sleep(400)
+  // console.log(res)
+
+  // await sleep(400)
   accounts();
   // ani()
-  // api();
-  // client()
+  api();
+  client()
   // commits();
   // convert();
   // issues_with_this_repo();
   // posts();
   // repos()
-  // server()
+  server()
 }
 
 async function indexfun(head = 'index') {
@@ -73,7 +76,6 @@ async function indexfun(head = 'index') {
     aHref.classList.add('active', 'nav')
     aHref.href = '#container'
   }
-  // else {
   var elem = document.createElement('div')
   container.append(elem)
   elem.id = head
@@ -81,11 +83,11 @@ async function indexfun(head = 'index') {
   elem.prepend(hIntro)
   hIntro.innerHTML = (head[0].toUpperCase() + head.slice(1)).replace(/_/g, ' ')
   hIntro.classList.add('mt-5', 'mb-3');
-  // }
   return elem
 }
 
 function li_aref(text, href) {
+  // console.log(1, href, text)
   var aref = document.createElement('a')
   aref.textContent = text
   aref.href = href

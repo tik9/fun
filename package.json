@@ -5,7 +5,8 @@
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "mongodb": "^4.8.1",
-    "node-ipinfo": "^3.1.1"
+    "node-ipinfo": "^3.1.1",
+    "oxford-dictionaries-api": "^0.1.2"
   },
   "name": "netlify",
   "description": "serverless functions",
@@ -20,8 +21,8 @@
   },
   "homepage": "https://github.com/tik9/netlify#readme",
   "devDependencies": {
-    "tsc": "^2.0.4",
     "@types/qs": "^6.9.7",
-    "cypress": "^10.7.0"
+    "cypress": "^10.7.0",
+    "tsc": "^2.0.4"
   }
 }

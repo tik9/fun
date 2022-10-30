@@ -13,6 +13,7 @@ export const handler: Handler = async (event) => {
         cores: os.cpus().length.toString(),
         date: new Date().toISOString().slice(0, 10),
         'free memory': format_bytes(os.freemem()),
+        host: event.headers.host,
         host_server: truncate(os.hostname(), 15),
         'memory': format_bytes(os.totalmem()),
         "node": process.versions.node.split(".")[0],
@@ -30,14 +31,17 @@ export const handler: Handler = async (event) => {
     var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete client[element] });
 
     client.map = (await ipinfo.getMap([client.ip])).reportUrl
-    client.tik = 2
 
     const server_sorted = (Object.keys(server) as Array<keyof typeof server>).sort().reduce((r: any, k) => ({ ...r, [k]: server[k] }), {});
 
     var res = { ...server_sorted, ...client }
     if (event.headers.host != 'localhost') insert_one('sys', res)
-    // console.log(new_arr, res)
-    return { statusCode: 200, body: JSON.stringify(res) }
+    // console.log(res)
+
+    return {
+        headers: { 'access-control-allow-orgigin': '*' },
+        statusCode: 200, body: JSON.stringify(res)
+    }
 }
 
 function execPromise(command: string) {

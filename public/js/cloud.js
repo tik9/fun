@@ -1,7 +1,7 @@
 
 async function accounts() {
-  var url = 'http://api.stackexchange.com/'
-  if (location.host == 'localhost') url = 'http://localhost:8010/proxy/'
+  var url = 'https://api.stackexchange.com/'
+  // if (location.host == 'localhost') url = 'http://localhost:8010/proxy/'
   var cloud_arr = [
     {
       name: "stack", url:

@@ -43,10 +43,11 @@ export const handler: Handler = async (event) => {
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('sys', 'date', '2022-10-19')
+    // remove_many('sys', 'date', '1')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
     // update_one('index', 'name', 'apis', 'name', 'api')
+
     console.log(1, res)
 
     return {

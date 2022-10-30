@@ -1,43 +1,6 @@
-.active {
-    border-bottom: none;
-    z-index: 2;
-    background: white;
-}
-
-.button p {
-    margin-top: 4rem;
-    padding: 2rem;
-    font-size: 300%;
-    display: none;
-    position: absolute;
-    width: 100%;
-}
-
-.button h2 {
-    background-color: #232946;
-    color: #fffffe;
-    padding: 8px 15px;
-    font-size: 100%;
-    font-weight: 100;
-    cursor: pointer;
-    display: inline-block;
-    margin: 0px;
-    position: relative;
-}
-
-.button h2:hover {
-    background: #b8c1ec;
-}
-
-.active+p {
-    display: block;
-}
-
-
 /* Style the links inside the navigation bar */
 #topnav a,
-#bottomnav a,
-#bottomnav div {
+#bottomnav a {
     font-size: 17px;
     float: left;
     color: #f2f2f2;

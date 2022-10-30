@@ -3,7 +3,9 @@
 
 var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
 var github = 'https://github.com/'
-var netfun = '/.netlify/functions/'
+var net_fun = '/.netlify/functions/'
+var net_host = 'http://localhost'
+var net_host = 'https://t--tik2.netlify.app'
 var tiko = "Tiko's"
 
 document.title += tiko;
@@ -23,7 +25,7 @@ function create_icon() {
 }
 
 async function css_js(type) {
-    var res = await (await fetch(netfun + 'files?dir=' + type)).json()
+    var res = await (await fetch(net_fun + 'files?dir=' + type)).json()
     res = res.object.entries.map(str => type + '/' + str.name)
     return res
 }
@@ -31,13 +33,15 @@ async function css_js(type) {
 async function includes() {
     var boots = 'twitter-bootstrap/5.2.1/'
 
-    var css_arr = await css_js('css')
-    css_arr.push(cdn + boots + 'css/bootstrap.min.css', 'css/jstable.css',
-
-        cdn + 'font-awesome/6.2.0/css/fontawesome.min.css',
-        cdn + 'font-awesome/6.2.0/css/solid.min.css'
-    )
-    for (var elem of css_arr) {
+    // var css_arr = await css_js('css')
+    // css_arr.push(cdn + boots + 'css/bootstrap.min.css', 'css/jstable.css',
+    // cdn + 'font-awesome/6.2.0/css/fontawesome.min.css',
+    // cdn + 'font-awesome/6.2.0/css/solid.min.css'
+    // )
+    for (var elem of [cdn + boots + 'css/bootstrap.min.css',
+        //  'css/jstable.css'
+    ]
+    ) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = elem;

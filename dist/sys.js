@@ -16,6 +16,7 @@ const handler = async (event) => {
         cores: os_1.default.cpus().length.toString(),
         date: new Date().toISOString().slice(0, 10),
         'free memory': (0, utils_1.format_bytes)(os_1.default.freemem()),
+        host: event.headers.host,
         host_server: (0, utils_1.truncate)(os_1.default.hostname(), 15),
         'memory': (0, utils_1.format_bytes)(os_1.default.totalmem()),
         "node": process.versions.node.split(".")[0],
@@ -31,13 +32,15 @@ const handler = async (event) => {
     var client = (await axios_1.default.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data;
     var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete client[element]; });
     client.map = (await ipinfo.getMap([client.ip])).reportUrl;
-    client.tik = 2;
     const server_sorted = Object.keys(server).sort().reduce((r, k) => ({ ...r, [k]: server[k] }), {});
     var res = { ...server_sorted, ...client };
     if (event.headers.host != 'localhost')
         (0, mongo_1.insert_one)('sys', res);
-    // console.log(new_arr, res)
-    return { statusCode: 200, body: JSON.stringify(res) };
+    // console.log(res)
+    return {
+        headers: { 'access-control-allow-orgigin': '*' },
+        statusCode: 200, body: JSON.stringify(res)
+    };
 };
 exports.handler = handler;
 function execPromise(command) {
