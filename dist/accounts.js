@@ -7,7 +7,7 @@ exports.handler = void 0;
 const axios_1 = __importDefault(require("axios"));
 var handler = async () => {
     var cloud_arr = [
-        { name: "stack", url: 'http://api.stackexchange.com/2.2/users/1705829?site=stackoverflow', link: 'link' },
+        { name: "stack", url: 'https://api.stackexchange.com/2.2/users/1705829?site=stackoverflow', link: 'link' },
         { name: "git", url: 'https://api.github.com/users/tik9', link: 'html_url' }
     ];
     var obj = {};

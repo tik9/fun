@@ -38,15 +38,15 @@ export const handler: Handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
-    // res=insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
+    // res = insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
     // res=insert_val('index', res)
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('sys', 'date', '1')
+    // remove_many('tools', 'tool', 'Docker')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'apis', 'name', 'api')
+    update_one('index', 'name', 'api', 'category', 'api')
 
     console.log(1, res)
 

@@ -36,10 +36,10 @@ export const handler: Handler = async (event) => {
 
     var res = { ...server_sorted, ...client }
     if (event.headers.host != 'localhost') insert_one('sys', res)
-    // console.log(res)
+    console.log(res)
 
     return {
-        headers: { 'access-control-allow-orgigin': '*' },
+        headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)
     }
 }

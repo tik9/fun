@@ -48,7 +48,9 @@ async function index() {
   await indexfun(alias_cloud)
 
   var index = arguments.callee.name;
-  var res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category.match(new RegExp(/further$/))).map(obj => ({ ...obj, url: '#' + obj.name }));
+
+  var res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category === 'api').map(obj => ({ ...obj, url: '#' + obj.name }));
+
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   // console.log(res)
