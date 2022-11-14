@@ -11,10 +11,4 @@ function net {
     # echo $res|jq '.[0].updated_at'
 }
 
-function hero {
-    api_key=$(cat $HOME/fun/.env | sed -n 5p | cut -f2 -d= )
-    curl -s https://api.heroku.com/account -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $api_key"
-}
-
 # net
-hero

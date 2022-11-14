@@ -46,7 +46,7 @@ export const handler: Handler = async (event) => {
     // remove_many('tools', 'tool', 'Docker')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    update_one('index', 'name', 'api', 'category', 'api')
+    // update_one('index', 'name', 'tools', 'name', 'fächer')
 
     console.log(1, res)
 

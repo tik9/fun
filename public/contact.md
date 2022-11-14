@@ -13,3 +13,4 @@
 </div>
 
 <script src="client.js"></script>
+<link href="css/style.css" rel="stylesheet">

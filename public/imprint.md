@@ -40,5 +40,4 @@ Hepberg, Germany
 <div id=bottomnav></div>
 </div>
 <script src=client.js></script>
-
-[home]: /public/index.html
+<link href="css/style.css" rel="stylesheet">

@@ -4,8 +4,6 @@
 var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
 var github = 'https://github.com/'
 var net_fun = '/.netlify/functions/'
-var net_host = 'http://localhost'
-var net_host = 'https://t--tik2.netlify.app'
 var tiko = "Tiko's"
 
 document.title += tiko;
@@ -15,11 +13,11 @@ container.style.paddingBottom = '80px'
 
 create_icon()
 includes()
-navbottom()
+nav()
 
 function create_icon() {
     var icon = document.createElement("link");
-    icon.rel = "icon";
+    icon.rel = 'icon'
     icon.href = github + "github.png";
     document.head.appendChild(icon);
 }
@@ -33,24 +31,16 @@ async function css_js(type) {
 async function includes() {
     var boots = 'twitter-bootstrap/5.2.1/'
 
-    // var css_arr = await css_js('css')
-    // css_arr.push(cdn + boots + 'css/bootstrap.min.css', 'css/jstable.css',
-    // cdn + 'font-awesome/6.2.0/css/fontawesome.min.css',
-    // cdn + 'font-awesome/6.2.0/css/solid.min.css'
-    // )
-    for (var elem of [cdn + boots + 'css/bootstrap.min.css',
-        //  'css/jstable.css'
-    ]
+    for (var elem of [cdn + boots + 'css/bootstrap.min.css']
     ) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = elem;
-        // console.log(elem)
         document.body.appendChild(link);
     }
 }
 
-function navbottom() {
+function nav() {
     topnav.classList.add('fixed-top', 'bg-dark')
     var aref = document.createElement("a");
     bottomnav.classList.add('fixed-bottom', 'bg-dark')

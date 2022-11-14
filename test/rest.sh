@@ -4,7 +4,7 @@ servn=http://tik2.netlify.app
 servn_te=$servn/test.html
 servn_sys=$servn/sys.html
 
-function alljs {
+function all {
     ntl functions:invoke accounts 
     post=posts
     # echo '\ncomm_repos:'

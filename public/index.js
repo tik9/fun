@@ -19,28 +19,16 @@ async function git_code(arr) {
   ghDivLink.append(head, ghUlLinks);
 }
 
-function groupByKey(list, key) {
-  return list.reduce((hash, { [key]: value, ...rest }) =>
-    ({ ...hash, [value]: (hash[value] || []).concat({ ...rest }) }), {})
-}
-
 async function include_js() {
-  var anijs = 'AniJS/0.9.3/'
   var arr = await css_js('js')
-  arr.push(cdn + anijs + 'anijs-min.js',
-    cdn + anijs + 'helpers/dom/anijs-helper-dom-min.js')
 
   for (var elem of arr) {
     var script = document.createElement("script")
     script.src = elem
     // console.log(elem)
-    if (elem == 'js/jstable.js') continue
+    // if (elem == 'js/jstable.js') continue
     document.body.append(script)
   }
-  // var script = document.createElement("script")
-  // script.src = 'js/jstable.js'
-  // document.body.append(script)
-  // await sleep(100);git_code(res)
 }
 
 async function index() {
@@ -48,14 +36,12 @@ async function index() {
   await indexfun(alias_cloud)
 
   var index = arguments.callee.name;
-
-  var res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category === 'api').map(obj => ({ ...obj, url: '#' + obj.name }));
+  var res
+  res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category === 'api').map(obj => ({ ...obj, url: '#' + obj.name }));
 
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
-  // console.log(res)
-
-  // await sleep(400)
+  await sleep(400)
   accounts();
   // ani()
   api();
@@ -63,7 +49,7 @@ async function index() {
   // commits();
   // convert();
   // issues_with_this_repo();
-  // posts();
+  posts();
   // repos()
   server()
 }

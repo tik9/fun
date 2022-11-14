@@ -1,14 +1,12 @@
 
 async function accounts() {
-  var url = 'https://api.stackexchange.com/'
-  // if (location.host == 'localhost') url = 'http://localhost:8010/proxy/'
   var cloud_arr = [
     {
       name: "stack", url:
-        url + '2.2/users/1705829?site=stackoverflow',
+        'https://api.stackexchange.com/2.2/users/1705829?site=stackoverflow',
       link: 'link'
     },
-    { name: "git", url: 'http://api.github.com/users/tik9', link: 'html_url' }
+    { name: "git", url: 'https://api.github.com/users/tik9', link: 'html_url' }
   ]
   var obj = {}
   for (var elem of cloud_arr) {
@@ -75,7 +73,7 @@ async function issues_with_this_repo() {
 
 async function posts() {
   var posts = arguments.callee.name
-  var res = await (await fetch(netfun + posts)).json()
+  var res = await (await fetch(net_fun + posts)).json()
   helper(posts).append(table(res, posts))
 }
 
