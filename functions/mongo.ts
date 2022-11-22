@@ -48,7 +48,7 @@ export const handler: Handler = async (event) => {
     // truncate(coll!)
     // update_one('index', 'name', 'tools', 'name', 'fächer')
 
-    console.log(1, res)
+    // console.log(1, res)
 
     return {
         headers: { 'access-control-allow-origin': '*' },

@@ -26,14 +26,14 @@ async function include_js() {
     var script = document.createElement("script")
     script.src = elem
     // console.log(elem)
-    // if (elem == 'js/jstable.js') continue
+    if (elem == 'js/ani.js') continue
     document.body.append(script)
   }
 }
 
 async function index() {
   await indexfun()
-  await indexfun(alias_cloud)
+  // await indexfun(alias_cloud)
 
   var index = arguments.callee.name;
   var res
@@ -41,15 +41,14 @@ async function index() {
 
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
-  await sleep(400)
-  accounts();
-  // ani()
+  // await sleep(500)
+  // accounts();
   api();
   client()
   // commits();
   // convert();
   // issues_with_this_repo();
-  posts();
+  // posts();
   // repos()
   server()
 }
@@ -75,7 +74,6 @@ async function indexfun(head = 'index') {
 }
 
 function li_aref(text, href) {
-  // console.log(1, href, text)
   var aref = document.createElement('a')
   aref.textContent = text
   aref.href = href
@@ -88,18 +86,19 @@ function list(arr, name) {
   var ul = document.createElement('ul')
   for (var elem in arr) {
     var val = arr[elem]
+    elem = elem[0].toUpperCase() + elem.slice(1)
     val = dateformat.test(val) ? locale_date(val) : val
 
     var li = document.createElement('li')
 
-    if (name == 'client' && elem == 'map') li = li_aref('Map', val)
+    if (elem == 'Map') li = li_aref(elem, val)
     else if (name == 'accounts') li = li_aref(elem, val)
     else if (name == 'git_code') {
       var text = val.slice(val.lastIndexOf('/') + 1)
       li = li_aref(text, gitBase + 'public/' + val)
     }
     else
-      li.append(document.createTextNode(`${elem.replace('_', ' ')}: ${val}`))
+      li.append(document.createTextNode(`${elem}: ${val}`))
     ul.appendChild(li)
   }
   return ul

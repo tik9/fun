@@ -46,7 +46,7 @@ function helper(sub) {
 
   div.id = sub
   var head = document.createElement('h5')
-  head.classList.add('mt-3', 'mb-3')
+  head.classList.add('mt-4', 'mb-3')
   head.textContent = sub[0].toUpperCase() + sub.slice(1).replace(/_/g, ' ')
   document.getElementById(alias_cloud).append(head, div)
   return div
