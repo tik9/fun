@@ -41,13 +41,13 @@ async function index() {
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   // sleep(500)
-  // accounts();
-  // api();
-  // commits();
+  accounts();
+  commits();
   // convert();
-  // issues_with_this_repo();
-  // posts();
+  issues_with_this_repo();
+  posts();
   repos()
+  api();
   sys_client()
   sys_server()
 }

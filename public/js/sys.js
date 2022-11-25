@@ -24,7 +24,6 @@ async function sys_client() {
     res['browser width and height'] = width + ' x ' + height
     res.browser = navigator.userAgent;
     (await indexfun(client)).append(list(res, client))
-
 }
 
 async function sys_server() {

@@ -1,10 +1,10 @@
 
-import axios from "axios";
+import { axiosHelp } from "./query";
 import { Handler } from "@netlify/functions";
 
-var query_file = `query file($expression: String) {
+var query = `query($vars: String) {
     repository(owner:"tik9", name:"fun") {
-        object(expression:$expression ) {
+        object(expression:$vars ) {
         ... on Tree{
           entries{
             name
@@ -15,16 +15,10 @@ var query_file = `query file($expression: String) {
   }`
 
 export const handler: Handler = async (event) => {
-  var expression = "main:public/" + event.queryStringParameters!.dir
 
-  var options = {
-    url: process.env.gh_graph,
-    method: 'post',
-    data: { query: query_file, variables: { expression } },
-    headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
-  };
+  var dir = event.queryStringParameters!.dir
   try {
-    var res = (await axios.request(options)).data
+    var res = await axiosHelp(query, "main:public/" + dir)
   } catch (error) { console.log(error) }
 
   return {
