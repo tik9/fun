@@ -2,9 +2,49 @@
 import { Handler } from "@netlify/functions";
 
 export const handler: Handler = async (event) => {
-    var res = JSON.parse(event.body!).arr
-    sort(res, 'category')
+    var res = datetime(new Date())
+    var arr = { id: 'toto_id', name: 'toto', age: 35 }
+    var arr2 = renameKeys({ id: 'value', name: 'label' }, arr)
+    console.log(arr2)
     return { body: JSON.stringify(res), statusCode: 200 }
+}
+
+export const renameKeys = <
+    TNewkey extends string,
+    T extends Record<string, unknown>
+>(
+    keys: { [key: string]: TNewkey },
+    obj: T
+) => Object
+    .keys(obj)
+    .reduce((acc, key) => ({
+        ...acc,
+        ...{ [keys[key] || key]: obj[key] }
+    }), {});
+
+export function datetime(dateobj: Date) {
+    var dat = dateobj.toLocaleDateString('de-de')
+    var time = dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    var zone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+    return dat + ' ' + time + ', ' + zone
+}
+
+export function format_bytes(bytes: number) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
+}
+/**
+ * Sorts an array of T by the specified properties of T.
+ *
+ * @param arr - the array to be sorted, all of the same type T
+ * @param sortBy - the names of the properties to sort by, in precedence order.
+ */
+export function sort<T extends object>(arr: T[], ...sortBy: Array<sortArg<T>>) {
+    // console.log(2, arr)
+    arr.sort(byPropertiesOf<T>(sortBy))
 }
 
 type sortArg<T> = keyof T | `-${string & keyof T}`
@@ -43,36 +83,6 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
             i++
         }
         return result
-    }
-}
-
-/**
- * Sorts an array of T by the specified properties of T.
- *
- * @param arr - the array to be sorted, all of the same type T
- * @param sortBy - the names of the properties to sort by, in precedence order.
- */
-export function sort<T extends object>(arr: T[], ...sortBy: Array<sortArg<T>>) {
-    // console.log(2, arr)
-    arr.sort(byPropertiesOf<T>(sortBy))
-}
-
-export function format_bytes(bytes: number) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
-}
-
-export function sort_(property: string) {
-    var sortOrder = 1;
-    if (property[0] === "-") {
-        sortOrder = -1;
-        property = property.slice(1);
-    }
-    return (obj1: { [key: string]: string; } = {}, obj2: { [key: string]: string; } = {}) => {
-        var result = (obj1[property] < obj2[property]) ? -1 : (obj1[property] > obj2[property]) ? 1 : 0;
-        return result * sortOrder;
     }
 }
 

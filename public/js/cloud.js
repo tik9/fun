@@ -56,7 +56,7 @@ async function issues_with_this_repo() {
   var arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
 
   var arr = []
-  for (var elem of await (await fetch(netfun + 'issues')).json()) {
+  for (var elem of await (await fetch(netfun + 'issues?repo=fun')).json()) {
     var obj = {};
     for (var elem2 of arr_field) {
       var val = elem.node[elem2]
@@ -79,6 +79,6 @@ async function posts() {
 
 async function repos() {
   var repos = arguments.callee.name
-  var res = await (await fetch(netfun + repos)).json()
+  var res = await (await fetch(net_fun + repos)).json()
   helper(repos).append(table(res, repos))
 }

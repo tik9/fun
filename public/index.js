@@ -25,7 +25,6 @@ async function include_js() {
   for (var elem of arr) {
     var script = document.createElement("script")
     script.src = elem
-    // console.log(elem)
     if (elem == 'js/ani.js') continue
     document.body.append(script)
   }
@@ -33,7 +32,7 @@ async function include_js() {
 
 async function index() {
   await indexfun()
-  // await indexfun(alias_cloud)
+  await indexfun(alias_cloud)
 
   var index = arguments.callee.name;
   var res
@@ -41,16 +40,16 @@ async function index() {
 
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
-  // await sleep(500)
+  // sleep(500)
   // accounts();
-  api();
-  client()
+  // api();
   // commits();
   // convert();
   // issues_with_this_repo();
   // posts();
-  // repos()
-  server()
+  repos()
+  sys_client()
+  sys_server()
 }
 
 async function indexfun(head = 'index') {
@@ -91,7 +90,7 @@ function list(arr, name) {
 
     var li = document.createElement('li')
 
-    if (elem == 'Map') li = li_aref(elem, val)
+    if (elem == 'Server location') li = li_aref(elem, val)
     else if (name == 'accounts') li = li_aref(elem, val)
     else if (name == 'git_code') {
       var text = val.slice(val.lastIndexOf('/') + 1)
@@ -123,6 +122,5 @@ function navhelp(arr) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
-
 
 //# sourceURL=dynamicScript.js

@@ -15,20 +15,22 @@ function orderKeys(obj) {
     return obj;
 }
 
-async function client() {
+async function sys_client() {
     var client = arguments.callee.name
     var res = {}
+    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+    res['browser width and height'] = width + ' x ' + height
     res.browser = navigator.userAgent;
-    res.date = new Date();
-    // console.log(res);
-    (await indexfun('info_about_' + client)).append(list(res, client))
+    (await indexfun(client)).append(list(res, client))
 
 }
 
-async function server() {
+async function sys_server() {
     // optional: show 1)info, 2)value, 3)category
     var server = arguments.callee.name
     var res = await (await fetch(net_fun + 'sys')).json();
     orderKeys(res);
-    (await indexfun('info_about_' + server)).append(list(res, server))
+    (await indexfun(server)).append(list(res, server))
 }

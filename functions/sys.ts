@@ -1,6 +1,7 @@
 
 import axios from 'axios'
-import { format_bytes, truncate } from './utils'
+import { renameKeys, datetime } from './utils'
+import { format_bytes } from './utils'
 import { Handler } from '@netlify/functions'
 import { insert_one } from './mongo'
 import { IPinfoWrapper } from "node-ipinfo"
@@ -13,7 +14,7 @@ export const handler: Handler = async (event) => {
         'free memory': format_bytes(os.freemem()),
         // host: event.headers.host,
         // host_server: truncate(os.hostname(), 15),
-        'memory': format_bytes(os.totalmem()),
+        'total memory': format_bytes(os.totalmem()),
         "node version": process.versions.node.split(".")[0],
         'os version': os.version(),
         platform: os.platform(),
@@ -23,14 +24,13 @@ export const handler: Handler = async (event) => {
 
     var ipinfo = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
 
-    ipinfo.map = (await (new IPinfoWrapper(process.env.ipgeo!)).getMap([ipinfo.ip])).reportUrl
+    ipinfo['server location'] = (await (new IPinfoWrapper(process.env.ipgeo!)).getMap([ipinfo.ip])).reportUrl
     var new_arr = ['ip', 'loc', 'org', 'postal'].forEach(element => { delete ipinfo[element] });
-
-    // const server_sorted = (Object.keys(server) as Array<keyof typeof server>).sort().reduce((r: any, k) => ({ ...r, [k]: server[k] }), {});
+    ipinfo = renameKeys({ city: 'region city', country: 'region country', timezone: 'server timezone' }, ipinfo)
 
     var res = { ...server, ...ipinfo }
     if (event.headers.host != 'localhost') {
-        res.date = new Date().toISOString().slice(0, 10)
+        res['server date'] = datetime(new Date())
         insert_one('sys', res)
     }
 

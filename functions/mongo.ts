@@ -13,22 +13,18 @@ export const handler: Handler = async (event) => {
     // return
 
     if (typeof (event.body) == 'undefined' || event.body == '{}' || event.body == '') {
-        // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
 
         var params = event.queryStringParameters!
-        // console.log(1, params.op, 2, typeof (params.op) == 'undefined')
         var coll = params.coll!
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll)
         else if (params.op == 'count') res = await count(coll)
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
+        // console.log(1, res)
     } else {
         var body = JSON.parse(event.body!);
         coll = body.coll
         var val = body.val
-        // res = coll + val
-        // try { 
         res = await insert_one(coll, val)
-        //  } catch (error) { }
     }
 
     // create_coll(coll)
@@ -46,9 +42,7 @@ export const handler: Handler = async (event) => {
     // remove_many('tools', 'tool', 'Docker')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'tools', 'name', 'fächer')
-
-    // console.log(1, res)
+    // update_one('index', 'name', 'server', 'category', 'api')
 
     return {
         headers: { 'access-control-allow-origin': '*' },

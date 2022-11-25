@@ -1,9 +1,21 @@
 
-import axios from "axios";
+import { axiosHelp } from "./query";
+import { Handler } from "@netlify/functions";
 
-var query = `
+export const handler: Handler = async (event) => {
+  var repo = event.queryStringParameters!.repo
+  var res = await issues(repo!)
+  console.log(res, repo)
+  return {
+    statusCode: 200,
+    body: JSON.stringify(res)
+  }
+}
+
+async function issues(repo: string) {
+  var query = `
   query {
-    repository(owner:"tik9", name:"fun") {
+    repository(owner:"tik9", name:"${repo}") {
       issues(last:3) {
        totalCount,
         edges {
@@ -18,18 +30,5 @@ var query = `
       }
     }
   }`;
-
-export const handler = async () => {
-  var options = {
-    url: process.env.gh_graph,
-    method: 'post',
-    data: { query: query },
-    headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
-  };
-  var res = (await axios.request(options)).data.data.repository.issues.edges
-  // console.log(res)
-  return {
-    statusCode: 200,
-    body: JSON.stringify(res)
-  }
+  return (await axiosHelp(query)).data.repository.issues.edges
 }

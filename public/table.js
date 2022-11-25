@@ -2,13 +2,11 @@
 function aref(elem, val) {
     var aref = document.createElement('a')
     aref.textContent = dateformat.test(val) ? locale_date(val) : val
-
     aref.href = elem.url
     return aref
 }
 
 function table(arr = [], src) {
-    var excludes = ['_id', '__v', 'api', 'category', 'name', 'url']
     var table_ = document.createElement('table')
     var thead = document.createElement('thead')
     var tr = document.createElement('tr')
@@ -16,7 +14,7 @@ function table(arr = [], src) {
     var columns = []
     for (var elem of arr) {
         for (var key in elem) {
-            if (excludes.includes(key)) continue
+            if (['_id', '__v', 'api', 'category', 'name', 'url'].includes(key)) continue
             if (elem.hasOwnProperty(key) && !columns.includes(key)) {
                 columns.push(key);
                 if (key == 'value') continue
@@ -61,27 +59,19 @@ function table(arr = [], src) {
             else if (src == 'joke') td.append(aref(elem, elem.value))
 
             else if (src == 'repos') {
-                if (['date', 'description'].includes(elem2)) {
+                if (['date'].includes(elem2))
                     td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
-                }
+
                 else if (elem2 == 'repo') {
                     var ahref = document.createElement('a')
                     ahref.href = git + elem.repo
                     ahref.textContent = val
                     td.append(ahref)
                 }
+                else if (elem2 == 'description')
+                    td.append(aref(elem, val))
             }
-            else if (src == 'tests') {
-                if (['lines', 'ext', 'date'].includes(elem2)) {
-                    td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
-                }
-                else {
-                    var ahref = document.createElement('a')
-                    ahref.href = ghBase + '/test/' + val
-                    ahref.textContent = val
-                    td.append(ahref)
-                }
-            }
+
             else td.innerHTML = val
             tr.appendChild(td);
         }
