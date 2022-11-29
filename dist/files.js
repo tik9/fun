@@ -1,13 +1,11 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = void 0;
-const axios_1 = __importDefault(require("axios"));
-var query_file = `query file($expression: String) {
+const graphquery_1 = require("./graphquery");
+const handler = async (event) => {
+    var query = `query($vars: String) {
     repository(owner:"tik9", name:"fun") {
-        object(expression:$expression ) {
+        object(expression:$vars ) {
         ... on Tree{
           entries{
             name
@@ -16,22 +14,18 @@ var query_file = `query file($expression: String) {
       }
     } 
   }`;
-const handler = async (event) => {
-    var expression = "main:public/" + event.queryStringParameters.dir;
-    var options = {
-        url: process.env.gh_graph,
-        method: 'post',
-        data: { query: query_file, variables: { expression } },
-        headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
-    };
+    var dir = event.queryStringParameters.dir;
+    var res;
     try {
-        var res = (await axios_1.default.request(options)).data;
+        res = await (0, graphquery_1.axiosHelp)(query, "main:public/" + dir);
+        // console.log(1, res)
     }
     catch (error) {
         console.log(error);
     }
     return {
         statusCode: 200,
+        //@ts-ignore
         body: JSON.stringify(res.data.repository)
     };
 };

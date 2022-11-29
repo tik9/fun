@@ -9,8 +9,6 @@ function main() { return new MongoClient(process.env.mongo!).connect() }
 
 export const handler: Handler = async (event) => {
     var res
-    // console.log(1, JSON.parse(event.body!))
-    // return
 
     if (typeof (event.body) == 'undefined' || event.body == '{}' || event.body == '') {
 

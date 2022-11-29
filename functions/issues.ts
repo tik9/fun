@@ -1,18 +1,9 @@
 
-import { axiosHelp } from "./query";
+import { axiosHelp } from "./graphquery";
 import { Handler } from "@netlify/functions";
 
 export const handler: Handler = async (event) => {
   var repo = event.queryStringParameters!.repo
-  var res = await issues(repo!)
-  console.log(res, repo)
-  return {
-    statusCode: 200,
-    body: JSON.stringify(res)
-  }
-}
-
-async function issues(repo: string) {
   var query = `
   query {
     repository(owner:"tik9", name:"${repo}") {
@@ -30,5 +21,7 @@ async function issues(repo: string) {
       }
     }
   }`;
-  return (await axiosHelp(query)).data.repository.issues.edges
+  //@ts-ignore
+  var res = (await axiosHelp(query)).data.repository.issues.edges
+  return { statusCode: 200, body: JSON.stringify(res) }
 }

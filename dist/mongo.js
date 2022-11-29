@@ -6,27 +6,21 @@ var dbWeb = "website";
 function main() { return new mongodb_1.MongoClient(process.env.mongo).connect(); }
 const handler = async (event) => {
     var res;
-    // console.log(1, JSON.parse(event.body!))
-    // return
     if (typeof (event.body) == 'undefined' || event.body == '{}' || event.body == '') {
-        // console.log(3, event.body, 4, typeof (event.body) == 'undefined')
         var params = event.queryStringParameters;
-        // console.log(1, params.op, 2, typeof (params.op) == 'undefined')
         var coll = params.coll;
         if (params.op == 'find' || typeof (params.op) == 'undefined')
             res = await find(coll);
         else if (params.op == 'count')
             res = await count(coll);
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
+        // console.log(1, res)
     }
     else {
         var body = JSON.parse(event.body);
         coll = body.coll;
         var val = body.val;
-        // res = coll + val
-        // try { 
         res = await insert_one(coll, val);
-        //  } catch (error) { }
     }
     // create_coll(coll)
     // res = await datatype(coll, 2)
@@ -35,16 +29,15 @@ const handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
-    // res=insert('index', JSON.parse(await fs.readFile(resolve('public', 'json/index.json'), 'utf-8')))
+    // res = insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
     // res=insert_val('index', res)
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('sys', 'date', '1')
+    // remove_many('tools', 'tool', 'Docker')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'apis', 'name', 'api')
-    console.log(1, res);
+    // update_one('index', 'name', 'server', 'category', 'api')
     return {
         headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)

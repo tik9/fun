@@ -1,7 +1,7 @@
 
 'use strict'
 
-var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
+// var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
 var github = 'https://github.com/'
 var net_fun = '/.netlify/functions/'
 var tiko = "Tiko's"
@@ -29,15 +29,10 @@ async function css_js(type) {
 }
 
 async function includes() {
-    var boots = 'twitter-bootstrap/5.2.1/'
-
-    for (var elem of [cdn + boots + 'css/bootstrap.min.css']
-    ) {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = elem;
-        document.body.appendChild(link);
-    }
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css'
+    document.body.appendChild(link);
 }
 
 function nav() {

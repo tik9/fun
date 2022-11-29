@@ -1,8 +1,9 @@
 
-import { axiosHelp } from "./query";
+import { axiosHelp } from "./graphquery";
 import { Handler } from "@netlify/functions";
 
-var query = `query($vars: String) {
+export const handler: Handler = async (event) => {
+  var query = `query($vars: String) {
     repository(owner:"tik9", name:"fun") {
         object(expression:$vars ) {
         ... on Tree{
@@ -13,16 +14,15 @@ var query = `query($vars: String) {
       }
     } 
   }`
-
-export const handler: Handler = async (event) => {
-
   var dir = event.queryStringParameters!.dir
+  var res
   try {
-    var res = await axiosHelp(query, "main:public/" + dir)
+    res = await axiosHelp(query, "main:public/" + dir)
+    // console.log(1, res)
   } catch (error) { console.log(error) }
-
   return {
     statusCode: 200,
+    //@ts-ignore
     body: JSON.stringify(res.data.repository)
   }
 }

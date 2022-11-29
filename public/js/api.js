@@ -1,6 +1,7 @@
 
 var apiheaders = {
-    joke: 'Fetch Jokes - enter keyword e.g. abc', trans: 'Fetch translation en -> de - e.g. ace ', clock: 'Get UTC Time',
+    // joke: 'Fetch Jokes - enter keyword e.g. abc', trans: 'Fetch translation en -> de - e.g. ace ', 
+    clock: 'Get UTC Time',
 }
 
 async function api() {
@@ -45,8 +46,8 @@ async function api() {
         count++
     }
 
-    document.getElementById('btnjoke').addEventListener('click', () => rapid('joke', document.getElementById('inputjoke')))
-    document.getElementById('btntrans').addEventListener('click', () => rapid('trans', document.getElementById('inputtrans')))
+    // document.getElementById('btnjoke').addEventListener('click', () => rapid('joke', document.getElementById('inputjoke')))
+    // document.getElementById('btntrans').addEventListener('click', () => rapid('trans', document.getElementById('inputtrans')))
 
     document.getElementById('btnclock').addEventListener('click', async () => {
         var innerHtml = document.getElementById('resclock')

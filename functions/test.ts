@@ -18,3 +18,14 @@ export async function rate_limit() {
     try { var res = (await axios.get(url)).data } catch (error) { console.log('err') }
     return res.resources.core
 }
+
+
+async function dic() {
+    var Dictionary = require("oxford-dictionaries-api");
+    var dict = new Dictionary("f6aa0186", process.env.oxford);
+
+    var res = await dict.entries({ word_id: 'ace' })
+    var lex_entry = res.results[0].lexicalEntries[0]
+    var definition = lex_entry.entries[0].senses[0].definitions[0]
+    var phrases = lex_entry.phrases[0].text
+}

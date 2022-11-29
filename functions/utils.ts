@@ -10,17 +10,13 @@ export const handler: Handler = async (event) => {
 }
 
 export const renameKeys = <
-    TNewkey extends string,
-    T extends Record<string, unknown>
+    TNewkey extends string, T extends Record<string, unknown>
 >(
     keys: { [key: string]: TNewkey },
     obj: T
-) => Object
-    .keys(obj)
-    .reduce((acc, key) => ({
-        ...acc,
-        ...{ [keys[key] || key]: obj[key] }
-    }), {});
+) => Object.keys(obj).reduce((acc, key) => ({
+    ...acc, ...{ [keys[key] || key]: obj[key] }
+}), {});
 
 export function datetime(dateobj: Date) {
     var dat = dateobj.toLocaleDateString('de-de')

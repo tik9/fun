@@ -1,13 +1,12 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = void 0;
-const axios_1 = __importDefault(require("axios"));
-var query = `
+const graphquery_1 = require("./graphquery");
+const handler = async (event) => {
+    var repo = event.queryStringParameters.repo;
+    var query = `
   query {
-    repository(owner:"tik9", name:"fun") {
+    repository(owner:"tik9", name:"${repo}") {
       issues(last:3) {
        totalCount,
         edges {
@@ -22,18 +21,8 @@ var query = `
       }
     }
   }`;
-const handler = async () => {
-    var options = {
-        url: process.env.gh_graph,
-        method: 'post',
-        data: { query: query },
-        headers: { 'Authorization': `Bearer ${process.env.ghtoken}`, },
-    };
-    var res = (await axios_1.default.request(options)).data.data.repository.issues.edges;
-    // console.log(res)
-    return {
-        statusCode: 200,
-        body: JSON.stringify(res)
-    };
+    //@ts-ignore
+    var res = (await (0, graphquery_1.axiosHelp)(query)).data.repository.issues.edges;
+    return { statusCode: 200, body: JSON.stringify(res) };
 };
 exports.handler = handler;

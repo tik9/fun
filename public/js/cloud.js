@@ -52,7 +52,7 @@ function helper(sub) {
   return div
 }
 
-async function issues_with_this_repo() {
+async function issues() {
   var arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
 
   var arr = []

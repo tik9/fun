@@ -1,5 +1,5 @@
 
-import axios from 'axios'
+import fetch from 'node-fetch'
 import { renameKeys, datetime } from './utils'
 import { format_bytes } from './utils'
 import { Handler } from '@netlify/functions'
@@ -22,12 +22,17 @@ export const handler: Handler = async (event) => {
         'speed cpu mhz': os.cpus()[0].speed.toString(),
     }
 
-    var ipinfo = (await axios.get("https://ipinfo.io/json?token=" + process.env.ipgeo)).data
-
+    var ipinfo = await (await fetch("https://ipinfo.io/json?token=" + process.env.ipgeo)).json()
+    console.log(1, ipinfo)
+    //@ts-ignore
     ipinfo['server location'] = (await (new IPinfoWrapper(process.env.ipgeo!)).getMap([ipinfo.ip])).reportUrl
+
+    //@ts-ignore
     var new_arr = ['ip', 'loc', 'org', 'postal'].forEach(element => { delete ipinfo[element] });
+    //@ts-ignore
     ipinfo = renameKeys({ city: 'region city', country: 'region country', timezone: 'server timezone' }, ipinfo)
 
+    //@ts-ignore
     var res = { ...server, ...ipinfo }
     if (event.headers.host != 'localhost') {
         res['server date'] = datetime(new Date())

@@ -20,12 +20,10 @@ async function git_code(arr) {
 }
 
 async function include_js() {
-  var arr = await css_js('js')
-
-  for (var elem of arr) {
+  for (var elem of await css_js('js')) {
     var script = document.createElement("script")
     script.src = elem
-    if (elem == 'js/ani.js') continue
+    // if (elem == 'js/ani.js') continue
     document.body.append(script)
   }
 }
@@ -41,10 +39,10 @@ async function index() {
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   // sleep(500)
-  accounts();
-  commits();
-  // convert();
-  issues_with_this_repo();
+  // accounts();
+  // commits();
+  convert();
+  issues();
   posts();
   repos()
   api();
