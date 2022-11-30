@@ -2,11 +2,36 @@
 import { Handler } from "@netlify/functions";
 
 export const handler: Handler = async (event) => {
-    var res = datetime(new Date())
-    var arr = { id: 'toto_id', name: 'toto', age: 35 }
-    var arr2 = renameKeys({ id: 'value', name: 'label' }, arr)
-    console.log(arr2)
-    return { body: JSON.stringify(res), statusCode: 200 }
+    var res
+    var body = event.body!
+    // console.log(1, body)
+
+    if (typeof (body) == 'undefined' || body == '{}' || body == '') {
+        var params = event.queryStringParameters!.q
+        // console.log(1, params)
+        if (typeof (params) != 'undefined') res = datetime(new Date(Number(params) * 1000))
+    }
+    else res = truncate(JSON.parse(body).input)
+
+    return {
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify(res), statusCode: 200
+    }
+}
+
+
+export function datetime(dateobj: Date) {
+    var dat = dateobj.toLocaleDateString('de-de')
+    var time = dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return dat + ' ' + time
+}
+
+export function format_bytes(bytes: number) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
 }
 
 export const renameKeys = <
@@ -18,20 +43,7 @@ export const renameKeys = <
     ...acc, ...{ [keys[key] || key]: obj[key] }
 }), {});
 
-export function datetime(dateobj: Date) {
-    var dat = dateobj.toLocaleDateString('de-de')
-    var time = dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    var zone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-    return dat + ' ' + time + ', ' + zone
-}
-
-export function format_bytes(bytes: number) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
-}
 /**
  * Sorts an array of T by the specified properties of T.
  *
@@ -83,11 +95,10 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
 }
 
 export function truncate(text: string, size = 100) {
-    text = text.replace(/<\/?(.*?)>/g, "");
+    text = text.replace(/<\/?(.*?)>/g, '');
     if (text.length > size) {
         var subString = text.slice(0, size);
-        var body = subString.slice(0, subString.lastIndexOf(" ")) + "..";
-        return body
+        return subString.slice(0, subString.lastIndexOf(" ")) + "..";
     }
     return text
 }

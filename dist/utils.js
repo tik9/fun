@@ -1,23 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.truncate = exports.byPropertiesOf = exports.sort = exports.format_bytes = exports.datetime = exports.renameKeys = exports.handler = void 0;
+exports.truncate = exports.byPropertiesOf = exports.sort = exports.renameKeys = exports.format_bytes = exports.datetime = exports.handler = void 0;
 const handler = async (event) => {
-    var res = datetime(new Date());
-    var arr = { id: 'toto_id', name: 'toto', age: 35 };
-    var arr2 = (0, exports.renameKeys)({ id: 'value', name: 'label' }, arr);
-    console.log(arr2);
-    return { body: JSON.stringify(res), statusCode: 200 };
+    var res;
+    var body = event.body;
+    // console.log(1, body)
+    if (typeof (body) == 'undefined' || body == '{}' || body == '') {
+        var params = event.queryStringParameters.q;
+        // console.log(1, params)
+        if (typeof (params) != 'undefined')
+            res = datetime(new Date(Number(params) * 1000));
+    }
+    else
+        res = truncate(JSON.parse(body).input);
+    return {
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify(res), statusCode: 200
+    };
 };
 exports.handler = handler;
-const renameKeys = (keys, obj) => Object.keys(obj).reduce((acc, key) => ({
-    ...acc, ...{ [keys[key] || key]: obj[key] }
-}), {});
-exports.renameKeys = renameKeys;
 function datetime(dateobj) {
     var dat = dateobj.toLocaleDateString('de-de');
     var time = dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    var zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return dat + ' ' + time + ', ' + zone;
+    return dat + ' ' + time;
 }
 exports.datetime = datetime;
 function format_bytes(bytes) {
@@ -28,6 +33,10 @@ function format_bytes(bytes) {
     return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
 }
 exports.format_bytes = format_bytes;
+const renameKeys = (keys, obj) => Object.keys(obj).reduce((acc, key) => ({
+    ...acc, ...{ [keys[key] || key]: obj[key] }
+}), {});
+exports.renameKeys = renameKeys;
 /**
  * Sorts an array of T by the specified properties of T.
  *
@@ -76,11 +85,10 @@ function byPropertiesOf(sortBy) {
 }
 exports.byPropertiesOf = byPropertiesOf;
 function truncate(text, size = 100) {
-    text = text.replace(/<\/?(.*?)>/g, "");
+    text = text.replace(/<\/?(.*?)>/g, '');
     if (text.length > size) {
         var subString = text.slice(0, size);
-        var body = subString.slice(0, subString.lastIndexOf(" ")) + "..";
-        return body;
+        return subString.slice(0, subString.lastIndexOf(" ")) + "..";
     }
     return text;
 }
