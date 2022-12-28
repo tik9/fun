@@ -60,10 +60,15 @@ async function issues() {
     var obj = {};
     for (var elem2 of arr_field) {
       var val = elem.node[elem2]
-      if ('updatedAt' == elem2) {
+      if ('updatedAt' === elem2) {
         val = val.slice(0, 10)
         elem2 = 'updated'
-      } else if (elem2 == 'state') val = val.toLowerCase()
+      } else if (elem2 === 'state') val = val.toLowerCase()
+      else if (elem2 === 'body') {
+        val = await (await fetch(net_fun + 'utils', {
+          method: "post", body: JSON.stringify({ type: "truncate", val: val, cut: 150 })
+        })).json()
+      }
       obj[elem2] = val
     }
     arr.push(obj)

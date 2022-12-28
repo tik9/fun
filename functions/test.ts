@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export var handler: Handler = async () => {
     var res
-    console.log(1, await rate_limit(), 2, await repos())
+    console.log(1, await rate_limit())
     return { statusCode: 200, body: res }
 }
 

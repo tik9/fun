@@ -1,17 +1,30 @@
 
 import { Handler } from "@netlify/functions";
 
+
 export const handler: Handler = async (event) => {
     var res
-    var body = event.body!
-    // console.log(1, body)
+    // return
+    // console.log(2, res)
 
-    if (typeof (body) == 'undefined' || body == '{}' || body == '') {
+    if (typeof (event.body!) === 'undefined' || event.body! === '{}' || event.body! === '') {
         var params = event.queryStringParameters!.q
-        // console.log(1, params)
-        if (typeof (params) != 'undefined') res = datetime(new Date(Number(params) * 1000))
+        if (typeof (params) !== 'undefined') res = datetime(new Date(Number(params) * 1000))
     }
-    else res = truncate(JSON.parse(body).input)
+    else if (JSON.parse(event.body!).type === 'sortList') {
+        let jsbody = JSON.parse(event.body!)
+        sortList(jsbody.val)
+        res = jsbody.val
+        console.log(2, res)
+    }
+    else if (JSON.parse(event.body!).type === 'sortTable') {
+        let jsbody = JSON.parse(event.body!)
+        //@ts-ignore
+        sortTable(jsbody.val, jsbody.sort1!, jsbody.sort2!)
+        res = jsbody.val
+    }
+
+    else res = truncate(JSON.parse(event.body!).val, JSON.parse(event.body!).cut)
 
     return {
         headers: { 'access-control-allow-origin': '*' },
@@ -23,7 +36,6 @@ export const handler: Handler = async (event) => {
 export function datetime(dateobj: Date) {
     var dat = dateobj.toLocaleDateString('de-de')
     var time = dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
     return dat + ' ' + time
 }
 
@@ -43,6 +55,24 @@ export const renameKeys = <
     ...acc, ...{ [keys[key] || key]: obj[key] }
 }), {});
 
+export function sortList(obj: object) {
+
+    var keys = Object.keys(obj).sort((k1, k2) => {
+        if (k1 < k2) return -1;
+        else if (k1 > k2) return +1;
+        else return 0;
+    });
+    let helpObj = {}
+    for (var elem of keys) {
+        //@ts-ignore
+        helpObj[elem] = obj[elem];
+        //@ts-ignore
+        delete obj[elem];
+        //@ts-ignore
+        obj[elem] = helpObj[elem]
+    }
+    return obj;
+}
 
 /**
  * Sorts an array of T by the specified properties of T.
@@ -50,9 +80,9 @@ export const renameKeys = <
  * @param arr - the array to be sorted, all of the same type T
  * @param sortBy - the names of the properties to sort by, in precedence order.
  */
-export function sort<T extends object>(arr: T[], ...sortBy: Array<sortArg<T>>) {
-    // console.log(2, arr)
+export function sortTable<T extends object>(arr: T[], ...sortBy: Array<sortArg<T>>) {
     arr.sort(byPropertiesOf<T>(sortBy))
+    // console.log(2, arr, sortBy)
 }
 
 type sortArg<T> = keyof T | `-${string & keyof T}`
@@ -78,6 +108,7 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
 
         return (a: T, b: T) => {
             const result = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0
+            // console.log({ a, b, key, sortOrder })
             return result * sortOrder
         }
     }
@@ -90,6 +121,7 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
             result = compareByProperty(sortBy[i])(obj1, obj2)
             i++
         }
+        // console.log({ result, obj1, obj2 })
         return result
     }
 }
@@ -98,6 +130,7 @@ export function truncate(text: string, size = 100) {
     text = text.replace(/<\/?(.*?)>/g, '');
     if (text.length > size) {
         var subString = text.slice(0, size);
+        // console.log({ subString, text })
         return subString.slice(0, subString.lastIndexOf(" ")) + "..";
     }
     return text

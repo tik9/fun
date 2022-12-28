@@ -1,8 +1,6 @@
 
 import { Handler } from '@netlify/functions'
 import { MongoClient } from 'mongodb'
-import { promises as fs } from 'fs'
-import { resolve } from 'path'
 var dbWeb = "website"
 
 function main() { return new MongoClient(process.env.mongo!).connect() }
@@ -14,7 +12,7 @@ export const handler: Handler = async (event) => {
 
         var params = event.queryStringParameters!
         var coll = params.coll!
-        if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll)
+        if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll, params.key)
         else if (params.op == 'count') res = await count(coll)
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
         // console.log(1, res)
@@ -26,21 +24,22 @@ export const handler: Handler = async (event) => {
     }
 
     // create_coll(coll)
-    // res = await datatype(coll, 2)
     // res = await find(coll)
     // res = await find_one(coll, params.key!, params.val!)
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
     // res = insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
-    // res=insert_val('index', res)
+    // res = insert_one('test', { 'cat': 'cloud2', field: 2, val: new Date() })
+
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('tools', 'tool', 'Docker')
+    // remove_many('sys', 'platform', 'darwin')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'server', 'category', 'api')
+    update_one('index', 'name', 'server', 'name', 'sys_server')
+    // update_many(coll, { category: 'nachhilfe' }, 'category', 'subject')
 
     return {
         headers: { 'access-control-allow-origin': '*' },
@@ -52,17 +51,8 @@ async function count(coll: string) { return (await main()).db(dbWeb).collection(
 
 async function create_coll(coll: string) { console.log(await (await main()).db(dbWeb).createCollection(coll)) }
 
-async function datatype(coll: string, val: string | number) {
-    return (await main()).db(dbWeb).collection(coll).aggregate([
-        { $match: { tik: 2 } },
-        { $addFields: { tikDataType: { $type: "$tik" } } }
-    ])
-}
-async function find(coll: string, limit = 0) {
-    try {
-        return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray()
-
-    } catch (error) { }
+async function find(coll: string, key = '', limit = 0) {
+    try { return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0, } }).limit(limit).toArray() } catch (error) { }
 }
 async function find_one(coll: string, key: string, val: string | number) { return (await main()).db(dbWeb).collection(coll).findOne({ [key]: val }) }
 
@@ -97,6 +87,6 @@ async function rename_field(coll: string, old: string, newf: string) { (await ma
 
 async function truncate(coll: string) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
 
-async function update_one(coll: string, searchkey: string, searchval: string, key: string, val: string) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }) }
+async function update_one(coll: string, searchkey: string, searchval: string, key: string, val: string | boolean) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }) }
 
-async function update_many(coll: string, field: string, val: []) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $set: { [field]: val } }); }
+async function update_many(coll: string, filter = {}, field: string, val: string) { (await main()).db(dbWeb).collection(coll).updateMany(filter, { $set: { [field]: val } }); }

@@ -1,7 +1,6 @@
 
 import fetch from 'node-fetch'
-import { renameKeys, datetime } from './utils'
-import { format_bytes } from './utils'
+import { datetime, format_bytes, renameKeys, sortList } from './utils'
 import { Handler } from '@netlify/functions'
 import { insert_one } from './mongo'
 import { IPinfoWrapper } from "node-ipinfo"
@@ -23,21 +22,22 @@ export const handler: Handler = async (event) => {
     }
 
     var ipinfo = await (await fetch("https://ipinfo.io/json?token=" + process.env.ipgeo)).json()
-    console.log(1, ipinfo)
     //@ts-ignore
-    ipinfo['server location'] = (await (new IPinfoWrapper(process.env.ipgeo!)).getMap([ipinfo.ip])).reportUrl
+    ipinfo.location = (await (new IPinfoWrapper(process.env.ipgeo!)).getMap([ipinfo.ip])).reportUrl
 
     //@ts-ignore
-    var new_arr = ['ip', 'loc', 'org', 'postal'].forEach(element => { delete ipinfo[element] });
+    var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete ipinfo[element] });
     //@ts-ignore
-    ipinfo = renameKeys({ city: 'region city', country: 'region country', timezone: 'server timezone' }, ipinfo)
+    ipinfo = renameKeys({ city: 'region city', country: 'region country' }, ipinfo)
 
     //@ts-ignore
     var res = { ...server, ...ipinfo }
+    sortList(res)
     if (event.headers.host != 'localhost') {
-        res['server date'] = datetime(new Date())
+        res['date'] = datetime(new Date())
         insert_one('sys', res)
     }
+    // console.log(1, res)
 
     return {
         headers: { 'access-control-allow-origin': '*' },

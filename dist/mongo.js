@@ -10,11 +10,11 @@ const handler = async (event) => {
         var params = event.queryStringParameters;
         var coll = params.coll;
         if (params.op == 'find' || typeof (params.op) == 'undefined')
-            res = await find(coll);
+            res = await find(coll, 'ip');
         else if (params.op == 'count')
             res = await count(coll);
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
-        // console.log(1, res)
+        console.log(1, res, await (await main()).db(dbWeb).version);
     }
     else {
         var body = JSON.parse(event.body);
@@ -23,21 +23,21 @@ const handler = async (event) => {
         res = await insert_one(coll, val);
     }
     // create_coll(coll)
-    // res = await datatype(coll, 2)
     // res = await find(coll)
     // res = await find_one(coll, params.key!, params.val!)
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
     // res = insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
-    // res=insert_val('index', res)
+    // res = insert_one('test', { 'cat': 'cloud2', field: 2, val: new Date() })
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('tools', 'tool', 'Docker')
+    // remove_many('tools', 'tool', 'Github Actions')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'server', 'category', 'api')
+    // update_one('index', 'name', 'client', 'title', 'Der Browser')
+    // update_many(coll, { category: 'nachhilfe' }, 'category', 'subject')
     return {
         headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)
@@ -46,15 +46,9 @@ const handler = async (event) => {
 exports.handler = handler;
 async function count(coll) { return (await main()).db(dbWeb).collection(coll).countDocuments(); }
 async function create_coll(coll) { console.log(await (await main()).db(dbWeb).createCollection(coll)); }
-async function datatype(coll, val) {
-    return (await main()).db(dbWeb).collection(coll).aggregate([
-        { $match: { tik: 2 } },
-        { $addFields: { tikDataType: { $type: "$tik" } } }
-    ]);
-}
-async function find(coll, limit = 0) {
+async function find(coll, key = '', limit = 0) {
     try {
-        return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0 } }).limit(limit).toArray();
+        return (await main()).db(dbWeb).collection(coll).find({}, { _id: 0, ip: 1 }).limit(limit).toArray();
     }
     catch (error) { }
 }
@@ -82,4 +76,6 @@ async function rename_coll(old, newcoll) { (await main()).db(dbWeb).collection(o
 async function rename_field(coll, old, newf) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $rename: { [old]: newf } }); }
 async function truncate(coll) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
 async function update_one(coll, searchkey, searchval, key, val) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }); }
-async function update_many(coll, field, val) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $set: { [field]: val } }); }
+async function update_many(coll, filter = {}, field, val) { (await main()).db(dbWeb).collection(coll).updateMany(filter, { $set: { [field]: val } }); }
+async function version() {
+}

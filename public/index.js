@@ -39,11 +39,12 @@ async function index() {
   var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   // sleep(500)
+
   // accounts();
   // commits();
   convert();
   issues();
-  posts();
+  // posts();
   repos()
   api();
   sys_client()
@@ -88,9 +89,9 @@ function list(arr, name) {
 
     var li = document.createElement('li')
 
-    if (elem == 'Server location') li = li_aref(elem, val)
-    else if (name == 'accounts') li = li_aref(elem, val)
-    else if (name == 'git_code') {
+    if (elem === 'Location') li = li_aref(elem, val)
+    else if (name === 'accounts') li = li_aref(elem, val)
+    else if (name === 'git_code') {
       var text = val.slice(val.lastIndexOf('/') + 1)
       li = li_aref(text, gitBase + 'public/' + val)
     }
@@ -98,6 +99,7 @@ function list(arr, name) {
       li.append(document.createTextNode(`${elem}: ${val}`))
     ul.appendChild(li)
   }
+  // console.log(ul)
   return ul
 }
 

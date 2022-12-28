@@ -7,7 +7,7 @@ exports.rate_limit = exports.handler = void 0;
 const axios_1 = __importDefault(require("axios"));
 var handler = async () => {
     var res;
-    console.log(1, await rate_limit(), 2, await repos());
+    console.log(1, await rate_limit());
     return { statusCode: 200, body: res };
 };
 exports.handler = handler;

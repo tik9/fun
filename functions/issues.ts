@@ -7,7 +7,7 @@ export const handler: Handler = async (event) => {
   var query = `
   query {
     repository(owner:"tik9", name:"${repo}") {
-      issues(last:3) {
+      issues(orderBy: { field: UPDATED_AT, direction: DESC },first:3) {
        totalCount,
         edges {
           node {

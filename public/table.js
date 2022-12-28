@@ -12,17 +12,15 @@ function table(arr = [], src) {
     var tr = document.createElement('tr')
     thead.appendChild(tr)
     var columns = []
-    for (var elem of arr) {
-        for (var key in elem) {
-            if (['_id', '__v', 'api', 'category', 'name', 'url'].includes(key)) continue
-            if (elem.hasOwnProperty(key) && !columns.includes(key)) {
-                columns.push(key);
-                if (key == 'value') continue
+    for (var key in arr[0]) {
+        if (['_id', '__v', 'api', 'category', 'name', 'url'].includes(key)) continue
+        if (arr[0].hasOwnProperty(key) && !columns.includes(key)) {
+            columns.push(key);
+            if (key == 'value') continue
 
-                var th = document.createElement('th')
-                th.appendChild(document.createTextNode(key[0].toUpperCase() + key.slice(1)));
-                tr.appendChild(th);
-            }
+            var th = document.createElement('th')
+            th.appendChild(document.createTextNode(key[0].toUpperCase() + key.slice(1)));
+            tr.appendChild(th);
         }
     }
     table_.appendChild(thead);

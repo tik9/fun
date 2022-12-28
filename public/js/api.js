@@ -1,6 +1,7 @@
 
 var apiheaders = {
-    // joke: 'Fetch Jokes - enter keyword e.g. abc', trans: 'Fetch translation en -> de - e.g. ace ', 
+    joke: 'Fetch Jokes - enter keyword e.g. abc',
+    //  trans: 'Fetch translation en -> de - e.g. ace ',
     clock: 'Get UTC Time',
 }
 
@@ -32,7 +33,6 @@ async function api() {
             input.classList.add('mt-3')
             input.required = true
             if (location.host.split(':')[0] == 'localhost') input.value = 'abc'
-            input.setAttribute('data-test', inputElem)
             div.append(input, btn)
         } else div.append(btn)
 
@@ -41,12 +41,12 @@ async function api() {
         res.id = resElem
         res.classList.add('mt-3')
         res.textContent = '.. ' + elem + ' waits ..'
-        res.setAttribute('data-test', resElem)
         div.append(res)
         count++
     }
 
-    // document.getElementById('btnjoke').addEventListener('click', () => rapid('joke', document.getElementById('inputjoke')))
+    document.getElementById('btnjoke').addEventListener('click', () => rapid('joke', document.getElementById('inputjoke')))
+
     // document.getElementById('btntrans').addEventListener('click', () => rapid('trans', document.getElementById('inputtrans')))
 
     document.getElementById('btnclock').addEventListener('click', async () => {
