@@ -9,7 +9,7 @@ api_joke() { ntl functions:invoke rapid --port 80 --querystring 'input=abc' ;}
 
 api_trans() { ntl functions:invoke rapid --port 80 --payload '{"q":"abc"}' ;}
 
-gh_issue() { ntl functions:invoke issues --port 80 --querystring 'repo=fun' ;}
+gh_issue() { ntl functions:invoke issues --port 80 --querystring 'repo=tik' ;}
 
 mongo() { ntl functions:invoke ${FUNCNAME[0]} --port 80 --querystring 'op=find&coll=tools' ;}
 

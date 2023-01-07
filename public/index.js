@@ -40,12 +40,10 @@ async function index() {
 
   // sleep(500)
 
-  // accounts();
-  // commits();
+  accounts();
+  commits();
   convert();
   issues();
-  // posts();
-  repos()
   api();
   sys_client()
   sys_server()

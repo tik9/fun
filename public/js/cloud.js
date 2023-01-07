@@ -75,15 +75,3 @@ async function issues() {
   }
   helper(arguments.callee.name).append(table(arr, 'issues'))
 }
-
-async function posts() {
-  var posts = arguments.callee.name
-  var res = await (await fetch(net_fun + posts)).json()
-  helper(posts).append(table(res, posts))
-}
-
-async function repos() {
-  var repos = arguments.callee.name
-  var res = await (await fetch(net_fun + repos)).json()
-  helper(repos).append(table(res, repos))
-}

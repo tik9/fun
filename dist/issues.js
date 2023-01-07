@@ -7,7 +7,7 @@ const handler = async (event) => {
     var query = `
   query {
     repository(owner:"tik9", name:"${repo}") {
-      issues(last:3) {
+      issues(orderBy: { field: UPDATED_AT, direction: DESC },first:3) {
        totalCount,
         edges {
           node {
@@ -23,6 +23,7 @@ const handler = async (event) => {
   }`;
     //@ts-ignore
     var res = (await (0, graphquery_1.axiosHelp)(query)).data.repository.issues.edges;
+    // console.log(res)
     return { statusCode: 200, body: JSON.stringify(res) };
 };
 exports.handler = handler;

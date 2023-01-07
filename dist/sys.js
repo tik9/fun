@@ -25,19 +25,19 @@ const handler = async (event) => {
     };
     var ipinfo = await (await (0, node_fetch_1.default)("https://ipinfo.io/json?token=" + process.env.ipgeo)).json();
     //@ts-ignore
-    ipinfo['server location'] = (await (new node_ipinfo_1.IPinfoWrapper(process.env.ipgeo)).getMap([ipinfo.ip])).reportUrl;
+    ipinfo.location = (await (new node_ipinfo_1.IPinfoWrapper(process.env.ipgeo)).getMap([ipinfo.ip])).reportUrl;
     //@ts-ignore
-    var new_arr = ['ip', 'loc', 'org', 'postal'].forEach(element => { delete ipinfo[element]; });
+    var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete ipinfo[element]; });
     //@ts-ignore
-    ipinfo = (0, utils_1.renameKeys)({ city: 'region city', country: 'region country', timezone: 'server timezone' }, ipinfo);
+    ipinfo = (0, utils_1.renameKeys)({ city: 'region city', country: 'region country' }, ipinfo);
     //@ts-ignore
     var res = { ...server, ...ipinfo };
     (0, utils_1.sortList)(res);
     if (event.headers.host != 'localhost') {
-        res['server date'] = (0, utils_1.datetime)(new Date());
+        res['date'] = (0, utils_1.datetime)(new Date());
         (0, mongo_1.insert_one)('sys', res);
     }
-    console.log(1, res);
+    // console.log(1, res)
     return {
         headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)

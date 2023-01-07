@@ -15,7 +15,7 @@ export const handler: Handler = async (event) => {
         let jsbody = JSON.parse(event.body!)
         sortList(jsbody.val)
         res = jsbody.val
-        console.log(2, res)
+        // console.log(2, res)
     }
     else if (JSON.parse(event.body!).type === 'sortTable') {
         let jsbody = JSON.parse(event.body!)
@@ -24,7 +24,10 @@ export const handler: Handler = async (event) => {
         res = jsbody.val
     }
 
-    else res = truncate(JSON.parse(event.body!).val, JSON.parse(event.body!).cut)
+    else {
+        console.log(1, event.body)
+        res = truncate(JSON.parse(event.body!).val, JSON.parse(event.body!).cut)
+    }
 
     return {
         headers: { 'access-control-allow-origin': '*' },

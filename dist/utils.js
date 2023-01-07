@@ -14,7 +14,7 @@ const handler = async (event) => {
         let jsbody = JSON.parse(event.body);
         sortList(jsbody.val);
         res = jsbody.val;
-        console.log(2, res);
+        // console.log(2, res)
     }
     else if (JSON.parse(event.body).type === 'sortTable') {
         let jsbody = JSON.parse(event.body);
@@ -22,8 +22,10 @@ const handler = async (event) => {
         sortTable(jsbody.val, jsbody.sort1, jsbody.sort2);
         res = jsbody.val;
     }
-    else
+    else {
+        console.log(1, event.body);
         res = truncate(JSON.parse(event.body).val, JSON.parse(event.body).cut);
+    }
     return {
         headers: { 'access-control-allow-origin': '*' },
         body: JSON.stringify(res), statusCode: 200

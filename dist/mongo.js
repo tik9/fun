@@ -10,11 +10,11 @@ const handler = async (event) => {
         var params = event.queryStringParameters;
         var coll = params.coll;
         if (params.op == 'find' || typeof (params.op) == 'undefined')
-            res = await find(coll, 'ip');
+            res = await find(coll, params.key);
         else if (params.op == 'count')
             res = await count(coll);
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
-        console.log(1, res, await (await main()).db(dbWeb).version);
+        console.log(1, res);
     }
     else {
         var body = JSON.parse(event.body);
@@ -33,10 +33,10 @@ const handler = async (event) => {
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('tools', 'tool', 'Github Actions')
+    // remove_many('tools', 'tool', 'Physik - Grundlagen bis 8. Klasse')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
-    // update_one('index', 'name', 'client', 'title', 'Der Browser')
+    // update_one('tools', 'tool', 'Html/CSS', 'cv', 'false')
     // update_many(coll, { category: 'nachhilfe' }, 'category', 'subject')
     return {
         headers: { 'access-control-allow-origin': '*' },
@@ -48,7 +48,7 @@ async function count(coll) { return (await main()).db(dbWeb).collection(coll).co
 async function create_coll(coll) { console.log(await (await main()).db(dbWeb).createCollection(coll)); }
 async function find(coll, key = '', limit = 0) {
     try {
-        return (await main()).db(dbWeb).collection(coll).find({}, { _id: 0, ip: 1 }).limit(limit).toArray();
+        return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0, } }).limit(limit).toArray();
     }
     catch (error) { }
 }
@@ -77,5 +77,3 @@ async function rename_field(coll, old, newf) { (await main()).db(dbWeb).collecti
 async function truncate(coll) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
 async function update_one(coll, searchkey, searchval, key, val) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }); }
 async function update_many(coll, filter = {}, field, val) { (await main()).db(dbWeb).collection(coll).updateMany(filter, { $set: { [field]: val } }); }
-async function version() {
-}

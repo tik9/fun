@@ -10,7 +10,7 @@ var handler = async (event) => {
     var res = {};
     var params = event.queryStringParameters.q;
     //@ts-ignore
-    res = (await getOneRepo('cv2')).data.repository.id;
+    res = (await getOneRepo('re')).data.repository.description;
     console.log(1, res);
     return { statusCode: 200, body: res };
 };
