@@ -1,13 +1,4 @@
 
-[build]
-  functions = "functions"
-  publish = "public"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-
 [dev]
   port=80
   autoLaunch = false

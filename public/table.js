@@ -13,7 +13,7 @@ function table(arr = [], src) {
     thead.appendChild(tr)
     var columns = []
     for (var key in arr[0]) {
-        if (['_id', '__v', 'api', 'category', 'name', 'url'].includes(key)) continue
+        if (['_id', '__v', 'api', 'category', 'name', 'url', 'post_id'].includes(key)) continue
         if (arr[0].hasOwnProperty(key) && !columns.includes(key)) {
             columns.push(key);
             if (key == 'value') continue

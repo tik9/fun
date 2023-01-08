@@ -21,9 +21,9 @@ export async function handler() {
     }
     arr = arr.flat()
     arr.sort((a, b) => a.score < b.score ? 1 : a.score > b.score ? -1 : 0)
-    // console.log(arr)
 
     return {
+        headers: { 'access-control-allow-origin': '*' },
         body: JSON.stringify(arr),
         statusCode: 200
     }
