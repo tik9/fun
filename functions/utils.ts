@@ -10,22 +10,22 @@ export const handler: Handler = async (event) => {
     if (typeof (event.body!) === 'undefined' || event.body! === '{}' || event.body! === '') {
         var params = event.queryStringParameters!.q
         if (typeof (params) !== 'undefined') res = datetime(new Date(Number(params) * 1000))
+        else res = format_bytes(Number(event.queryStringParameters!.num))
     }
     else if (JSON.parse(event.body!).type === 'sortList') {
         let jsbody = JSON.parse(event.body!)
         sortList(jsbody.val)
         res = jsbody.val
-        // console.log(2, res)
     }
     else if (JSON.parse(event.body!).type === 'sortTable') {
         let jsbody = JSON.parse(event.body!)
+        console.log(1, jsbody)
         //@ts-ignore
         sortTable(jsbody.val, jsbody.sort1!, jsbody.sort2!)
         res = jsbody.val
     }
 
     else {
-        console.log(1, event.body)
         res = truncate(JSON.parse(event.body!).val, JSON.parse(event.body!).cut)
     }
 
@@ -48,15 +48,6 @@ export function format_bytes(bytes: number) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return (bytes / Math.pow(k, i)).toFixed() + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i];
 }
-
-export const renameKeys = <
-    TNewkey extends string, T extends Record<string, unknown>
->(
-    keys: { [key: string]: TNewkey },
-    obj: T
-) => Object.keys(obj).reduce((acc, key) => ({
-    ...acc, ...{ [keys[key] || key]: obj[key] }
-}), {});
 
 export function sortList(obj: object) {
 

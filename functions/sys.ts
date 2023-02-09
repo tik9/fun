@@ -27,8 +27,9 @@ export const handler: Handler = async (event) => {
 
     //@ts-ignore
     var new_arr = ['loc', 'org', 'postal'].forEach(element => { delete ipinfo[element] });
+
     //@ts-ignore
-    ipinfo = renameKeys({ city: 'region city', country: 'region country' }, ipinfo)
+    ipinfo = Object.keys(ipinfo).reduce((acc, key) => ({ ...acc, ...{ [{ city: 'region city', country: 'region country' }[key] || key]: ipinfo[key] } }), {});
 
     //@ts-ignore
     var res = { ...server, ...ipinfo }

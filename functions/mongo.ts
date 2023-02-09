@@ -1,6 +1,9 @@
 
 import { Handler } from '@netlify/functions'
 import { MongoClient } from 'mongodb'
+import { promises as fs } from 'fs'
+import { resolve } from 'path'
+
 var dbWeb = "website"
 
 function main() { return new MongoClient(process.env.mongo!).connect() }
@@ -15,7 +18,7 @@ export const handler: Handler = async (event) => {
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll, params.key)
         else if (params.op == 'count') res = await count(coll)
         // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
-        console.log(1, res)
+        if (params.log) console.log(1, res)
     } else {
         var body = JSON.parse(event.body!);
         coll = body.coll
@@ -29,13 +32,13 @@ export const handler: Handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
-    // res = insert('tools', JSON.parse(await fs.readFile(resolve('public', 'json/tools.json'), 'utf-8')))
+    // res = insert('sayings', JSON.parse(await fs.readFile(resolve('public', 'json/sayings.json'), 'utf-8')))
     // res = insert_one('test', { 'cat': 'cloud2', field: 2, val: new Date() })
 
     // res = await list_coll()
     // res=remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('tools', 'tool', 'Physik - Grundlagen bis 8. Klasse')
+    // remove_many('tools', 'tool', 'Html/CSS')
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
     // update_one('tools', 'tool', 'Html/CSS', 'cv', 'false')

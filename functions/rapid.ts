@@ -14,7 +14,6 @@ export const handler: Handler = async (event) => {
     }
     else {
         let jsbody = JSON.parse(event.body!)
-
         body = { target: "de", q: jsbody.q }
     }
     const options = {

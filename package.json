@@ -24,7 +24,7 @@
     "url": "https://github.com/tik9/netlify/issues"
   },
   "homepage": "https://github.com/tik9/netlify#readme",
-  "devDependencies": {
-    "cypress": "^10.7.0"
+  "scripts": {
+    "debug": "NODE_OPTIONS=--inspect netlify dev"
   }
 }
