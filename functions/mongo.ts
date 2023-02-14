@@ -42,7 +42,7 @@ export const handler: Handler = async (event) => {
     // rename_field('index', 'cat', 'category')
     // truncate(coll!)
     // update_one('tools', 'tool', 'Html/CSS', 'cv', 'false')
-    // update_many(coll, { category: 'nachhilfe' }, 'category', 'subject')
+    // update_many(coll, { category: 'api' }, 'category', 'fun')
 
     return {
         headers: { 'access-control-allow-origin': '*' },

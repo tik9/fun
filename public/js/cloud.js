@@ -78,7 +78,7 @@ async function issues() {
 
 async function posts() {
   var posts = arguments.callee.name
-  var res = await (await fetch( net_fun + posts)).json()
+  var res = await (await fetch(net_fun + posts)).json()
   helper(posts).append(table(res, posts))
 }
 

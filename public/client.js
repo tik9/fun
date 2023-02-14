@@ -25,6 +25,8 @@ function create_icon() {
 async function css_js(type) {
     var res = await (await fetch(net_fun + 'files?dir=' + type)).json()
     res = res.object.entries.map(str => type + '/' + str.name)
+    res.push('js/lastfm.js')
+    // console.log(res)
     return res
 }
 
@@ -50,8 +52,9 @@ function nav() {
         aref.classList.add('nav')
         bottomnav.append(aref)
     }
-    var div = document.createElement('div')
-    bottomnav.append(div)
-    div.innerHTML = 'moving numbers + text for a living'
-    div.classList.add('nav')
+    var aref = document.createElement("a");
+    aref.href = github + 'tik9/fun'
+    aref.textContent = 'github'
+    aref.classList.add('nav')
+    bottomnav.append(aref)
 }

@@ -21,6 +21,7 @@ async function git_code(arr) {
 
 async function include_js() {
   for (var elem of await css_js('js')) {
+    if (elem === 'js/tests.js') continue
     var script = document.createElement("script")
     script.src = elem
     // if (elem == 'js/ani.js') continue
@@ -29,26 +30,26 @@ async function include_js() {
 }
 
 async function index() {
-  await indexfun()
-  await indexfun(alias_cloud)
+  // await indexfun()
+  // await indexfun(alias_cloud)
 
   var index = arguments.callee.name;
   var res
-  res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category === 'api').map(obj => ({ ...obj, url: '#' + obj.name }));
+  // res = (await (await fetch(net_fun + 'mongo?op=find&coll=' + index)).json()).filter(val => val.category === 'fun').map(obj => ({ ...obj, url: '#' + obj.name }));
 
-  var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
+  // var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
-  // sleep(500)
-
-  accounts();
-  commits();
+  await sleep(500)
+  lastfm()
+  // accounts();
+  // commits();
   // convert();
-  issues();
+  // issues();
   // posts();
   // repos()
-  api();
-  sys_client()
-  sys_server()
+  // api();
+  // sys_client()
+  // sys_server()
 }
 
 async function indexfun(head = 'index') {
@@ -99,7 +100,6 @@ function list(arr, name) {
       li.append(document.createTextNode(`${elem}: ${val}`))
     ul.appendChild(li)
   }
-  // console.log(ul)
   return ul
 }
 

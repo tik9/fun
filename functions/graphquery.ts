@@ -2,9 +2,8 @@
 import { Handler } from '@netlify/functions'
 import fetch from 'node-fetch';
 
-//@ts-ignore
 export var handler: Handler = async (event) => {
-    var res = {}
+    var res
     var params = event.queryStringParameters!.q
 
     //@ts-ignore
