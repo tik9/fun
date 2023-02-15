@@ -4,7 +4,7 @@
     "@netlify/functions": "^1.2.0",
     "@types/qs": "^6.9.7",
     "axios": "^1.2.0",
-    "mongodb": "^4.8.1",
+    "mongodb": "",
     "node-fetch": "^3.3.0",
     "node-ipinfo": "^3.1.1",
     "oxford-dictionaries-api": "^0.1.2",

@@ -1,6 +1,6 @@
 
 import fetch from 'node-fetch'
-import { datetime, format_bytes, renameKeys, sortList } from './utils'
+import { datetime, format_bytes, sortList } from './utils'
 import { Handler } from '@netlify/functions'
 import { insert_one } from './mongo'
 import { IPinfoWrapper } from "node-ipinfo"
@@ -44,4 +44,4 @@ export const handler: Handler = async (event) => {
         headers: { 'access-control-allow-origin': '*' },
         statusCode: 200, body: JSON.stringify(res)
     }
-}
+}   
