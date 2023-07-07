@@ -1,6 +1,6 @@
 
 import { Handler } from '@netlify/functions';
-import { axiosHelp } from './graphquery';
+import { getHelp } from './graphquery';
 
 
 export var handler: Handler = async (event) => {
@@ -38,6 +38,6 @@ export var handler: Handler = async (event) => {
     }
   }`
   //@ts-ignore
-  var res = (await axiosHelp(query)).data.repository.refs.edges[0].node.target.history.edges
+  var res = (await getHelp(query)).data.repository.refs.edges[0].node.target.history.edges
   return { statusCode: 200, body: JSON.stringify(res) };
 }

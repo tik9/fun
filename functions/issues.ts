@@ -1,5 +1,5 @@
 
-import { axiosHelp } from "./graphquery";
+import { getHelp } from "./graphquery";
 import { Handler } from "@netlify/functions";
 
 export const handler: Handler = async (event) => {
@@ -22,7 +22,7 @@ export const handler: Handler = async (event) => {
     }
   }`;
   //@ts-ignore
-  var res = (await axiosHelp(query)).data.repository.issues.edges
+  var res = (await getHelp(query)).data.repository.issues.edges
   // console.log(res)
   return { statusCode: 200, body: JSON.stringify(res) }
 }

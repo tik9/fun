@@ -1,13 +1,13 @@
 
 import { Handler } from '@netlify/functions'
-import { axiosHelp, getOneRepo } from './graphquery'
+import { getHelp, getOneRepo } from './graphquery'
 
 //@ts-ignore
 export var handler: Handler = async () => {
     // var query = create('apo')
     var query = await update('apo')
     //@ts-ignore
-    var res = await axiosHelp(query)
+    var res = await getHelp(query)
     return { statusCode: 200, body: res }
 }
 

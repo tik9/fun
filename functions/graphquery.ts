@@ -12,7 +12,7 @@ export var handler: Handler = async (event) => {
     return { statusCode: 200, body: res }
 }
 
-export async function axiosHelp(query: string, vars: string = '') {
+export async function getHelp(query: string, vars: string = '') {
     // console.log(1, vars, query)
     var res = await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: { vars } }) })).json()
     return res
@@ -24,12 +24,12 @@ export async function getOneRepo(repo = 'custom') {
     // query = `query{repositoryOwner(login: "tik9"){id login repositories(first: 1) { edges {node {id name}}}}}`
     var res = {}
     //@ts-ignore
-    res = await axiosHelp(query)
+    res = await getHelp(query)
     // console.log(1, res.data.repositoryOwner.repositories.edges)
     // console.log(1, res.data.repository.id)
     return res
 }
 
 async function rate() {
-    return await axiosHelp(`query {viewer {login}rateLimit {limit remaining resetAt}}`)
+    return await getHelp(`query {viewer {login}rateLimit {limit remaining resetAt}}`)
 }

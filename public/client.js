@@ -25,7 +25,7 @@ function create_icon() {
 async function css_js(type) {
     var res = await (await fetch(net_fun + 'files?dir=' + type)).json()
     res = res.object.entries.map(str => type + '/' + str.name)
-    res.push('js/lastfm.js')
+    res.push('js/random.js')
     // console.log(res)
     return res
 }
