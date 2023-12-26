@@ -1,8 +1,6 @@
 
 import { Handler } from '@netlify/functions'
 import { MongoClient } from 'mongodb'
-import { promises as fs } from 'fs'
-import { resolve } from 'path'
 
 var dbWeb = "website"
 
@@ -17,7 +15,6 @@ export const handler: Handler = async (event) => {
         var coll = params.coll!
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll, params.key)
         else if (params.op == 'count') res = await count(coll)
-        // else if (params.op == 'del') remove_many(coll, params.key!, params.val!)
         if (params.log) console.log(1, res)
     } else {
         var body = JSON.parse(event.body!);
@@ -32,20 +29,23 @@ export const handler: Handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
-    // res = insert('sayings', JSON.parse(await fs.readFile(resolve('public', 'json/sayings.json'), 'utf-8')))
-    // res = insert_one('test', { 'cat': 'cloud2', field: 2, val: new Date() })
+    // insert('sayings', JSON.parse(await fs.readFile(resolve('public', 'json/sayings.json'), 'utf-8')))
+    // insert_one(coll, { 'cat': 'Online tools I use', text: 'Spreadsheets and Excel' })
 
     // res = await list_coll()
-    // res=remove_coll(coll!)
+    // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
     // remove_many('tools', 'tool', 'Html/CSS')
-    // rename_field('index', 'cat', 'category')
+    // rename_coll('subjects', 'data')
+    // rename_field('data', 'category', 'cat')
     // truncate(coll!)
-    // update_one('tools', 'tool', 'Html/CSS', 'cv', 'false')
-    // update_many(coll, { category: 'api' }, 'category', 'fun')
+    // update_one('qualification', 'text', 'BWL Studium - Abschluss Dipl.-Kfm.', 'text', 'Dipl.-Kfm.')
+    // update_many(coll, { cat: 'subjects I teach' }, 'cat', 'Subjects I teach')
 
     return {
-        headers: { 'access-control-allow-origin': '*' },
+        headers: {
+            'access-control-allow-origin': '*',
+        },
         statusCode: 200, body: JSON.stringify(res)
     }
 }

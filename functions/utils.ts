@@ -19,7 +19,7 @@ export const handler: Handler = async (event) => {
     }
     else if (JSON.parse(event.body!).type === 'sortTable') {
         let jsbody = JSON.parse(event.body!)
-        console.log(1, jsbody)
+        // console.log(1, jsbody)
         //@ts-ignore
         sortTable(jsbody.val, jsbody.sort1!, jsbody.sort2!)
         res = jsbody.val
