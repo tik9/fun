@@ -1,16 +1,18 @@
 
 import { Handler } from "@netlify/functions";
-
+import { promises as fs } from "fs";
+import { resolve } from "path";
+import { find } from './mongo'
 
 export const handler: Handler = async (event) => {
     var res
-    // return
-    // console.log(2, res)
 
     if (typeof (event.body!) === 'undefined' || event.body! === '{}' || event.body! === '') {
-        var params = event.queryStringParameters!.q
-        if (typeof (params) !== 'undefined') res = datetime(new Date(Number(params) * 1000))
-        else res = format_bytes(Number(event.queryStringParameters!.num))
+        var params = event.queryStringParameters!
+        if (params.save)
+            res = await saveToFile()
+        else
+            res = JSON.parse(await fs.readFile(resolve('public', 'json/website.json'), 'utf-8'))
     }
     else if (JSON.parse(event.body!).type === 'sortList') {
         let jsbody = JSON.parse(event.body!)
@@ -19,14 +21,9 @@ export const handler: Handler = async (event) => {
     }
     else if (JSON.parse(event.body!).type === 'sortTable') {
         let jsbody = JSON.parse(event.body!)
-        // console.log(1, jsbody)
         //@ts-ignore
         sortTable(jsbody.val, jsbody.sort1!, jsbody.sort2!)
         res = jsbody.val
-    }
-
-    else {
-        res = truncate(JSON.parse(event.body!).val, JSON.parse(event.body!).cut)
     }
 
     return {
@@ -35,6 +32,11 @@ export const handler: Handler = async (event) => {
     }
 }
 
+export async function saveToFile() {
+    var res = JSON.stringify(await find('data'))
+    fs.writeFile(resolve('public', 'json/website.json'), res, 'utf-8')
+    return res
+}
 
 export function datetime(dateobj: Date) {
     var dat = dateobj.toLocaleDateString('de-de')

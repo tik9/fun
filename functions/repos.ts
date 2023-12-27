@@ -7,12 +7,12 @@ export const handler: Handler = async () => {
     // res = await first()
     res = await allRepos()
     //@ts-ignore
-    console.log(res.data.repositoryOwner.repositories.nodes)
+    // console.log(res)
     return { statusCode: 200, body: JSON.stringify(res) }
 }
 
 async function allRepos() {
-    var query = `query{repositoryOwner(login: "tik9") { repositories (orderBy: { field: NAME, direction: ASC },first:20) { nodes { name }}}}`
+    var query = `query{repositoryOwner(login: "tik9") { repositories (orderBy: { field: NAME, direction: ASC },first:5) { nodes { url description}}}}`
     var res = await getHelp(query)
     return res
 }

@@ -5,15 +5,6 @@
 
 <br>
 
-### Steps to reach Goal
-- Tests with Cypress
-
-<br>
-  
-### Tools needed while making the site
-  - cypress
-
-<br>
 
 ### Contents
 
@@ -23,14 +14,8 @@
 
 ### Learned
 
-| Tool | About       |
-| ---- | ----------- |
-| Test framework   | Cypress Tests |
-serverless functions|calling them in node
+| Tool                 | About                |
+| -------------------- | -------------------- |
+| serverless functions | calling them in node |
 
-<br>
 
-### To Do
-
- | page  | to do                                                    | done |
- | ----- | -------------------------------------------------------- |

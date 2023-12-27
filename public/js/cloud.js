@@ -1,4 +1,19 @@
 
+async function repos() {
+  var repos = arguments.callee.name
+  var res = await (await fetch(net_fun + repos)).json()
+  res = res.data.repositoryOwner.repositories.nodes
+  // console.log(res)
+  var div = document.createElement('div')
+
+  div.id = repos
+  var head = document.createElement('h5')
+  head.classList.add('mt-4', 'mb-3')
+  head.textContent = repos[0].toUpperCase() + repos.slice(1).replace(/_/g, ' ')
+  document.getElementById('cloud').append(head, div)
+  div.append(table(res, 'repos'))
+}
+
 async function accounts() {
   var cloud_arr = [
     {
@@ -41,17 +56,6 @@ async function commits() {
   helper(commits).append(table(res, commits))
 }
 
-function helper(sub) {
-  var div = document.createElement('div')
-
-  div.id = sub
-  var head = document.createElement('h5')
-  head.classList.add('mt-4', 'mb-3')
-  head.textContent = sub[0].toUpperCase() + sub.slice(1).replace(/_/g, ' ')
-  document.getElementById(alias_cloud).append(head, div)
-  return div
-}
-
 async function issues() {
   var arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
 
@@ -82,8 +86,3 @@ async function posts() {
   helper(posts).append(table(res, posts))
 }
 
-async function repos() {
-  var repos = arguments.callee.name
-  var res = await (await fetch(net_fun + repos)).json()
-  helper(repos).append(table(res, repos))
-}

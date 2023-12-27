@@ -1,10 +1,10 @@
 
 index()
-include_js()
+// include_js()
 
 var alias_cloud = 'social_cloud'
 var dateformat = /^\d{4}-\d{2}-\d{2}/
-var git = github + 'tik9/'
+var git = 'github/tik9/'
 var git2 = git + 'fun'
 var gitBase = git2 + '/blob/main/'
 
@@ -40,13 +40,12 @@ async function index() {
   // var div = document.getElementById(index); div.append(table(res, index)); div.classList.add('mt-5')
 
   await sleep(500)
-  lastfm()
   // accounts();
   // commits();
   // convert();
   // issues();
   // posts();
-  // repos()
+  repos()
   // api();
   // sys_client()
   // sys_server()

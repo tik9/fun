@@ -1,6 +1,8 @@
 
 import { Handler } from '@netlify/functions'
 import { MongoClient } from 'mongodb'
+import { promises as fs } from 'fs'
+import { resolve } from 'path'
 
 var dbWeb = "website"
 
@@ -13,6 +15,7 @@ export const handler: Handler = async (event) => {
 
         var params = event.queryStringParameters!
         var coll = params.coll!
+        if (!coll) coll = 'test'
         if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll, params.key)
         else if (params.op == 'count') res = await count(coll)
         if (params.log) console.log(1, res)
@@ -29,18 +32,19 @@ export const handler: Handler = async (event) => {
     // index_create(coll!, params!.key!)
     // res = await index_remove(coll!, params!.key!)
     // res = await index_get(coll!)
-    // insert('sayings', JSON.parse(await fs.readFile(resolve('public', 'json/sayings.json'), 'utf-8')))
+    // insert('data', JSON.parse(await fs.readFile(resolve('public', 'json/add.json'), 'utf-8')))
     // insert_one(coll, { 'cat': 'Online tools I use', text: 'Spreadsheets and Excel' })
 
     // res = await list_coll()
     // remove_coll(coll!)
     // remove_field(coll, searchkey, searchval, 'del')
-    // remove_many('tools', 'tool', 'Html/CSS')
+    // remove_field_all('data', 'Clients I address')
+    // remove_empty('data')
     // rename_coll('subjects', 'data')
     // rename_field('data', 'category', 'cat')
     // truncate(coll!)
-    // update_one('qualification', 'text', 'BWL Studium - Abschluss Dipl.-Kfm.', 'text', 'Dipl.-Kfm.')
-    // update_many(coll, { cat: 'subjects I teach' }, 'cat', 'Subjects I teach')
+    // update_one('data', 'text', 'Students towards Bachelor degree and technical employees', 'text', 'Students in a Bachelor degree and employees preparing for a math exam')
+    // update_many(coll, { cat: 'What famous people said' }, 'cat', 'What famous people said about learning')
 
     return {
         headers: {
@@ -54,7 +58,7 @@ async function count(coll: string) { return (await main()).db(dbWeb).collection(
 
 async function create_coll(coll: string) { console.log(await (await main()).db(dbWeb).createCollection(coll)) }
 
-async function find(coll: string, key = '', limit = 0) {
+export async function find(coll: string, key = '', limit = 0) {
     try { return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0, } }).limit(limit).toArray() } catch (error) { }
 }
 async function find_one(coll: string, key: string, val: string | number) { return (await main()).db(dbWeb).collection(coll).findOne({ [key]: val }) }
@@ -77,6 +81,9 @@ async function insert(coll: string, obj: []) { return await (await main()).db(db
 async function list_coll() { return (await (await main()).db(dbWeb).listCollections().toArray()).map(elem => elem.name) }
 
 async function remove_coll(coll: string) { (await main()).db(dbWeb).collection(coll).drop() }
+
+async function remove_empty(coll: string) { (await main()).db(dbWeb).collection(coll).deleteMany({ $size: 0 }) }
+
 
 async function remove_field(coll: string, searchkey: string, searchval: string, del: string) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $unset: { [del]: "" } }) }
 
