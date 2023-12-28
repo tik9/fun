@@ -1,9 +1,9 @@
 
-import { Handler } from '@netlify/functions'
+import { Context } from '@netlify/functions'
 
 const nodemailer = require('nodemailer');
 
-export const handler: Handler = async (event) => {
+export default async (req: Request, context: Context) => {
 
     const mailadr = 'user153015@gmail.com'
 
@@ -25,7 +25,7 @@ export const handler: Handler = async (event) => {
         html: '<b>Hello world </b>'
     }
 
-    transport.sendMail(mailOptions, (error, info) => {
+    transport.sendMail(mailOptions, (error:any, info:any) => {
         if (error) {
             return false;
         } else {
@@ -33,5 +33,4 @@ export const handler: Handler = async (event) => {
             return true;
         };
     });
-
 }

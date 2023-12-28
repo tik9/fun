@@ -1,7 +1,7 @@
 
 import { Handler } from "@netlify/functions";
 import { promises as fs } from "fs";
-import { resolve } from "path";
+import { resolve } from 'path'
 import { find } from './mongo'
 
 export const handler: Handler = async (event) => {
