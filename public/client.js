@@ -3,7 +3,7 @@ var github = 'github.com'
 var tiko = "Tiko's"
 
 document.title += tiko;
-document.body.style.paddingTop = '90px'
+document.body.style.paddingTop = '30px'
 
 container.style.paddingBottom = '80px'
 
@@ -43,7 +43,7 @@ function locale_date(date) {
 function create_icon() {
     var icon = document.createElement("link");
     icon.rel = 'icon'
-    icon.href = github + "github.png";
+    icon.href = 'https://' + github + "/github.png";
     document.head.appendChild(icon);
 }
 

@@ -4,34 +4,20 @@ import { resolve } from 'path'
 import { find } from './mongo'
 
 
-// [[headers]]
-// for = "/*"
-// [headers.values]
-//     Access - Control - Allow - Origin = "*"
-
 export default async (req: Request) => {
     var res
-    var req_json = await req.json()
-    if (Object.keys(req_json).length === 0) {
-        if ((new URL(req.url).searchParams).get('save'))
-            res = await saveToFile()
-        else {
-            res = JSON.parse(await fs.readFile(resolve('public', 'json/website.json'), 'utf-8'))
-            sortTable(res, 'cat', 'text')
-            console.log(1, res, 2)
-        }
-    } else {
-        if (await req_json.type === 'sortList')
-            sortList(req_json.val)
 
-        else
-            // @ts-ignore
-            sortTable(req_json.val, req_json.sort1!, req_json.sort2!)
-        res = req_json.val
-
-        // headers: { 'access-control-allow-origin': '*' },
+    if ((new URL(req.url).searchParams).get('save'))
+        res = await saveToFile()
+    else {
+        res = JSON.parse(await fs.readFile(resolve('public', 'json/website.json'), 'utf-8'))
+        sortTable(res, 'cat', 'text')
+        console.log(1, res, 2)
     }
-    return new Response(JSON.stringify(res), { headers: { 'access-control-allow-origin': '*' } })
+
+    return new Response(JSON.stringify(res), {
+        headers: { 'access-control-allow-origin': '*' }
+    })
 }
 
 export async function saveToFile() {

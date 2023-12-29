@@ -9,7 +9,7 @@ async function index() {
     // commits();
     // convert();
     // issues();
-    // posts();
+    posts();
     repos()
     // api();
     // sys_client()

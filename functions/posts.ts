@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { truncate } from './utils'
 
-export async function handler() {
+export default async () => {
     let arr: Array<{ score: number, text: string, url: string, date: string }> = []
     for (var elem of ['posts', 'comments']) {
         var res = (await axios.get('https://api.stackexchange.com/2.2/users/1705829/' + elem + '?site=stackoverflow&sort=votes&filter=withbody')).data.items.slice(0, 2);
@@ -22,9 +22,6 @@ export async function handler() {
     arr = arr.flat()
     arr.sort((a, b) => a.score < b.score ? 1 : a.score > b.score ? -1 : 0)
 
-    return {
-        headers: { 'access-control-allow-origin': '*' },
-        body: JSON.stringify(arr),
-        statusCode: 200
-    }
+    return new Response(
+        JSON.stringify(arr), {})
 }

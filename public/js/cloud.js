@@ -1,4 +1,18 @@
 
+async function posts() {
+  var posts = arguments.callee.name
+  var res = await (await fetch(net_fun + posts)).json()
+  // console.log(res)
+  var div = document.createElement('div')
+
+  div.id = posts
+  var head = document.createElement('h5')
+  head.classList.add('mt-4', 'mb-3')
+  head.textContent = posts[0].toUpperCase() + posts.slice(1)
+  document.getElementById('cloud').append(head, div)
+  div.append(table(res, posts))
+}
+
 async function repos() {
   var repos = arguments.callee.name
   var res = await (await fetch(net_fun + repos)).json()
@@ -8,9 +22,9 @@ async function repos() {
   div.id = repos
   var head = document.createElement('h5')
   head.classList.add('mt-4', 'mb-3')
-  head.textContent = repos[0].toUpperCase() + repos.slice(1).replace(/_/g, ' ')
+  head.textContent = repos[0].toUpperCase() + repos.slice(1)
   document.getElementById('cloud').append(head, div)
-  div.append(table(res, 'repos'))
+  div.append(table(res, repos))
 }
 
 async function accounts() {
@@ -26,9 +40,9 @@ async function accounts() {
   for (var elem of cloud_arr) {
     var res = await (await fetch(elem.url)).json()
     let name = elem.name
-    if (name == 'stack') {
+    if (name == 'stack')
       res = Object.values(res.items)[0]
-    }
+
     obj[name] = res[elem.link]
   }
 
@@ -78,10 +92,3 @@ async function issues() {
   }
   helper(arguments.callee.name).append(table(arr, 'issues'))
 }
-
-async function posts() {
-  var posts = arguments.callee.name
-  var res = await (await fetch(net_fun + posts)).json()
-  helper(posts).append(table(res, posts))
-}
-
