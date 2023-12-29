@@ -1,42 +1,54 @@
-<div id=container class="container">
-  <div id="topnav"></div>
-  <h2 style="font-size: 5rem;
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+  <div id=container class="container">
+    <div id="topnav"></div>
+    <h2 style="font-size: 5rem;
   color:green;
   filter: url(#shadow);">Tiko's</h2>
-  <svg xmlns="http://www.w3.org/2000/svg" class="filter">
-    <defs>
-      <filter id="shadow">
-        <feTurbulence type="turbulence" baseFrequency="0.2" numOctaves="100" result="turbulence" />
-        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"
-          result="grainyShadow1" />
-        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"
-          result="grainyShadow2" />
-        <feColorMatrix in="grainyShadow1" result="colorCorrected1" type="matrix" values="1 0 0 -1 0
+    <svg xmlns="http://www.w3.org/2000/svg" class="filter">
+      <defs>
+        <filter id="shadow">
+          <feTurbulence type="turbulence" baseFrequency="0.2" numOctaves="100" result="turbulence" />
+          <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"
+            result="grainyShadow1" />
+          <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"
+            result="grainyShadow2" />
+          <feColorMatrix in="grainyShadow1" result="colorCorrected1" type="matrix" values="1 0 0 -1 0
                      0 0 0 -1 0
                      0 0 0 -1 0
                      0 0 0 1 0" />
-        <feColorMatrix in="grainyShadow2" result="colorCorrected2" type="matrix" values="1 0 0 -1 0
+          <feColorMatrix in="grainyShadow2" result="colorCorrected2" type="matrix" values="1 0 0 -1 0
         0 0 0 -1 0
         0 0 0 -1 0
         0 0 0 1 0" />
-        <feMerge>
-          <feMergeNode in="colorCorrected1" />
-          <feMergeNode in="colorCorrected2" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-  </svg>
+          <feMerge>
+            <feMergeNode in="colorCorrected1" />
+            <feMergeNode in="colorCorrected2" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+    </svg>
 
-  <h4>About my programming in Nodejs</h4>
-  <div id="cloud"></div>
-  <div id="bottomnav"></div>
-</div>
-
+    <h4>About my programming in Nodejs</h4>
+    <div id="cloud"></div>
+    <div id="bottomnav"></div>
+  </div>
+</body>
+<script src="js/cloud.js"></script>
+<script>
+</script>
 <link href="css/style.css" rel="stylesheet">
 <link href="css/jstable.css" rel="stylesheet">
-<script src="js/cloud.js"></script>
 <script src="table.js"></script>
 <script src="index.js"></script>
 <script src="client.js"></script>
 <script src="jstable.js"></script>
+
+</html>

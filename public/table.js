@@ -54,23 +54,16 @@ function table(arr = [], src) {
                 else
                     td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
-            else if (src == 'joke') td.append(aref(elem, elem.value))
 
             else if (src == 'repos') {
-                if (['date'].includes(elem2))
-                    td.innerHTML = (elem2 == 'date') ? locale_date(val) : val
+                if ('pushedAt' === elem2)
+                    td.innerHTML = locale_date(val)
 
-                else if (elem2 == 'repo') {
-                    var ahref = document.createElement('a')
-                    ahref.href = git + elem.repo
-                    ahref.textContent = val
-                    td.append(ahref)
-                }
                 else if (elem2 == 'description')
                     td.append(aref(elem, val))
+                else td.innerHTML = val
             }
 
-            else td.innerHTML = val
             tr.appendChild(td);
         }
         tbody.appendChild(tr)

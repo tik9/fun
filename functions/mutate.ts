@@ -5,14 +5,14 @@ import { getHelp, getOneRepo } from './graphquery'
 //@ts-ignore
 export var handler: Handler = async () => {
     // var query = create('apo')
-    var query = await update('apo')
+    var query = await update('')
     //@ts-ignore
     var res = await getHelp(query)
     return { statusCode: 200, body: res }
 }
 
 async function update(repo: string) {
-    var description = 'Apollo and React'
+    var description = 'hw'
     var url = ''
     var res = await getOneRepo(repo)
     //@ts-ignore

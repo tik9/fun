@@ -2,7 +2,6 @@
 async function repos() {
   var repos = arguments.callee.name
   var res = await (await fetch(net_fun + repos)).json()
-  res = res.data.repositoryOwner.repositories.nodes
   // console.log(res)
   var div = document.createElement('div')
 

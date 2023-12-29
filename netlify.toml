@@ -2,6 +2,3 @@
 [dev]
   port=80
   autoLaunch = false
-
-[functions]
-included_files = ["public/json/**"]

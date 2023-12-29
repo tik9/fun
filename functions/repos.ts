@@ -1,28 +1,26 @@
 
-import { Handler } from '@netlify/functions'
 import { getHelp } from './graphquery'
+import { promises as fs } from 'fs'
+import { resolve } from 'path'
 
-export const handler: Handler = async () => {
+export default async (req: Request) => {
+
     var res
-    // res = await first()
-    res = await allRepos()
+
+    res = await fs.readFile(resolve('public', 'json/repos.json'), 'utf-8')
+
+    if (new URL(req.url).searchParams.get('save'))
+        fs.writeFile(resolve('public', 'json/repos.json'), res)
     //@ts-ignore
     // console.log(res)
-    return { statusCode: 200, body: JSON.stringify(res) }
-}
-
-async function allRepos() {
-    var query = `query{repositoryOwner(login: "tik9") { repositories (orderBy: { field: NAME, direction: ASC },first:5) { nodes { url description}}}}`
-    var res = await getHelp(query)
-    return res
+    return new Response(res)
 }
 
 async function first() {
-    var query = `query{repositoryOwner(login: "tik9") { repositories (orderBy: { field: PUSHED_AT, direction: DESC }, first: 2) { nodes { id name description homepageUrl pushedAt }}}}`
+    var query = `query{repositoryOwner(login: "tik9") { repositories (orderBy: { field: PUSHED_AT, direction: DESC }, first: 3) { nodes { name description homepageUrl pushedAt }}}}`
 
     //@ts-ignore
     var res = (await getHelp(query)).data.repositoryOwner.repositories.nodes
     //@ts-ignore
-    res = res.map(({ homepageUrl: url, pushedAt, ...rest }: { name: string, description: string, homepageUrl: string, pushedAt: string }) => ({ pushedAt: pushedAt.substring(0, 10), url, ...rest }))
-    return res
+    return res.map(({ homepageUrl: url, pushedAt, ...rest }: { name: string, description: string, homepageUrl: string, pushedAt: string }) => ({ pushedAt: pushedAt.substring(0, 10), url, ...rest }))
 }

@@ -1,9 +1,5 @@
 
-'use strict'
-
-// var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/'
-var github = 'https://github.com/'
-var net_fun = '/.netlify/functions/'
+var github = 'github.com'
 var tiko = "Tiko's"
 
 document.title += tiko;
@@ -15,6 +11,35 @@ create_icon()
 includes()
 nav()
 
+var alias_cloud = 'social_cloud'
+var dateformat = /^\d{4}-\d{2}-\d{2}/
+
+
+function list(arr, name) {
+    var ul = document.createElement('ul')
+    for (var elem in arr) {
+        var val = arr[elem]
+        elem = elem[0].toUpperCase() + elem.slice(1)
+        val = dateformat.test(val) ? locale_date(val) : val
+
+        var li = document.createElement('li')
+
+        if (elem === 'Location') li = li_aref(elem, val)
+        else if (name === 'accounts') li = li_aref(elem, val)
+        else
+            li.append(document.createTextNode(`${elem}: ${val}`))
+        ul.appendChild(li)
+    }
+    return ul
+}
+
+function locale_date(date) {
+    var today = new Date()
+    var dateformat = { day: '2-digit', month: '2-digit', year: 'numeric' }
+
+    return date == today.toISOString().substring(0, 10) ? 'today' : new Date(today.setDate(today.getDate() - 1)).toISOString().substring(0, 10) == date ? 'yesterday' : new Date(date).toLocaleDateString('de-de', dateformat)
+}
+
 function create_icon() {
     var icon = document.createElement("link");
     icon.rel = 'icon'
@@ -22,18 +47,12 @@ function create_icon() {
     document.head.appendChild(icon);
 }
 
-async function css_js(type) {
-    var res = await (await fetch(net_fun + 'files?dir=' + type)).json()
-    res = res.object.entries.map(str => type + '/' + str.name)
-    console.log(res)
-    return res
-}
 
 async function includes() {
     var link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css'
-    document.body.appendChild(link);
+    document.head.appendChild(link);
 }
 
 function nav() {
@@ -52,8 +71,8 @@ function nav() {
         bottomnav.append(aref)
     }
     var aref = document.createElement("a");
-    aref.href = github + 'tik9/fun'
-    aref.textContent = 'github'
+    aref.href = 'https://' + github + '/tik9/fun'
+    aref.textContent = github
     aref.classList.add('nav')
     bottomnav.append(aref)
 }

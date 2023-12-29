@@ -1,35 +1,37 @@
 
-import { Handler } from "@netlify/functions";
 import { promises as fs } from "fs";
 import { resolve } from 'path'
 import { find } from './mongo'
 
-export const handler: Handler = async (event) => {
+
+// [[headers]]
+// for = "/*"
+// [headers.values]
+//     Access - Control - Allow - Origin = "*"
+
+export default async (req: Request) => {
     var res
-
-    if (typeof (event.body!) === 'undefined' || event.body! === '{}' || event.body! === '') {
-        var params = event.queryStringParameters!
-        if (params.save)
+    var req_json = await req.json()
+    if (Object.keys(req_json).length === 0) {
+        if ((new URL(req.url).searchParams).get('save'))
             res = await saveToFile()
-        else
+        else {
             res = JSON.parse(await fs.readFile(resolve('public', 'json/website.json'), 'utf-8'))
-    }
-    else if (JSON.parse(event.body!).type === 'sortList') {
-        let jsbody = JSON.parse(event.body!)
-        sortList(jsbody.val)
-        res = jsbody.val
-    }
-    else if (JSON.parse(event.body!).type === 'sortTable') {
-        let jsbody = JSON.parse(event.body!)
-        //@ts-ignore
-        sortTable(jsbody.val, jsbody.sort1!, jsbody.sort2!)
-        res = jsbody.val
-    }
+            sortTable(res, 'cat', 'text')
+            console.log(1, res, 2)
+        }
+    } else {
+        if (await req_json.type === 'sortList')
+            sortList(req_json.val)
 
-    return {
-        headers: { 'access-control-allow-origin': '*' },
-        body: JSON.stringify(res), statusCode: 200
+        else
+            // @ts-ignore
+            sortTable(req_json.val, req_json.sort1!, req_json.sort2!)
+        res = req_json.val
+
+        // headers: { 'access-control-allow-origin': '*' },
     }
+    return new Response(JSON.stringify(res), { headers: { 'access-control-allow-origin': '*' } })
 }
 
 export async function saveToFile() {

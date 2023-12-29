@@ -1,5 +1,6 @@
 
-import { Handler } from '@netlify/functions'
+import { Config, Context } from "@netlify/functions";
+
 import { MongoClient } from 'mongodb'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
@@ -8,23 +9,18 @@ var dbWeb = "website"
 
 function main() { return new MongoClient(process.env.mongo!).connect() }
 
-export const handler: Handler = async (event) => {
+export default async (req: Request, context: Context) => {
+
     var res
 
-    if (typeof (event.body) == 'undefined' || event.body == '{}' || event.body == '') {
+    var params = new URL(req.url).searchParams
+    var coll = params.get('coll')
+    if (!coll) coll = 'test'
 
-        var params = event.queryStringParameters!
-        var coll = params.coll!
-        if (!coll) coll = 'test'
-        if (params.op == 'find' || typeof (params.op) == 'undefined') res = await find(coll, params.key)
-        else if (params.op == 'count') res = await count(coll)
-        if (params.log) console.log(1, res)
-    } else {
-        var body = JSON.parse(event.body!);
-        coll = body.coll
-        var val = body.val
-        res = await insert_one(coll, val)
-    }
+    else if (params.get('op') == 'count') res = await count(coll)
+    else res = await find(coll)
+    if (params.get('log')) console.log(1, res)
+
 
     // create_coll(coll)
     // res = await find(coll)
@@ -46,12 +42,13 @@ export const handler: Handler = async (event) => {
     // update_one('data', 'text', 'Students towards Bachelor degree and technical employees', 'text', 'Students in a Bachelor degree and employees preparing for a math exam')
     // update_many(coll, { cat: 'What famous people said' }, 'cat', 'What famous people said about learning')
 
-    return {
-        headers: {
-            'access-control-allow-origin': '*',
-        },
-        statusCode: 200, body: JSON.stringify(res)
-    }
+    // return {
+    //     headers: {
+    //         'access-control-allow-origin': '*',
+    //     },
+    //     statusCode: 200, body: JSON.stringify(res)
+    // }
+    return new Response(JSON.stringify(res))
 }
 
 async function count(coll: string) { return (await main()).db(dbWeb).collection(coll).countDocuments() }
