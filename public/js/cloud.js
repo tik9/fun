@@ -11,6 +11,7 @@ async function posts() {
   head.textContent = posts[0].toUpperCase() + posts.slice(1)
   document.getElementById('cloud').append(head, div)
   div.append(table(res, posts))
+  // console.log(res)
 }
 
 async function repos() {

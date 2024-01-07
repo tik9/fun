@@ -1,4 +1,3 @@
-
 function aref(elem, val) {
     var aref = document.createElement('a')
     aref.textContent = dateformat.test(val) ? locale_date(val) : val
@@ -6,7 +5,8 @@ function aref(elem, val) {
     return aref
 }
 
-function table(arr = [], src) {
+function table(arr, src) {
+    
     var table_ = document.createElement('table')
     var thead = document.createElement('thead')
     var tr = document.createElement('tr')
@@ -26,25 +26,15 @@ function table(arr = [], src) {
     table_.appendChild(thead);
     var tbody = document.createElement('tbody');
     for (var elem of arr) {
+        // console.log(2, elem)
         var tr = document.createElement('tr')
 
         for (var elem2 of columns) {
             var val = elem[elem2]
             var td = document.createElement('td');
 
-            if (src == 'index') {
-                if (elem2 == 'title') {
-                    var ahref = document.createElement('a')
-                    ahref.href = '#' + elem.name
-                    ahref.textContent = val
-                    td.append(ahref)
-                }
-                else if (elem2 != 'name') td.innerHTML = val
-            }
-            else if (src == 'apis') {
-                if (elem2 == 'description') td.append(aref({ url: '#' + elem.api }, val))
-            }
-            else if (['commits', 'posts'].includes(src)) {
+
+            if (['commits', 'posts'].includes(src)) {
                 if (elem2 == 'date') td.append(aref(elem, val))
                 else td.innerHTML = val
             }
@@ -72,4 +62,3 @@ function table(arr = [], src) {
     table_.classList.add('table', 'table-bordered', 'table-striped', 'mt-4', 'mb-4')
     return table_;
 }
-table()
