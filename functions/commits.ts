@@ -1,14 +1,25 @@
 
-import { Handler } from '@netlify/functions';
-import { getHelp } from './graphquery';
+import { getHelp } from './graph';
+import { promises as fs } from 'fs'
+import { resolve } from 'path'
 
+var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
+var json = resolve('public', `json/${script}.json`)
 
-export var handler: Handler = async (event) => {
-  var repo = event.queryStringParameters!.repo
-  // var res = await commits(repo!)
-  // }
+export default async (req: Request) => {
+  var repo
 
-  // async function commits(repo: string) {
+  // repo = new URL(req.url).searchParams.get('repo')
+
+  if (new URL(req.url).searchParams.get('save')) {
+    getCommits()
+  }
+  return new Response(await fs.readFile(json, 'utf-8'))
+
+}
+
+async function getCommits() {
+  var repo = 'fun'
   var query = `query {
     repository(owner: "tik9", name: "${repo}") {
       refs(refPrefix: "refs/heads/", orderBy: {direction: DESC, field: TAG_COMMIT_DATE}, first: 2) {
@@ -38,6 +49,8 @@ export var handler: Handler = async (event) => {
     }
   }`
   //@ts-ignore
-  var res = (await getHelp(query)).data.repository.refs.edges[0].node.target.history.edges
-  return { statusCode: 200, body: JSON.stringify(res) };
+  var res = await getHelp(query)
+
+  res = res.data.repository.refs.edges[0].node.target.history.edges
+  fs.writeFile(json, JSON.stringify(res))
 }

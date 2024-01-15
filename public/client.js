@@ -49,10 +49,15 @@ function create_icon() {
 
 
 async function includes() {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css'
-    document.head.appendChild(link);
+    var links = ['https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css', "https://fonts.googleapis.com/css?family=Roboto", "https://fonts.googleapis.com/css?family=Yellowtail"]
+
+    for (let elem of links) {
+
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = elem
+        document.head.appendChild(link);
+    }
 }
 
 function nav() {

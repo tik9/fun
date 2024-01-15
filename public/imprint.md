@@ -3,11 +3,16 @@
 <div id=topnav>
         <a href="/" class="active">Home</a>
 </div>
-<div id=imprint data-test=imprint>
+<div id=imprint>
 
-#### Declaration of Data Protection Policy
+  <div style='padding-top:50px'></div>
 
-General info
+### Imprint Timo's
+
+<div style='padding-top:30px'></div>
+
+
+#### General info
 
 The following information will present an overview of what happens with your personal data while visiting my
 page.

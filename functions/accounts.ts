@@ -1,5 +1,4 @@
 
-import axios from 'axios'
 
 export var handler = async () => {
     var cloud_arr = [
@@ -8,7 +7,7 @@ export var handler = async () => {
     ]
     var obj: Object = {}
     for (var elem of cloud_arr) {
-        var res = (await axios.get(elem.url)).data
+        var res = await (await fetch(elem.url)).json()
         let name = elem.name
         if (name == 'stack') res = res.items[0]
         obj[name as keyof Object] = res[elem.link]

@@ -6,7 +6,7 @@ function aref(elem, val) {
 }
 
 function table(arr, src) {
-    
+
     var table_ = document.createElement('table')
     var thead = document.createElement('thead')
     var tr = document.createElement('tr')

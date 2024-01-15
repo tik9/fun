@@ -1,4 +1,31 @@
 
+async function commits() {
+  var commits = arguments.callee.name
+  var arr = await (await fetch(net_fun + commits)).json()
+  var res = []
+  for (var elem of arr) {
+    var obj = {}
+    for (var elem2 in elem.node) {
+      var val = elem.node[elem2]
+      if (elem2 == 'committedDate') {
+        val = val.slice(0, 10)
+        elem2 = 'date'
+      } else if (elem2 == 'commitUrl') elem2 = 'url'
+
+      obj[elem2] = val
+    }
+    res.push(obj)
+  }
+  var div = document.createElement('div')
+
+  div.id = commits
+  var head = document.createElement('h5')
+  head.classList.add('mt-4', 'mb-3')
+  head.textContent = commits[0].toUpperCase() + commits.slice(1)
+  document.getElementById('cloud').append(head, div)
+  div.append(table(res, commits))
+}
+
 async function posts() {
   var posts = arguments.callee.name
   var res = await (await fetch(net_fun + posts)).json()
@@ -50,25 +77,6 @@ async function accounts() {
   helper(arguments.callee.name).append(list(obj, arguments.callee.name))
 }
 
-async function commits() {
-  var commits = arguments.callee.name
-  var arr = await (await fetch(net_fun + commits + '?repo=fun')).json()
-  var res = []
-  for (var elem of arr) {
-    var obj = {}
-    for (var elem2 in elem.node) {
-      var val = elem.node[elem2]
-      if (elem2 == 'committedDate') {
-        val = val.slice(0, 10)
-        elem2 = 'date'
-      } else if (elem2 == 'commitUrl') elem2 = 'url'
-
-      obj[elem2] = val
-    }
-    res.push(obj)
-  }
-  helper(commits).append(table(res, commits))
-}
 
 async function issues() {
   var arr_field = ['updatedAt', 'title', 'body', 'url', 'state']

@@ -6,7 +6,7 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 async function index() {
     // await sleep(500)
     // accounts();
-    // commits();
+    commits();
     // convert();
     // issues();
     posts();

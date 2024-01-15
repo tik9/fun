@@ -1,5 +1,5 @@
 
-import { getHelp } from './graphquery'
+import { getHelp } from './graph'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
@@ -19,8 +19,10 @@ async function getRepos() {
 
     //@ts-ignore
     var res = (await getHelp(query)).data.repositoryOwner.repositories.nodes
+    // console.log(res)
 
-    fs.writeFile(json, res)
 
-    return res.map(({ homepageUrl: url, pushedAt, ...rest }: { name: string, description: string, homepageUrl: string, pushedAt: string }) => ({ pushedAt: pushedAt.substring(0, 10), url, ...rest }))
+    res = res.map(({ homepageUrl: url, pushedAt, ...rest }: { name: string, description: string, homepageUrl: string, pushedAt: string }) => ({ pushedAt: pushedAt.substring(0, 10), url, ...rest }))
+    
+    fs.writeFile(json, JSON.stringify(res))
 }

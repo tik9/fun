@@ -1,9 +1,8 @@
 
-import { getHelp } from "./graphquery";
-import { Handler } from "@netlify/functions";
+import { getHelp } from "./graph";
 
-export const handler: Handler = async (event) => {
-  var repo = event.queryStringParameters!.repo
+export default async (req: Request) => {
+  var repo = 'fun'
   var query = `
   query {
     repository(owner:"tik9", name:"${repo}") {

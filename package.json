@@ -3,10 +3,10 @@
   "dependencies": {
     "@netlify/functions": "^2.4.1",
     "@types/node": "^20.10.5",
-    "axios": "^1.3.3",
     "mongodb": "",
     "node-fetch": "^3.3.0",
-    "node-ipinfo": "^3.5.1"
+    "node-ipinfo": "^3.5.1",
+    "puppeteer-core": "^21.7.0"
   },
   "name": "netlify",
   "description": "serverless functions",

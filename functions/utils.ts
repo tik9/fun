@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import { resolve } from 'path'
 import { find } from './mongo'
 
+var file = resolve('public', 'json/website.json')
 
 export default async (req: Request) => {
     var res
@@ -10,9 +11,10 @@ export default async (req: Request) => {
     if ((new URL(req.url).searchParams).get('save'))
         res = await saveToFile()
     else {
-        res = JSON.parse(await fs.readFile(resolve('public', 'json/website.json'), 'utf-8'))
+        res = JSON.parse(await fs.readFile(file, 'utf-8'))
         sortTable(res, 'cat', 'text')
-        console.log(1, res, 2)
+        if ((new URL(req.url).searchParams).get('log'))
+            console.log(res)
     }
 
     return new Response(JSON.stringify(res), {
@@ -22,14 +24,12 @@ export default async (req: Request) => {
 
 export async function saveToFile() {
     var res = JSON.stringify(await find('data'))
-    fs.writeFile(resolve('public', 'json/website.json'), res, 'utf-8')
+    fs.writeFile(file, res, 'utf-8')
     return res
 }
 
 export function datetime(dateobj: Date) {
-    var dat = dateobj.toLocaleDateString('de-de')
-    var time = dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return dat + ' ' + time
+    return dateobj.toLocaleDateString('de-de') + ' ' + dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
 export function format_bytes(bytes: number) {

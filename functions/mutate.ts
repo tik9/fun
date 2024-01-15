@@ -1,6 +1,6 @@
 
 import { Handler } from '@netlify/functions'
-import { getHelp, getOneRepo } from './graphquery'
+import { getHelp, getOneRepo } from './graph'
 
 //@ts-ignore
 export var handler: Handler = async () => {

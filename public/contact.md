@@ -3,8 +3,10 @@
         <a href="/" class="active">Home</a>
     </div>
     <div id="contact">
-    
-  ### Contact  
+
+  <div style='padding-top:50px'></div>
+  
+  ### Contact Timo  
     - email: timo "at" tik1.net
     - Phone: +49 1573 95 98 220
     
