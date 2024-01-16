@@ -29,7 +29,6 @@ async function commits() {
 async function posts() {
   var posts = arguments.callee.name
   var res = await (await fetch(net_fun + posts)).json()
-  // console.log(res)
   var div = document.createElement('div')
 
   div.id = posts
@@ -38,7 +37,6 @@ async function posts() {
   head.textContent = posts[0].toUpperCase() + posts.slice(1)
   document.getElementById('cloud').append(head, div)
   div.append(table(res, posts))
-  // console.log(res)
 }
 
 async function repos() {

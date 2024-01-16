@@ -1,62 +1,22 @@
-<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-        <style>
-/* From extension vscode.github */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+<!-- <script>console.log(location.hostname)</script> -->
 
-.vscode-dark img[src$=\#gh-light-mode-only],
-.vscode-light img[src$=\#gh-dark-mode-only] {
-	display: none;
-}
-
-</style>
-        
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
-<style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
-                font-size: 14px;
-                line-height: 1.6;
-            }
-        </style>
-        <style>
-.task-list-item {
-    list-style-type: none;
-}
-
-.task-list-item-checkbox {
-    margin-left: -20px;
-    vertical-align: middle;
-    pointer-events: none;
-}
-</style>
-        
-    </head>
-    <body class="vscode-body vscode-light">
-        <div id=container class="container">
+<div id=container class="container">
     <div class="nav" id="topnav">
         <a href="/" class="active">Home</a>
     </div>
-    <div id="contact">
-  <div style='padding-top:50px'></div>
-<h3 id="contact-timo">Contact Timo</h3>
-<pre><code>- email: timo &quot;at&quot; tik1.net
-- Phone: +49 1573 95 98 220
-</code></pre>
+    <div style='padding-top:50px'></div>
+    <div id="content"></div>
+    <div id="bottomnav"></div>
 </div>
-<div id="bottomnav"></div>
-</div>
-<script src="client.js"></script>
-<link href="css/style.css" rel="stylesheet">
 
-        
-        
-    </body>
-    </html>
+<script src="client.js"></script>
+<script type="module">
+    import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+    test()
+    async function test() {
+        var res = await (await (fetch(net_fun + 'utils'))).json();
+        res = (res.filter(val => val.key === 'contact'))[0].val;
+        document.getElementById('content').innerHTML = marked.parse(res);
+    }
+</script>
+<link href="css/style.css" rel="stylesheet">

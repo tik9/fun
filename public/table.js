@@ -13,7 +13,7 @@ function table(arr, src) {
     thead.appendChild(tr)
     var columns = []
     for (var key in arr[0]) {
-        if (['_id', '__v', 'api', 'category', 'post_id', 'url'].includes(key)) continue
+        if (['_id', '__v', 'api', 'category', 'name', 'post_id', 'url'].includes(key)) continue
         if (arr[0].hasOwnProperty(key) && !columns.includes(key)) {
             columns.push(key);
             if (key == 'value') continue
@@ -35,22 +35,23 @@ function table(arr, src) {
 
 
             if (['commits', 'posts'].includes(src)) {
-                if (elem2 == 'date') td.append(aref(elem, val))
+                if (elem2 === 'date') td.append(aref(elem, val))
                 else td.innerHTML = val
             }
 
-            else if (src == 'issues') {
-                if (elem2 == 'title') td.append(aref(elem, val))
+            else if (src === 'issues') {
+                if (elem2 === 'title') td.append(aref(elem, val))
                 else
                     td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
 
-            else if (src == 'repos') {
+            else if (src === 'repos') {
                 if ('pushedAt' === elem2)
                     td.innerHTML = locale_date(val)
 
-                else if (elem2 == 'description')
+                else if (elem2 === 'description')
                     td.append(aref(elem, val))
+                else if (elem2 === 'name') continue
                 else td.innerHTML = val
             }
 

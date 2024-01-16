@@ -1,4 +1,3 @@
-var net_fun = '/.netlify/functions/'
 
 index()
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }

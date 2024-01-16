@@ -1,4 +1,5 @@
 
+var net_fun = '/.netlify/functions/'
 var github = 'github.com'
 var tiko = "Tiko's"
 
