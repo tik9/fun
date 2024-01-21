@@ -1,22 +1,17 @@
-<head>
+<html>
 
-    <style>
-        body {
-            padding-top: 60px;
-        }
-    </style>
+<head>
+    <meta charset="utf-8" />
+    <title>Marked in the browser</title>
 </head>
 
-<div class="container" id="container">
-</div>
+<body>
+    <div id="content"></div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.getElementById('content').innerHTML =
+            marked.parse('# browser\nby **marked**.');
+    </script>
+</body>
 
-<script>
-    function indexfun() {
-        var div = document.createElement('div')
-        div.id = 'convert'
-        document.getElementById('container').append(div)
-        return div
-    }
-</script>
-<script src="js/convert.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css">
+</html>

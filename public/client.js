@@ -3,18 +3,33 @@ var net_fun = '/.netlify/functions/'
 var github = 'github.com'
 var tiko = "Tiko's"
 
-document.title += tiko;
-document.body.style.paddingTop = '30px'
-
-container.style.paddingBottom = '80px'
+let topnav = document.createElement('div')
 
 create_icon()
 includes()
-nav()
+bottom_nav()
+head()
 
 var alias_cloud = 'social_cloud'
 var dateformat = /^\d{4}-\d{2}-\d{2}/
 
+
+function head() {
+    document.title += tiko;
+
+    let container = document.getElementById('container')
+    container.style.paddingBottom = '80px'
+
+    topnav.id = 'topnav'
+    topnav.classList.add('fixed-top', 'bg-dark')
+
+    let head = document.createElement('h4')
+    topnav.append(head)
+    head.textContent = 'Tiko'
+    head.classList.add('mt-2', 'mb-2')
+    head.style.color = 'white'
+    document.body.prepend(topnav, container)
+}
 
 function list(arr, name) {
     var ul = document.createElement('ul')
@@ -50,7 +65,7 @@ function create_icon() {
 
 
 async function includes() {
-    var links = ['https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css', "https://fonts.googleapis.com/css?family=Roboto", "https://fonts.googleapis.com/css?family=Yellowtail"]
+    var links = ['https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css', "https://fonts.googleapis.com/css?family=Roboto", "https://fonts.googleapis.com/css?family=Yellowtail"]
 
     for (let elem of links) {
 
@@ -61,24 +76,15 @@ async function includes() {
     }
 }
 
-function nav() {
-    topnav.classList.add('fixed-top', 'bg-dark')
-    var aref = document.createElement("a");
+function bottom_nav() {
     bottomnav.classList.add('fixed-bottom', 'bg-dark')
-    aref.textContent = tiko;
-    aref.href = '/'
-    aref.classList.add('active', 'nav')
-    bottomnav.append(aref)
-    for (var elem of ["contact", 'imprint']) {
+    for (var elem of ['index', "contact", 'imprint']) {
         var aref = document.createElement("a");
         aref.href = `${elem}.html`;
         aref.textContent = elem[0].toUpperCase() + elem.slice(1)
-        aref.classList.add('nav')
         bottomnav.append(aref)
+        aref.id = elem
     }
-    var aref = document.createElement("a");
-    aref.href = 'https://' + github + '/tik9/fun'
-    aref.textContent = github
-    aref.classList.add('nav')
-    bottomnav.append(aref)
+    const element = document.getElementById(window.location.pathname.split('/').pop().replace('.html', ''));
+    if (element) element.classList.add('active');
 }

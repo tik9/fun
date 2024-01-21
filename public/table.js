@@ -26,7 +26,6 @@ function table(arr, src) {
     table_.appendChild(thead);
     var tbody = document.createElement('tbody');
     for (var elem of arr) {
-        // console.log(2, elem)
         var tr = document.createElement('tr')
 
         for (var elem2 of columns) {

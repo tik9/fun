@@ -1,13 +1,11 @@
 
-import { Handler } from '@netlify/functions'
-import { getHelp, getOneRepo } from './graph'
+import { getGhGraph, getOneRepo } from './graph.mjs'
 
-//@ts-ignore
-export var handler: Handler = async () => {
+export default async () => {
     // var query = create('apo')
     var query = await update('')
     //@ts-ignore
-    var res = await getHelp(query)
+    var res = await getGhGraph(query)
     return { statusCode: 200, body: res }
 }
 

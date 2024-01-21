@@ -1,5 +1,5 @@
 
-import { getHelp } from "./graph";
+import { getGhGraph } from "./graph.mjs";
 
 export default async (req: Request) => {
   var repo = 'fun'
@@ -21,7 +21,7 @@ export default async (req: Request) => {
     }
   }`;
   //@ts-ignore
-  var res = (await getHelp(query)).data.repository.issues.edges
+  var res = (await getGhGraph(query)).data.repository.issues.edges
   // console.log(res)
   return { statusCode: 200, body: JSON.stringify(res) }
 }

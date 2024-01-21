@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import { resolve } from 'path';
 
-import { truncate } from './utils'
+import { truncate } from './utils.mjs'
 
 var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
 var json = resolve('public', `json/${script}.json`)

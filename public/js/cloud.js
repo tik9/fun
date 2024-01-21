@@ -1,4 +1,21 @@
 
+async function repos() {
+  let repos = arguments.callee.name
+  var arr = await (await fetch(net_fun + graph)).json()
+  let res = []
+  for (let elem of arr) {
+    console.log(elem)
+  }
+  var div = document.createElement('div')
+
+  div.id = repos
+  var head = document.createElement('h5')
+  head.classList.add('mt-4', 'mb-3')
+  head.textContent = commits[0].toUpperCase() + commits.slice(1)
+  document.getElementById('cloud').append(head, div)
+  div.append(table(res, commits))
+}
+
 async function commits() {
   var commits = arguments.callee.name
   var arr = await (await fetch(net_fun + commits)).json()
@@ -39,7 +56,7 @@ async function posts() {
   div.append(table(res, posts))
 }
 
-async function repos() {
+async function trepos() {
   var repos = arguments.callee.name
   var res = await (await fetch(net_fun + repos)).json()
   // console.log(res)

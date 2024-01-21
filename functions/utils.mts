@@ -1,7 +1,7 @@
 
 import { promises as fs } from "fs";
 import { resolve } from 'path'
-import { find } from './mongo'
+import { find } from './mongo.mjs'
 
 var file = resolve('public', 'json/website.json')
 

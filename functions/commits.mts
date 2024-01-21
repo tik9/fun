@@ -1,5 +1,5 @@
 
-import { getHelp } from './graph';
+import { getGhGraph } from './graph.mjs';
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
@@ -7,9 +7,7 @@ var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
 var json = resolve('public', `json/${script}.json`)
 
 export default async (req: Request) => {
-  var repo
-
-  // repo = new URL(req.url).searchParams.get('repo')
+  // var repo = new URL(req.url).searchParams.get('repo')
 
   if (new URL(req.url).searchParams.get('save')) {
     getCommits()
@@ -48,9 +46,6 @@ async function getCommits() {
       }
     }
   }`
-  //@ts-ignore
-  var res = await getHelp(query)
 
-  res = res.data.repository.refs.edges[0].node.target.history.edges
-  fs.writeFile(json, JSON.stringify(res))
+  fs.writeFile(json, JSON.stringify((await getGhGraph(query)).data.repository.refs.edges[0].node.target.history.edges))
 }

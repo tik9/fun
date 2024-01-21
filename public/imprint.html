@@ -1,19 +1,14 @@
-<div class=container id=container>
-        <div id=topnav>
-                <a href="/" class="active">Home</a>
-        </div>
-        <div style='padding-top:50px'></div>
-        <div id=content></div>
-        <div id=bottomnav></div>
+<div id=container></div>
+<div id=bottomnav></div>
 </div>
 <script src=client.js></script>
-<script type="module">
-        import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
         test()
         async function test() {
                 var res = await (await (fetch(net_fun + 'utils'))).json();
                 res = (res.filter(val => val.key === 'imprint'))[0].val
-                document.getElementById('content').innerHTML = marked.parse(res);
+                document.getElementById('container').innerHTML = marked.parse(res);
         }
 </script>
 <link href="css/style.css" rel="stylesheet">

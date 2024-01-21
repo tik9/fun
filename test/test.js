@@ -1,13 +1,16 @@
+import puppeteer from 'puppeteer-core'
 
-import { join } from "path"
-import { promises as fs } from 'fs'
+(async () => {
+    console.log(1)
 
-export async function alljs() {
-    var res = await fs.readFile(join('json', '.json'))
-    for (var json of JSON.parse(res)) {
-        if (typeof json.pages != 'undefined') {
-            console.log(json.pages)
-            return
-        }
-    }
-}
+    const browser = await puppeteer.launch({
+        executablePath: '/opt/homebrew/bin/chromium',
+    });
+    const page = await browser.newPage();
+
+    await page.goto('https://github.com');
+
+    await page.screenshot({ path: 'screenshot.png' });
+    browser.close();
+    console.log(2)
+})()

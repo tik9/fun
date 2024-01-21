@@ -1,15 +1,13 @@
 
-import { Config, Context } from "@netlify/functions";
-
 import { MongoClient } from 'mongodb'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
 var dbWeb = "website"
 
-function main() { return new MongoClient(process.env.mongo!).connect() }
+function main() { return new MongoClient(process.env.mongo).connect() }
 
-export default async (req: Request, context: Context) => {
+export default async (req: Request) => {
 
     var res
 

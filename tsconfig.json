@@ -3,11 +3,11 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "sourceMap": true,
-        "module": "commonjs",
-        "outDir": "dest",
-        "rootDir": "src"
+        "module": "es6",
+        "target": "ES6",
+        "moduleResolution": "Node"
     },
     "exclude": [
         "node_modules"
-    ]
+    ],
 }
