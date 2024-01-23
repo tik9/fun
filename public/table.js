@@ -32,7 +32,6 @@ function table(arr, src) {
             var val = elem[elem2]
             var td = document.createElement('td');
 
-
             if (['commits', 'posts'].includes(src)) {
                 if (elem2 === 'date') td.append(aref(elem, val))
                 else td.innerHTML = val
@@ -44,7 +43,7 @@ function table(arr, src) {
                     td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
 
-            else if (src === 'repos') {
+            else if (src === 'trepos') {
                 if ('pushedAt' === elem2)
                     td.innerHTML = locale_date(val)
 

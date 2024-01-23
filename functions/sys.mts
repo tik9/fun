@@ -1,6 +1,6 @@
 
 import { datetime, format_bytes, sortList } from './utils.mjs'
-import { insert_one } from './mongo'
+import { insert_one } from './mongo.mjs'
 import * as os from "os"
 
 export default async () => {

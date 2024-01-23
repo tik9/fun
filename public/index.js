@@ -1,6 +1,7 @@
 
 index()
 async function index() {
+    repos()
     commits();
     // issues();
     posts();

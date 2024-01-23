@@ -15,6 +15,7 @@ export default async (req: Request) => {
 
 async function getPosts() {
     var elem = 'comments'
+    //@ts-ignore
     var res = (await (await fetch('https://api.stackexchange.com/2.2/users/1705829/' + elem + '?site=stackoverflow&filter=withbody')).json()).items.slice(0, 3)
 
     res = res.map(({ body: text, creation_date: date, post_id, score }: { body: string, creation_date: number, post_id: number, score: number }) => (

@@ -1,5 +1,7 @@
 
-import { getGhGraph, getOneRepo } from './graph.mjs'
+import { getGhGraph } from './utils.mjs'
+
+import getOneRepo from './trepos.mjs'
 
 export default async () => {
     // var query = create('apo')
@@ -12,7 +14,8 @@ export default async () => {
 async function update(repo: string) {
     var description = 'hw'
     var url = ''
-    var res = await getOneRepo(repo)
+    // var res = await getOneRepo(repo)
+
     //@ts-ignore
     var id = res.data.repository.id
     return `mutation {updateRepository(input: { clientMutationId: "tik9", description: "${description}", repositoryId: "${id}",homepageUrl:"${url}" }) { clientMutationId repository{name description } }}`

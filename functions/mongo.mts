@@ -5,6 +5,7 @@ import { resolve } from 'path'
 
 var dbWeb = "website"
 
+//@ts-ignore
 function main() { return new MongoClient(process.env.mongo).connect() }
 
 export default async (req: Request) => {

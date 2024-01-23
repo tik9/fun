@@ -22,6 +22,10 @@ export default async (req: Request) => {
     })
 }
 
+export async function getGhGraph(query: string, vars = {}) {
+    return await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: vars }) })).json()
+}
+
 export async function saveToFile() {
     var res = JSON.stringify(await find('data'))
     fs.writeFile(file, res, 'utf-8')

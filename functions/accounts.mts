@@ -8,7 +8,8 @@ export var handler = async () => {
     for (var elem of cloud_arr) {
         var res = await (await fetch(elem.url)).json()
         let name = elem.name
-        if (name == 'stack') res = res.items[0]
+        //@ts-ignore
+        if (name === 'stack') res = res.items[0]
         obj[name as keyof Object] = res[elem.link]
     }
     return { statusCode: 200, body: JSON.stringify(obj) }

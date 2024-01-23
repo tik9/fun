@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "dependencies": {
     "@netlify/functions": "^2.4.1",
     "@types/node": "^20.10.5",
@@ -8,19 +7,5 @@
     "node-ipinfo": "^3.5.1",
     "puppeteer-core": "^21.7.0"
   },
-  "name": "netlify",
-  "description": "serverless functions",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tik9/netlify.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tik9/netlify/issues"
-  },
-  "homepage": "https://github.com/tik9/netlify#readme",
-  "scripts": {
-    "debug": "NODE_OPTIONS=--inspect netlify dev"
-  }
+  "description": "serverless functions"
 }

@@ -1,7 +1,7 @@
 
 async function repos() {
   let repos = arguments.callee.name
-  var arr = await (await fetch(net_fun + graph)).json()
+  var arr = await (await fetch(net_fun + repos)).json()
   let res = []
   for (let elem of arr) {
     console.log(elem)
@@ -13,7 +13,7 @@ async function repos() {
   head.classList.add('mt-4', 'mb-3')
   head.textContent = commits[0].toUpperCase() + commits.slice(1)
   document.getElementById('cloud').append(head, div)
-  div.append(table(res, commits))
+  div.append(table(res, repos))
 }
 
 async function commits() {
@@ -59,7 +59,6 @@ async function posts() {
 async function trepos() {
   var repos = arguments.callee.name
   var res = await (await fetch(net_fun + repos)).json()
-  // console.log(res)
   var div = document.createElement('div')
 
   div.id = repos
