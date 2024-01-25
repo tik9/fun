@@ -1,0 +1,64 @@
+[
+    {
+        "node": {
+            "name": "freeCodeCamp",
+            "pushedAt": "2024-01-23T15:33:42Z",
+            "description": "freeCodeCamp.org's open-source codebase and curriculum. Learn to code for free.",
+            "url": "https://github.com/freeCodeCamp/freeCodeCamp",
+            "stargazers": {
+                "totalCount": 381994
+            },
+            "defaultBranchRef": {
+                "target": {
+                    "history": {
+                        "edges": [
+                            {
+                                "node": {
+                                    "committedDate": "2024-01-23T15:29:35Z",
+                                    "message": "fix: no need to listen to shift (#53330)"
+                                }
+                            },
+                            {
+                                "node": {
+                                    "committedDate": "2024-01-23T13:10:36Z",
+                                    "message": "fix(curriculum): JavaScript Decimal to Binary Converter Step 23 description (#53332)"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    {
+        "node": {
+            "name": "free-programming-books",
+            "pushedAt": "2024-01-22T03:54:14Z",
+            "description": ":books: Freely available programming books",
+            "url": "https://github.com/EbookFoundation/free-programming-books",
+            "stargazers": {
+                "totalCount": 308956
+            },
+            "defaultBranchRef": {
+                "target": {
+                    "history": {
+                        "edges": [
+                            {
+                                "node": {
+                                    "committedDate": "2024-01-22T03:54:07Z",
+                                    "message": "chore(deps): bump tj-actions/changed-files from 4..."
+                                }
+                            },
+                            {
+                                "node": {
+                                    "committedDate": "2024-01-21T19:51:54Z",
+                                    "message": "account for markdown files (#11051)"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+]

@@ -1,35 +1,39 @@
 
 import { promises as fs } from "fs";
 import { resolve } from 'path'
-import { find } from './mongo.mjs'
+import { find } from './mongo'
 
-var file = resolve('public', 'json/website.json')
+let json = resolve('public', 'json/website.json')
 
 export default async (req: Request) => {
-    var res
-
+    let res
     if ((new URL(req.url).searchParams).get('save'))
         res = await saveToFile()
-    else {
-        res = JSON.parse(await fs.readFile(file, 'utf-8'))
-        sortTable(res, 'cat', 'text')
-        if ((new URL(req.url).searchParams).get('log'))
-            console.log(res)
-    }
+    res = JSON.parse(await fs.readFile(json, 'utf-8'))
+    // sortTable(res, 'cat', 'text')
 
     return new Response(JSON.stringify(res), {
         headers: { 'access-control-allow-origin': '*' }
     })
 }
 
-export async function getGhGraph(query: string, vars = {}) {
-    return await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: vars }) })).json()
+export async function getGhGraph(query: any, jsonVars = {}) {
+    return await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: jsonVars }) })).json()
 }
 
 export async function saveToFile() {
-    var res = JSON.stringify(await find('data'))
-    fs.writeFile(file, res, 'utf-8')
-    return res
+    fs.writeFile(json, JSON.stringify(await find('data')), 'utf-8')
+}
+
+
+export function truncate(text: string, size = 100) {
+    text = text.replace(/<\/?(.*?)>/g, '');
+    if (text.length > size) {
+        let subString = text.slice(0, size);
+        // console.log({ subString, text })
+        return subString.slice(0, subString.lastIndexOf(" ")) + "..";
+    }
+    return text
 }
 
 export function datetime(dateobj: Date) {
@@ -45,18 +49,15 @@ export function format_bytes(bytes: number) {
 
 export function sortList(obj: object) {
 
-    var keys = Object.keys(obj).sort((k1, k2) => {
+    let keys = Object.keys(obj).sort((k1, k2) => {
         if (k1 < k2) return -1;
         else if (k1 > k2) return +1;
         else return 0;
     });
     let helpObj = {}
-    for (var elem of keys) {
-        //@ts-ignore
+    for (let elem of keys) {
         helpObj[elem] = obj[elem];
-        //@ts-ignore
         delete obj[elem];
-        //@ts-ignore
         obj[elem] = helpObj[elem]
     }
     return obj;
@@ -64,8 +65,7 @@ export function sortList(obj: object) {
 
 /**
  * Sorts an array of T by the specified properties of T.
- *
- * @param arr - the array to be sorted, all of the same type T
+  * @param arr - the array to be sorted, all of the same type T
  * @param sortBy - the names of the properties to sort by, in precedence order.
  */
 export function sortTable<T extends object>(arr: T[], ...sortBy: Array<sortArg<T>>) {
@@ -112,14 +112,4 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
         // console.log({ result, obj1, obj2 })
         return result
     }
-}
-
-export function truncate(text: string, size = 100) {
-    text = text.replace(/<\/?(.*?)>/g, '');
-    if (text.length > size) {
-        var subString = text.slice(0, size);
-        // console.log({ subString, text })
-        return subString.slice(0, subString.lastIndexOf(" ")) + "..";
-    }
-    return text
 }

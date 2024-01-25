@@ -1,7 +1,7 @@
+import { truncate } from './utils'
+
 import { promises as fs } from 'fs'
 import { resolve } from 'path';
-
-import { truncate } from './utils.mjs'
 
 var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
 var json = resolve('public', `json/${script}.json`)
@@ -21,7 +21,7 @@ async function getPosts() {
     res = res.map(({ body: text, creation_date: date, post_id, score }: { body: string, creation_date: number, post_id: number, score: number }) => (
         {
             date: new Date(date * 1000).toISOString().substring(0, 10),
-            text: truncate(text, 100),
+            text: truncate(text),
             url: 'https://stackoverflow.com/questions/' + post_id,
             post_id
         }))

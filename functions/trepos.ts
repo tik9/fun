@@ -1,10 +1,9 @@
 
-import { getGhGraph } from './utils.mjs'
+import { getGhGraph } from './utils'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
-var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
-var json = resolve('public', `json/${script}.json`)
+let json = resolve('public', `json/${__filename.split(__dirname + "/").pop()?.split('.')[0]}.json`)
 
 export default async (req: Request) => {
 

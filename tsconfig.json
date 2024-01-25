@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        // "module": "NodeNext",
+        // "module": "CommonJS",
         // "moduleResolution": "NodeNext",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,

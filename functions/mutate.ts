@@ -1,7 +1,5 @@
 
-import { getGhGraph } from './utils.mjs'
-
-import getOneRepo from './trepos.mjs'
+import { getGhGraph } from './utils'
 
 export default async () => {
     // var query = create('apo')

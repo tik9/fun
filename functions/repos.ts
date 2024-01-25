@@ -1,19 +1,23 @@
-import { getGhGraph } from "./utils.mjs"
+import { truncate, getGhGraph } from "./utils"
+import { resolve } from 'path'
+import { promises as fs } from 'fs'
 
-export default async (req: Request) => {
-    let { json, query } = queryRepos()
+let json = resolve('public', `json/${__filename.split(__dirname + "/").pop()?.split('.')[0]}.json`)
+let graphOrig = resolve('public', 'json', 'graphOrig.json')
+let graphFlat = resolve('public', 'json', 'graphFlat.json')
 
-    let res = await getGhGraph(query, json)
-    res = res.data.search.edges
-    for (let elem of res) console.log(elem)
-    let arr = res[0]
-    res = flattenObject(arr)
-    let stargazers = arr.node.stargazers
-    // let url_owner = res.node.owner.url
-    let branchref = arr.node.defaultBranchRef.target.history.edges
-    // let mapped = res.map(({ description, url_owner, users }: { description, url_owner, users }) => ({ users, url_owner, description }))
-    console.log(res)
-    // return new Response(JSON.stringify(res))
+export default async () => {
+    let res = JSON.parse(await fs.readFile(json, 'utf-8'))
+    // let branchref = elem.node.defaultBranchRef.target.history.edges
+
+    return new Response(JSON.stringify(res))
+}
+
+async function updateJson() {
+    let { jsonQuery, query } = queryRepos()
+    let res = (await getGhGraph(query, jsonQuery)).data.search.edges
+    res = res.map(elem => flattenObject(elem))
+    fs.writeFile(json, JSON.stringify(res))
 }
 
 export const flattenObject = (obj) => {
@@ -22,15 +26,22 @@ export const flattenObject = (obj) => {
     Object.keys(obj).forEach((key) => {
         const value = obj[key]
 
-        if (typeof value === 'object' && value !== null && !Array.isArray(value)) Object.assign(flattened, flattenObject(value))
-        else flattened[key] = value
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+            // console.log(1, value)
+            Object.assign(flattened, flattenObject(value))
+        }
+        else {
+            if (key === 'message') truncate(value)
+            flattened[key] = value
+            // console.log(2, key, value)
+        }
     })
 
     return flattened
 }
 
 function queryRepos() {
-    let json = {
+    let jsonQuery = {
         "queryString": "is:public archived:false created:<2020-01-01 pushed:>2024-01-01",
         "refOrder": {
             "direction": "DESC",
@@ -44,7 +55,7 @@ function queryRepos() {
          remaining
          resetAt
         }
-        search(query:$queryString, type:REPOSITORY, first:2){
+        search(query:$queryString, type:REPOSITORY, first:3){
          repositoryCount
          pageInfo{
           endCursor
@@ -80,7 +91,7 @@ function queryRepos() {
          }
         }
        }`
-    return { json, query }
+    return { jsonQuery, query }
 }
 
 

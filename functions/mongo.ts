@@ -2,24 +2,27 @@
 import { MongoClient } from 'mongodb'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
+import { truncate } from './utils'
 
-var dbWeb = "website"
+let dbWeb = "website"
 
-//@ts-ignore
 function main() { return new MongoClient(process.env.mongo).connect() }
 
 export default async (req: Request) => {
 
-    var res
+    let res
 
-    var params = new URL(req.url).searchParams
-    var coll = params.get('coll')
-    if (!coll) coll = 'test'
+    let params = new URL(req.url).searchParams
+    let coll = params.get('coll')
+    if (!coll) coll = 'website'
 
-    else if (params.get('op') == 'count') res = await count(coll)
-    else res = await find(coll)
-    if (params.get('log')) console.log(1, res)
+    if (params.get('op') == 'count') res = await count(coll)
+    else
+        res = await find(coll)
 
+    console.log(truncate(res))
+
+    // console.log(await list_coll())
 
     // create_coll(coll)
     // res = await find(coll)
@@ -35,7 +38,7 @@ export default async (req: Request) => {
     // remove_field(coll, searchkey, searchval, 'del')
     // remove_field_all('data', 'Clients I address')
     // remove_empty('data')
-    // rename_coll('subjects', 'data')
+    // rename_coll('data', 'website')
     // rename_field('data', 'category', 'cat')
     // truncate(coll!)
     // update_one('data', 'text', 'Students towards Bachelor degree and technical employees', 'text', 'Students in a Bachelor degree and employees preparing for a math exam')
@@ -67,7 +70,7 @@ async function index_remove(coll: string, key: string) { return (await main()).d
 
 export async function insert_one(coll: string, obj: object) {
     try {
-        var res = await (await main()).db(dbWeb).collection(coll).insertOne(obj)
+        let res = await (await main()).db(dbWeb).collection(coll).insertOne(obj)
         return res
     } catch (error) { console.log(1, error) }
 }
@@ -87,11 +90,12 @@ async function remove_field_all(coll: string, del: string) { (await main()).db(d
 
 async function remove_many(coll: string, field: string, val: string) { (await main()).db(dbWeb).collection(coll).deleteMany({ [field]: val }) }
 
+async function remove_many2(coll: string) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
+
 async function rename_coll(old: string, newcoll: string) { (await main()).db(dbWeb).collection(old).rename(newcoll) }
 
 async function rename_field(coll: string, old: string, newf: string) { (await main()).db(dbWeb).collection(coll).updateMany({}, { $rename: { [old]: newf } }) }
 
-async function truncate(coll: string) { (await main()).db(dbWeb).collection(coll).deleteMany({}); }
 
 async function update_one(coll: string, searchkey: string, searchval: string, key: string, val: string | boolean) { (await main()).db(dbWeb).collection(coll).updateOne({ [searchkey]: searchval }, { $set: { [key]: val } }) }
 

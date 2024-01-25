@@ -1,23 +1,23 @@
 
-import getGhGraph from './utils.mjs';
+import { getGhGraph } from './utils';
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
 var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
 var json = resolve('public', `json/${script}.json`)
 
-export default async (req) => {
-
+export default async (req: Request) => {
+  // console.log(1, new URL(req.url).searchParams.get('save'))
   if (new URL(req.url).searchParams.get('save'))
-    getCommits()
-
+    await getCommits()
+  // console.log(2)
   return new Response(await fs.readFile(json, 'utf-8'))
 
 }
 
 async function getCommits() {
-  var repo = 'fun'
-  var query = `query {
+  let repo = 'fun'
+  let query = `query {
     repository(owner: "tik9", name: "${repo}") {
       refs(refPrefix: "refs/heads/", orderBy: {direction: DESC, field: TAG_COMMIT_DATE}, first: 2) {
         edges {
@@ -46,6 +46,7 @@ async function getCommits() {
     }
   }`
 
-  //@ts-ignore
-  fs.writeFile(json, JSON.stringify((await getGhGraph(query)).data.repository.refs.edges[0].node.target.history.edges))
+  // console.log(12)
+  let res = await getGhGraph(query)
+  fs.writeFile(json, JSON.stringify(res.data.repository.refs.edges[0].node.target.history.edges))
 }

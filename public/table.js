@@ -13,7 +13,7 @@ function table(arr, src) {
     thead.appendChild(tr)
     var columns = []
     for (var key in arr[0]) {
-        if (['_id', '__v', 'api', 'category', 'name', 'post_id', 'url'].includes(key)) continue
+        if (['_id', '__v', 'api', 'category', 'edges', 'name', 'post_id', 'url'].includes(key)) continue
         if (arr[0].hasOwnProperty(key) && !columns.includes(key)) {
             columns.push(key);
             if (key == 'value') continue
@@ -43,13 +43,13 @@ function table(arr, src) {
                     td.innerHTML = (['created', 'updated'].includes(elem2)) ? locale_date(val) : val
             }
 
-            else if (src === 'trepos') {
+            else if (['trepos', 'repos'].includes(src)) {
                 if ('pushedAt' === elem2)
                     td.innerHTML = locale_date(val)
 
                 else if (elem2 === 'description')
                     td.append(aref(elem, val))
-                else if (elem2 === 'name') continue
+                else if ('totalCount' === elem2) td.innerHTML = `${Math.floor(val / 1000)} K`
                 else td.innerHTML = val
             }
 

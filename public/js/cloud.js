@@ -1,29 +1,26 @@
 
 async function repos() {
   let repos = arguments.callee.name
-  var arr = await (await fetch(net_fun + repos)).json()
-  let res = []
-  for (let elem of arr) {
-    console.log(elem)
-  }
-  var div = document.createElement('div')
+  let res = await (await fetch(net_fun + repos)).json()
+  // console.log(res)
+  let div = document.createElement('div')
 
   div.id = repos
-  var head = document.createElement('h5')
+  let head = document.createElement('h5')
   head.classList.add('mt-4', 'mb-3')
-  head.textContent = commits[0].toUpperCase() + commits.slice(1)
+  head.textContent = `${repos[0].toUpperCase()}${repos.slice(1)} I watch`
   document.getElementById('cloud').append(head, div)
   div.append(table(res, repos))
 }
 
 async function commits() {
-  var commits = arguments.callee.name
-  var arr = await (await fetch(net_fun + commits)).json()
-  var res = []
-  for (var elem of arr) {
-    var obj = {}
-    for (var elem2 in elem.node) {
-      var val = elem.node[elem2]
+  let commits = arguments.callee.name
+  let arr = await (await fetch(net_fun + commits)).json()
+  let res = []
+  for (let elem of arr) {
+    let obj = {}
+    for (let elem2 in elem.node) {
+      let val = elem.node[elem2]
       if (elem2 == 'committedDate') {
         val = val.slice(0, 10)
         elem2 = 'date'
@@ -33,10 +30,10 @@ async function commits() {
     }
     res.push(obj)
   }
-  var div = document.createElement('div')
+  let div = document.createElement('div')
 
   div.id = commits
-  var head = document.createElement('h5')
+  let head = document.createElement('h5')
   head.classList.add('mt-4', 'mb-3')
   head.textContent = commits[0].toUpperCase() + commits.slice(1)
   document.getElementById('cloud').append(head, div)
@@ -44,12 +41,12 @@ async function commits() {
 }
 
 async function posts() {
-  var posts = arguments.callee.name
-  var res = await (await fetch(net_fun + posts)).json()
-  var div = document.createElement('div')
+  let posts = arguments.callee.name
+  let res = await (await fetch(net_fun + posts)).json()
+  let div = document.createElement('div')
 
   div.id = posts
-  var head = document.createElement('h5')
+  let head = document.createElement('h5')
   head.classList.add('mt-4', 'mb-3')
   head.textContent = posts[0].toUpperCase() + posts.slice(1)
   document.getElementById('cloud').append(head, div)
@@ -57,20 +54,21 @@ async function posts() {
 }
 
 async function trepos() {
-  var repos = arguments.callee.name
-  var res = await (await fetch(net_fun + repos)).json()
-  var div = document.createElement('div')
+  let repos = arguments.callee.name
+  let res = await (await fetch(net_fun + repos)).json()
+  let div = document.createElement('div')
 
   div.id = repos
-  var head = document.createElement('h5')
+  let head = document.createElement('h5')
   head.classList.add('mt-4', 'mb-3')
-  head.textContent = repos[0].toUpperCase() + repos.slice(1)
+  head.textContent = 'Github repos I own'
   document.getElementById('cloud').append(head, div)
   div.append(table(res, repos))
 }
 
 async function accounts() {
-  var cloud_arr = [
+  let accounts = arguments.callee.name
+  let cloud_arr = [
     {
       name: "stack", url:
         'https://api.stackexchange.com/2.2/users/1705829?site=stackoverflow',
@@ -78,9 +76,9 @@ async function accounts() {
     },
     { name: "git", url: 'https://api.github.com/users/tik9', link: 'html_url' }
   ]
-  var obj = {}
-  for (var elem of cloud_arr) {
-    var res = await (await fetch(elem.url)).json()
+  let obj = {}
+  for (let elem of cloud_arr) {
+    let res = await (await fetch(elem.url)).json()
     let name = elem.name
     if (name == 'stack')
       res = Object.values(res.items)[0]
@@ -88,18 +86,28 @@ async function accounts() {
     obj[name] = res[elem.link]
   }
 
-  helper(arguments.callee.name).append(list(obj, arguments.callee.name))
+  let div = document.createElement('div')
+
+  div.id = accounts
+  let head = document.createElement('h5')
+  head.classList.add('mt-4', 'mb-3')
+  head.textContent = accounts[0].toUpperCase() + accounts.slice(1)
+  document.getElementById('cloud').append(head, div)
+
+  div.append(list(obj, accounts))
 }
 
 
 async function issues() {
-  var arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
+  let issues = arguments.callee.name
 
-  var arr = []
-  for (var elem of await (await fetch(net_fun + 'issues?repo=fun')).json()) {
-    var obj = {};
-    for (var elem2 of arr_field) {
-      var val = elem.node[elem2]
+  let arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
+
+  let arr = []
+  for (let elem of await (await fetch(net_fun + 'issues?repo=fun')).json()) {
+    let obj = {};
+    for (let elem2 of arr_field) {
+      let val = elem.node[elem2]
       if ('updatedAt' === elem2) {
         val = val.slice(0, 10)
         elem2 = 'updated'
@@ -113,5 +121,14 @@ async function issues() {
     }
     arr.push(obj)
   }
-  helper(arguments.callee.name).append(table(arr, 'issues'))
+
+  let div = document.createElement('div')
+
+  div.id = issues
+  let head = document.createElement('h5')
+  head.classList.add('mt-4', 'mb-3')
+  head.textContent = issues[0].toUpperCase() + issues.slice(1)
+  document.getElementById('cloud').append(head, div)
+
+  div.append(table(arr, 'issues'))
 }

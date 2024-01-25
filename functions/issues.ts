@@ -1,5 +1,5 @@
 
-import { getGhGraph } from "./utils.mjs";
+import { getGhGraph } from "./utils";
 
 export default async (req: Request) => {
   var repo = 'fun'
