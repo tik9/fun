@@ -1,48 +1,31 @@
-import { truncate, getGhGraph } from "./utils"
+import { flattenObject, getGhGraph } from "./utils"
+
 import { resolve } from 'path'
 import { promises as fs } from 'fs'
 
-let json = resolve('public', `json/${__filename.split(__dirname + "/").pop()?.split('.')[0]}.json`)
-let graphOrig = resolve('public', 'json', 'graphOrig.json')
-let graphFlat = resolve('public', 'json', 'graphFlat.json')
 
-export default async () => {
+let json = resolve('public', `json/${import.meta.url.split("/").pop().split('.')[0]}.json`)
+
+export default async (req) => {
+    if (new URL(req.url).searchParams.get('save'))
+        await updateJson()
     let res = JSON.parse(await fs.readFile(json, 'utf-8'))
-    // let branchref = elem.node.defaultBranchRef.target.history.edges
+    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'Last commits': elem.node.defaultBranchRef.target.history.edges.map(commit => commit.node) }))
+    res = res
 
+    console.log(res)
     return new Response(JSON.stringify(res))
 }
 
 async function updateJson() {
     let { jsonQuery, query } = queryRepos()
     let res = (await getGhGraph(query, jsonQuery)).data.search.edges
-    res = res.map(elem => flattenObject(elem))
     fs.writeFile(json, JSON.stringify(res))
-}
-
-export const flattenObject = (obj) => {
-    const flattened = {}
-
-    Object.keys(obj).forEach((key) => {
-        const value = obj[key]
-
-        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-            // console.log(1, value)
-            Object.assign(flattened, flattenObject(value))
-        }
-        else {
-            if (key === 'message') truncate(value)
-            flattened[key] = value
-            // console.log(2, key, value)
-        }
-    })
-
-    return flattened
 }
 
 function queryRepos() {
     let jsonQuery = {
-        "queryString": "is:public archived:false created:<2020-01-01 pushed:>2024-01-01",
+        "queryString": "is:public archived:false created:<2020-01-01 pushed:>2024-02-01",
         "refOrder": {
             "direction": "DESC",
             "field": "TAG_COMMIT_DATE"
@@ -64,12 +47,9 @@ function queryRepos() {
          edges{
           node{
            ... on Repository{
-            name
-            pushedAt 
             description 
+            name
             url
-            stargazers{totalCount}
-
             defaultBranchRef{
              target{
               ... on Commit{

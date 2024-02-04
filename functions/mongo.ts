@@ -20,7 +20,7 @@ export default async (req: Request) => {
     else
         res = await find(coll)
 
-    console.log(truncate(res))
+    console.log(res)
 
     // console.log(await list_coll())
 
@@ -57,7 +57,7 @@ async function count(coll: string) { return (await main()).db(dbWeb).collection(
 
 async function create_coll(coll: string) { console.log(await (await main()).db(dbWeb).createCollection(coll)) }
 
-export async function find(coll: string, key = '', limit = 0) {
+export async function find(coll = 'website', key = '', limit = 0) {
     try { return (await main()).db(dbWeb).collection(coll).find({}, { projection: { _id: 0, } }).limit(limit).toArray() } catch (error) { }
 }
 async function find_one(coll: string, key: string, val: string | number) { return (await main()).db(dbWeb).collection(coll).findOne({ [key]: val }) }

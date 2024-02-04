@@ -1,20 +1,23 @@
 
 import { getGhGraph } from './utils'
+import { getOneRepo } from './repos'
+
+import { resolve } from 'path'
+
+let json = resolve('public', `json/${import.meta.url.split("/").pop().split('.')[0]}.json`)
 
 export default async () => {
-    // var query = create('apo')
-    var query = await update('')
-    //@ts-ignore
-    var res = await getGhGraph(query)
+    let res
+
     return { statusCode: 200, body: res }
 }
+
 
 async function update(repo: string) {
     var description = 'hw'
     var url = ''
-    // var res = await getOneRepo(repo)
+    let res = await getOneRepo(repo)
 
-    //@ts-ignore
     var id = res.data.repository.id
     return `mutation {updateRepository(input: { clientMutationId: "tik9", description: "${description}", repositoryId: "${id}",homepageUrl:"${url}" }) { clientMutationId repository{name description } }}`
 }

@@ -6,7 +6,7 @@
 <script>
         test()
         async function test() {
-                var res = await (await (fetch(net_fun + 'utils'))).json();
+                var res = await (await (fetch(net_fun + 'website'))).json();
                 res = (res.filter(val => val.key === 'imprint'))[0].val
                 document.getElementById('container').innerHTML = marked.parse(res);
         }

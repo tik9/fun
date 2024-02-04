@@ -2,13 +2,12 @@
 async function repos() {
   let repos = arguments.callee.name
   let res = await (await fetch(net_fun + repos)).json()
-  // console.log(res)
   let div = document.createElement('div')
 
   div.id = repos
   let head = document.createElement('h5')
   head.classList.add('mt-4', 'mb-3')
-  head.textContent = `${repos[0].toUpperCase()}${repos.slice(1)} I watch`
+  head.textContent = `Github ${repos} I watch`
   document.getElementById('cloud').append(head, div)
   div.append(table(res, repos))
 }
@@ -101,27 +100,8 @@ async function accounts() {
 async function issues() {
   let issues = arguments.callee.name
 
-  let arr_field = ['updatedAt', 'title', 'body', 'url', 'state']
 
-  let arr = []
-  for (let elem of await (await fetch(net_fun + 'issues?repo=fun')).json()) {
-    let obj = {};
-    for (let elem2 of arr_field) {
-      let val = elem.node[elem2]
-      if ('updatedAt' === elem2) {
-        val = val.slice(0, 10)
-        elem2 = 'updated'
-      } else if (elem2 === 'state') val = val.toLowerCase()
-      else if (elem2 === 'body') {
-        val = await (await fetch(net_fun + 'utils', {
-          method: "post", body: JSON.stringify({ type: "truncate", val: val, cut: 150 })
-        })).json()
-      }
-      obj[elem2] = val
-    }
-    arr.push(obj)
-  }
-
+  let res = await (await fetch(net_fun + issues)).json()
   let div = document.createElement('div')
 
   div.id = issues
@@ -130,5 +110,5 @@ async function issues() {
   head.textContent = issues[0].toUpperCase() + issues.slice(1)
   document.getElementById('cloud').append(head, div)
 
-  div.append(table(arr, 'issues'))
+  div.append(table(res, issues))
 }

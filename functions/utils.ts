@@ -1,28 +1,96 @@
 
-import { promises as fs } from "fs";
-import { resolve } from 'path'
-import { find } from './mongo'
+import { find } from "./mongo"
 
-let json = resolve('public', 'json/website.json')
+import { promises as fs } from 'fs'
+import { resolve } from "path"
+
+let json = import.meta.url.split('/').pop().split('.')[0]
+json = resolve('public', 'json', `${json}.json`)
 
 export default async (req: Request) => {
     let res
-    if ((new URL(req.url).searchParams).get('save'))
-        res = await saveToFile()
-    res = JSON.parse(await fs.readFile(json, 'utf-8'))
-    // sortTable(res, 'cat', 'text')
 
-    return new Response(JSON.stringify(res), {
-        headers: { 'access-control-allow-origin': '*' }
+    res = JSON.parse(await fs.readFile(json, 'utf-8'))
+    const arr = []
+    if (new URL(req.url).searchParams.get('save'))
+        res = await find()
+    // console.log(1, res)
+
+    return new Response(JSON.stringify(res))
+}
+
+function flatten_() {
+
+    const items = [
+        {
+            id: 1,
+            sub_items: [
+                { id: 2 },
+                { id: 3 },
+            ]
+        },
+        {
+            id: 2,
+            sub_items: [
+                { id: 4 },
+            ]
+        }
+    ]
+
+    const res = items.map(item => ({
+        id: item.id, subs: item.sub_items.map(subItem => subItem.id)
+    }))
+    return res
+}
+
+
+function flatten2(elem) {
+    const { c, ...notToBeRemoved } = elem;
+    return { ...c, ...notToBeRemoved }
+}
+
+export const flattenObject = (obj) => {
+    const flattened = {}
+
+    Object.keys(obj).forEach((key) => {
+        const value = obj[key]
+
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+            // console.log(1, value)
+            Object.assign(flattened, flattenObject(value))
+        }
+        else {
+            if (key === 'message') truncate(value)
+            flattened[key] = value
+            // console.log(2, key, value)
+        }
     })
+
+    return flattened
+}
+
+async function getGhGraphSchema() {
+    let minimum = 1, maximum = 10
+    var randomnumber = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+    let query = `query {
+        __schema {
+          types {
+            name
+            kind
+            description
+            fields {
+              name
+            }
+          }
+        }
+      }`
+    return (await getGhGraph(query)).data.__schema.types[randomnumber]
 }
 
 export async function getGhGraph(query: any, jsonVars = {}) {
-    return await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: jsonVars }) })).json()
-}
-
-export async function saveToFile() {
-    fs.writeFile(json, JSON.stringify(await find('data')), 'utf-8')
+    let res = await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: jsonVars }) })).json()
+    // console.log(res)
+    return res
 }
 
 

@@ -1,6 +1,6 @@
 
 repos()
 commits();
-// issues();
+issues();
 posts();
 trepos()
