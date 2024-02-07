@@ -1,10 +1,16 @@
 
 all() {
-    res=$(mongo)
-    echo $res|jq
-    # res=$(utils_sort3 "$res")
-}
+    declare -a arr=("commits" "posts" )
 
+    ## now loop through the above array
+    for i in "${arr[@]}"
+    do
+    echo "$i"
+# ntl functions:invoke $i --port 80 --querystring save=1
+    done
+
+}
+all
 
 issues() { ntl functions:invoke issues --port 80 --querystring 'repo=fun' ;}
 
@@ -30,4 +36,4 @@ chrome(){
     chromium --headless --remote-debugging-port=9222 localhost
 }
 
-$@
+# $@

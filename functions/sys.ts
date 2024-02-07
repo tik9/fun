@@ -1,5 +1,5 @@
 
-import { datetime, format_bytes, sortList } from './utils'
+import { locale_date, format_bytes, sortList } from './utils'
 import { insert_one } from './mongo'
 import * as os from "os"
 
@@ -7,7 +7,7 @@ export default async () => {
     var res = {
         architecture: os.arch(),
         cores: os.cpus().length.toString(),
-        date: datetime(new Date()),
+        date: locale_date(new Date()),
         'free memory': format_bytes(os.freemem()),
         host_server: os.hostname(),
         'total memory': format_bytes(os.totalmem()),

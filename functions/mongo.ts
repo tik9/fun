@@ -44,12 +44,6 @@ export default async (req: Request) => {
     // update_one('data', 'text', 'Students towards Bachelor degree and technical employees', 'text', 'Students in a Bachelor degree and employees preparing for a math exam')
     // update_many(coll, { cat: 'What famous people said' }, 'cat', 'What famous people said about learning')
 
-    // return {
-    //     headers: {
-    //         'access-control-allow-origin': '*',
-    //     },
-    //     statusCode: 200, body: JSON.stringify(res)
-    // }
     return new Response(JSON.stringify(res))
 }
 

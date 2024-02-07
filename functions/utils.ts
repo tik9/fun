@@ -9,8 +9,8 @@ json = resolve('public', 'json', `${json}.json`)
 
 export default async (req: Request) => {
     let res
-
-    res = JSON.parse(await fs.readFile(json, 'utf-8'))
+    res = locale_date('2024-02-04T21:38:48Z')
+    // res = JSON.parse(await fs.readFile(json, 'utf-8'))
     const arr = []
     if (new URL(req.url).searchParams.get('save'))
         res = await find()
@@ -98,14 +98,15 @@ export function truncate(text: string, size = 100) {
     text = text.replace(/<\/?(.*?)>/g, '');
     if (text.length > size) {
         let subString = text.slice(0, size);
-        // console.log({ subString, text })
         return subString.slice(0, subString.lastIndexOf(" ")) + "..";
     }
     return text
 }
 
-export function datetime(dateobj: Date) {
-    return dateobj.toLocaleDateString('de-de') + ' ' + dateobj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+export function locale_date(date) {
+    var today = new Date()
+    date = date.substring(0, 10)
+    return date === today.toISOString().substring(0, 10) ? 'today' : new Date(today.setDate(today.getDate() - 1)).toISOString().substring(0, 10) == date ? 'yesterday' : new Date(date).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 export function format_bytes(bytes: number) {
@@ -180,4 +181,8 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
         // console.log({ result, obj1, obj2 })
         return result
     }
+}
+
+async function rate() {
+    return await getGhGraph(`query {viewer {login}rateLimit {limit remaining resetAt}}`)
 }

@@ -1,4 +1,4 @@
-import { flattenObject, getGhGraph } from "./utils"
+import { getGhGraph, locale_date } from "./utils"
 
 import { resolve } from 'path'
 import { promises as fs } from 'fs'
@@ -8,22 +8,13 @@ let json = resolve('public', `json/${import.meta.url.split("/").pop().split('.')
 
 export default async (req) => {
     if (new URL(req.url).searchParams.get('save'))
-        await updateJson()
+        await queryRepos()
     let res = JSON.parse(await fs.readFile(json, 'utf-8'))
-    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'Last commits': elem.node.defaultBranchRef.target.history.edges.map(commit => commit.node) }))
-    res = res
-
-    console.log(res)
     return new Response(JSON.stringify(res))
 }
 
-async function updateJson() {
-    let { jsonQuery, query } = queryRepos()
-    let res = (await getGhGraph(query, jsonQuery)).data.search.edges
-    fs.writeFile(json, JSON.stringify(res))
-}
 
-function queryRepos() {
+async function queryRepos() {
     let jsonQuery = {
         "queryString": "is:public archived:false created:<2020-01-01 pushed:>2024-02-01",
         "refOrder": {
@@ -53,7 +44,7 @@ function queryRepos() {
             defaultBranchRef{
              target{
               ... on Commit{
-               history(first:2){
+               history(first:3){
                 edges{
                  node{
                   ... on Commit{
@@ -71,7 +62,10 @@ function queryRepos() {
          }
         }
        }`
-    return { jsonQuery, query }
+
+    let res = (await getGhGraph(query, jsonQuery)).data.search.edges
+    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'commits': elem.node.defaultBranchRef.target.history.edges.map(elem => ({ date: locale_date(elem.node.committedDate), message: elem.node.message })) }))
+    fs.writeFile(json, JSON.stringify(res))
 }
 
 
@@ -80,8 +74,4 @@ export async function getOneRepo(repo: any) {
 
     return await getGhGraph(query)
     // console.log(1, res.data.repository.id)
-}
-
-async function rate() {
-    return await getGhGraph(`query {viewer {login}rateLimit {limit remaining resetAt}}`)
 }

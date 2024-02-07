@@ -1,6 +1,6 @@
 function aref(elem, val) {
     var aref = document.createElement('a')
-    aref.textContent = dateformat.test(val) ? locale_date(val) : val
+    aref.textContent = val
     aref.href = elem.url
     return aref
 }
@@ -32,28 +32,26 @@ function table(arr, src) {
         for (var elem2 of columns) {
             var val = elem[elem2]
             var td = document.createElement('td');
-
             if (['commits', 'posts'].includes(src)) {
                 if (elem2 === 'date') td.append(aref(elem, val))
                 else td.innerHTML = val
             }
 
             else if (src === 'issues') {
-                if (elem2 === 'title') td.append(aref(elem, val))
+                if (elem2 === 'date') td.append(aref(elem, val))
                 else
-                    td.innerHTML = (['updatedAt'].includes(elem2)) ? locale_date(val) : val
+                    td.innerHTML = val
             }
-
-            else if (['trepos', 'repos'].includes(src)) {
-                if ('pushedAt' === elem2)
-                    td.innerHTML = locale_date(val)
-
-                // else if (elem2 === 'description')
-                // td.append(aref(elem, val))
+            else if ('trepos' === src) {
+                if (elem2 === 'updated')
+                    td.append(aref(elem, val))
+                else td.innerHTML = val
+            }
+            else if ('repos' === src) {
                 // else if ('totalCount' === elem2) td.innerHTML = `${Math.floor(val / 1000)} K`
-                else if ('Last commits' === elem2) {
+                if ('commits' === elem2) {
                     for (let elem of val)
-                        td.innerHTML += locale_date(elem.committedDate) + '<br>'
+                        td.innerHTML += elem.date + '<br>'
                 }
                 else td.innerHTML = val
             }

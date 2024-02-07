@@ -36,24 +36,13 @@ function list(arr, name) {
     for (var elem in arr) {
         var val = arr[elem]
         elem = elem[0].toUpperCase() + elem.slice(1)
-        val = dateformat.test(val) ? locale_date(val) : val
 
         var li = document.createElement('li')
-
-        if (elem === 'Location') li = li_aref(elem, val)
-        else if (name === 'accounts') li = li_aref(elem, val)
-        else
-            li.append(document.createTextNode(`${elem}: ${val}`))
         ul.appendChild(li)
+
+            li.append(document.createTextNode(`${elem}: ${val}`))
     }
     return ul
-}
-
-function locale_date(date) {
-    var today = new Date()
-    var dateformat = { day: '2-digit', month: '2-digit', year: 'numeric' }
-
-    return date == today.toISOString().substring(0, 10) ? 'today' : new Date(today.setDate(today.getDate() - 1)).toISOString().substring(0, 10) == date ? 'yesterday' : new Date(date).toLocaleDateString('de-de', dateformat)
 }
 
 function create_icon() {

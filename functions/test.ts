@@ -8,20 +8,25 @@ let json = resolve('public', `json/${import.meta.url.split("/").pop().split('.')
 
 export default async () => {
     let res
-
-    return { statusCode: 200, body: res }
+    update()
+    return new Response(res)
 }
 
 
-async function update(repo: string) {
-    var description = 'hw'
-    var url = ''
+async function update() {
+    let repo = 'apps'
+    let description = 'Motivation letter and CV in markdown and js'
+    let url = 'https://tiapps.netlify.app'
+
     let res = await getOneRepo(repo)
 
     var id = res.data.repository.id
-    return `mutation {updateRepository(input: { clientMutationId: "tik9", description: "${description}", repositoryId: "${id}",homepageUrl:"${url}" }) { clientMutationId repository{name description } }}`
+    console.log(res)
+
+    // return getGhGraph(`mutation {updateRepository(input: { clientMutationId: "tik9", description: "${description}", repositoryId: "${id}",homepageUrl:"${url}" }) { clientMutationId repository{name description } }}`)
 }
 
-function create(repo: string) {
+function create() {
+    let repo = ''
     return `mutation {createRepository(input: {name: "${repo}",visibility: PUBLIC}) { repository {url} }}`
 }

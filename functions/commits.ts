@@ -1,5 +1,5 @@
 
-import { getGhGraph } from './utils';
+import { getGhGraph, locale_date } from './utils';
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
@@ -24,7 +24,7 @@ async function getCommits() {
               name
               target {
                 ... on Commit {
-                  history(first: 4) {
+                  history(first: 2) {
                     edges {
                       node {
                         ... on Commit {
@@ -44,5 +44,8 @@ async function getCommits() {
     }
   }`
 
-  fs.writeFile(json, JSON.stringify((await getGhGraph(query)).data.repository.refs.edges[0].node.target.history.edges))
+  let res = (await getGhGraph(query)).data.repository.refs.edges[0].node.target.history.edges
+  res = res.map(elem => ({ date: locale_date(elem.node.committedDate), message: elem.node.message, url: elem.node.commitUrl }))
+
+  fs.writeFile(json, JSON.stringify(res))
 }
