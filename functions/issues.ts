@@ -38,7 +38,6 @@ export default async (req: Request) => {
     res = (await getGhGraph(query)).data.repository.issues.edges
     res = res.map(elem => ({ date: locale_date(elem.node.updatedAt), title: elem.node.title, text: elem.node.body, url: elem.node.url, }))
     fs.writeFile(json, JSON.stringify(res))
-    return new Response(res)
   }
 
   return new Response((await fs.readFile(json, 'utf-8')))

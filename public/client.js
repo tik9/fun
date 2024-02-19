@@ -40,7 +40,7 @@ function list(arr, name) {
         var li = document.createElement('li')
         ul.appendChild(li)
 
-            li.append(document.createTextNode(`${elem}: ${val}`))
+        li.append(document.createTextNode(`${elem}: ${val}`))
     }
     return ul
 }
@@ -63,6 +63,9 @@ async function includes() {
         link.href = elem
         document.head.appendChild(link);
     }
+    let livejs = document.createElement('script')
+    livejs.src = 'js/live.js'
+    document.head.append(livejs)
 }
 
 function bottom_nav() {

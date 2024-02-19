@@ -1,12 +1,13 @@
 
 all() {
-    declare -a arr=("commits" "posts" )
+    cd $(dirname $0)
+    pwd
+    declare -a arr=('issues')
+    # declare -a arr=("commits" "posts" 'repos' 'trepos')
 
-    ## now loop through the above array
-    for i in "${arr[@]}"
-    do
+    for i in "${arr[@]}";do
     echo "$i"
-# ntl functions:invoke $i --port 80 --querystring save=1
+        ntl functions:invoke $i --port 80 --querystring save=1
     done
 
 }

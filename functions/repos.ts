@@ -10,10 +10,19 @@ export default async (req) => {
     if (new URL(req.url).searchParams.get('save'))
         await queryRepos()
     let res = JSON.parse(await fs.readFile(json, 'utf-8'))
+    if (new URL(req.url).searchParams.get('commits')) {
+        res = await getComm(res)
+        console.log(res)
+        // return new Response(JSON.stringify(res))
+    }
     return new Response(JSON.stringify(res))
 }
 
-
+async function getComm(content) {
+    console.log(content)
+    let res = content.filter
+    return 1
+}
 async function queryRepos() {
     let jsonQuery = {
         "queryString": "is:public archived:false created:<2020-01-01 pushed:>2024-02-01",
@@ -29,7 +38,7 @@ async function queryRepos() {
          remaining
          resetAt
         }
-        search(query:$queryString, type:REPOSITORY, first:3){
+        search(query:$queryString, type:REPOSITORY, first:2){
          repositoryCount
          pageInfo{
           endCursor
@@ -44,7 +53,7 @@ async function queryRepos() {
             defaultBranchRef{
              target{
               ... on Commit{
-               history(first:3){
+               history(first:2){
                 edges{
                  node{
                   ... on Commit{
@@ -66,6 +75,7 @@ async function queryRepos() {
     let res = (await getGhGraph(query, jsonQuery)).data.search.edges
     res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'commits': elem.node.defaultBranchRef.target.history.edges.map(elem => ({ date: locale_date(elem.node.committedDate), message: elem.node.message })) }))
     fs.writeFile(json, JSON.stringify(res))
+    console.log(res)
 }
 
 
