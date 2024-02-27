@@ -10,19 +10,11 @@ export default async (req) => {
     if (new URL(req.url).searchParams.get('save'))
         await queryRepos()
     let res = JSON.parse(await fs.readFile(json, 'utf-8'))
-    if (new URL(req.url).searchParams.get('commits')) {
-        res = await getComm(res)
-        console.log(res)
-        // return new Response(JSON.stringify(res))
-    }
+
     return new Response(JSON.stringify(res))
 }
 
-async function getComm(content) {
-    console.log(content)
-    let res = content.filter
-    return 1
-}
+
 async function queryRepos() {
     let jsonQuery = {
         "queryString": "is:public archived:false created:<2020-01-01 pushed:>2024-02-01",
@@ -38,7 +30,7 @@ async function queryRepos() {
          remaining
          resetAt
         }
-        search(query:$queryString, type:REPOSITORY, first:2){
+        search(query:$queryString, type:REPOSITORY, first:3){
          repositoryCount
          pageInfo{
           endCursor
@@ -53,7 +45,7 @@ async function queryRepos() {
             defaultBranchRef{
              target{
               ... on Commit{
-               history(first:2){
+               history(first:3){
                 edges{
                  node{
                   ... on Commit{
@@ -79,7 +71,7 @@ async function queryRepos() {
 }
 
 
-export async function getOneRepo(repo: any) {
+export async function getOneRepo(repo: string) {
     var query = `query {repository (name:"${repo}" , owner: "tik9")  {id name description homepageUrl}}`;
 
     return await getGhGraph(query)

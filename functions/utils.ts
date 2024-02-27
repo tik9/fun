@@ -9,7 +9,6 @@ json = resolve('public', 'json', `${json}.json`)
 
 export default async (req: Request) => {
     let res
-    res = locale_date('2024-02-04T21:38:48Z')
     // res = JSON.parse(await fs.readFile(json, 'utf-8'))
     const arr = []
     if (new URL(req.url).searchParams.get('save'))
@@ -17,56 +16,6 @@ export default async (req: Request) => {
     // console.log(1, res)
 
     return new Response(JSON.stringify(res))
-}
-
-function flatten_() {
-
-    const items = [
-        {
-            id: 1,
-            sub_items: [
-                { id: 2 },
-                { id: 3 },
-            ]
-        },
-        {
-            id: 2,
-            sub_items: [
-                { id: 4 },
-            ]
-        }
-    ]
-
-    const res = items.map(item => ({
-        id: item.id, subs: item.sub_items.map(subItem => subItem.id)
-    }))
-    return res
-}
-
-
-function flatten2(elem) {
-    const { c, ...notToBeRemoved } = elem;
-    return { ...c, ...notToBeRemoved }
-}
-
-export const flattenObject = (obj) => {
-    const flattened = {}
-
-    Object.keys(obj).forEach((key) => {
-        const value = obj[key]
-
-        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-            // console.log(1, value)
-            Object.assign(flattened, flattenObject(value))
-        }
-        else {
-            if (key === 'message') truncate(value)
-            flattened[key] = value
-            // console.log(2, key, value)
-        }
-    })
-
-    return flattened
 }
 
 async function getGhGraphSchema() {
