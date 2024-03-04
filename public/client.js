@@ -14,7 +14,43 @@ var alias_cloud = 'social_cloud'
 var dateformat = /^\d{4}-\d{2}-\d{2}/
 
 
-// repos()
+async function lyrics() {
+    let lyrics = arguments.callee.name
+    let res = JSON.parse(await (await fetch(net_fun + lyrics)).json())
+
+    let div = document.createElement('div')
+
+    div.id = lyrics
+    let head = document.createElement('h4')
+    head.classList.add('mt-4', 'mb-3')
+    head.textContent = 'My favourite lyrics'
+    let ol = document.createElement('ol')
+    div.append(head, ol)
+    for (let elem of res) {
+        let li = document.createElement('li')
+        ol.append(li)
+        li.id = elem.name
+        li.style.marginBottom = '25px'
+        ol.append(li)
+        let writer = elem.writer[0].toUpperCase() + elem.writer.slice(1)
+        let song = elem.song[0].toUpperCase() + elem.song.slice(1)
+        let content = `${writer}: ${song}\n${elem.lyrics.slice(0, 70)}`
+        let lyrics = document.createElement('span')
+        lyrics.innerText = content
+        lyrics.id = song
+        let btn = document.createElement('button')
+        btn.id = 'btn_' + song
+        btn.innerHTML = 'Read more'
+        btn.classList.add('btn', 'btn-info')
+
+        let dots = document.createElement('span')
+        dots.innerHTML = '...'
+        dots.id = 'dots_' + song
+        li.append(lyrics, dots, btn)
+    }
+    document.getElementById('container').append(div)
+}
+
 async function repos() {
     let repos = arguments.callee.name
     let res = await (await fetch(net_fun + repos)).json()
@@ -220,9 +256,9 @@ async function includes() {
         link.href = elem
         document.head.appendChild(link);
     }
-    // let livejs = document.createElement('script')
-    // livejs.src = 'js/live.js'
-    // document.head.append(livejs)
+    let livejs = document.createElement('script')
+    livejs.src = 'js/live.js'
+    document.head.append(livejs)
 }
 
 function bottom_nav() {

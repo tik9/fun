@@ -53,9 +53,8 @@ export function truncate(text: string, size = 100) {
 }
 
 export function locale_date(date) {
-    var today = new Date()
-    date = date.substring(0, 10)
-    return date === today.toISOString().substring(0, 10) ? 'today' : new Date(today.setDate(today.getDate() - 1)).toISOString().substring(0, 10) == date ? 'yesterday' : new Date(date).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' })
+
+    return new Date(date.substring(0, 10)).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 export function format_bytes(bytes: number) {

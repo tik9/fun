@@ -3,20 +3,17 @@ import { find } from './mongo'
 import { resolve } from 'path'
 import { promises as fs } from "fs";
 
-var json = import.meta.url.split("/").pop().split('.')[0]
-json = resolve('public', 'json', `${json}.json`)
+let json = resolve('public', 'json', `${import.meta.url.split("/").pop().split('.')[0]}.json`)
 
 export default async (req: Request) => {
-    let res
     if ((new URL(req.url).searchParams).get('save')) {
-        res = await find('website')
+        let res = await find('website')
 
         sortTable(res, 'cat')
         fs.writeFile(json, JSON.stringify(res), 'utf-8')
     }
-    res = JSON.parse(await fs.readFile(json, 'utf-8'))
 
-    return new Response(JSON.stringify(res), {
+    return new Response(JSON.stringify(JSON.parse(await fs.readFile(json, 'utf-8'))), {
         headers: { 'access-control-allow-origin': '*' }
     })
 }

@@ -1,11 +1,12 @@
 
 
 var array_of_functions = [
-    commits,
-    issues,
-    posts,
+    // commits,
+    // issues,
+    lyrics,
+    // posts,
     repos,
-    trepos
+    // trepos
 ]
 
 for (i = 0; i < array_of_functions.length; i++) {

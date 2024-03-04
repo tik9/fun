@@ -2,11 +2,11 @@
 all() {
     cd $(dirname $0)
     pwd
-    declare -a arr=('issues')
-    # declare -a arr=("commits" "posts" 'repos' 'trepos')
+    # declare -a arr=('issues')
+    declare -a arr=("commits" "posts" 'repos' 'trepos' 'issues')
 
     for i in "${arr[@]}";do
-    echo "$i"
+        echo "$i"
         ntl functions:invoke $i --port 80 --querystring save=1
     done
 
