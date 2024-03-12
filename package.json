@@ -4,6 +4,7 @@
     "@netlify/functions": "^2.4.1",
     "@types/node": "^20.10.5",
     "mongodb": "",
-    "node-ipinfo": "^3.5.1"
+    "node-ipinfo": "^3.5.1",
+    "youtube-search": "^1.1.6"
   }
 }

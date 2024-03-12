@@ -17,36 +17,56 @@ var dateformat = /^\d{4}-\d{2}-\d{2}/
 async function lyrics() {
     let lyrics = arguments.callee.name
     let res = JSON.parse(await (await fetch(net_fun + lyrics)).json())
-
+    // console.log(res)
     let div = document.createElement('div')
 
     div.id = lyrics
     let head = document.createElement('h4')
-    head.classList.add('mt-4', 'mb-3')
     head.textContent = 'My favourite lyrics'
+    head.classList.add('mt-4', 'mb-3')
     let ol = document.createElement('ol')
     div.append(head, ol)
     for (let elem of res) {
         let li = document.createElement('li')
         ol.append(li)
-        li.id = elem.name
         li.style.marginBottom = '25px'
+        li.id = elem.song
         ol.append(li)
+
+        let lyrics = elem.lyrics
+        let lyrics_short = lyrics.slice(0, 70)
+        lyrics_short = lyrics_short.slice(0, lyrics_short.lastIndexOf(' '))
+
         let writer = elem.writer[0].toUpperCase() + elem.writer.slice(1)
         let song = elem.song[0].toUpperCase() + elem.song.slice(1)
-        let content = `${writer}: ${song}\n${elem.lyrics.slice(0, 70)}`
-        let lyrics = document.createElement('span')
-        lyrics.innerText = content
-        lyrics.id = song
+        let writer_song = `${writer}: ${song}`
+        let writer_song_head = document.createElement('h6')
+        writer_song_head.textContent = writer_song
+        let content_short = lyrics_short
+        let lyrics_span = document.createElement('span')
+        lyrics_span.innerText = content_short
+        lyrics_span.id = song + '_content'
         let btn = document.createElement('button')
         btn.id = 'btn_' + song
-        btn.innerHTML = 'Read more'
+        btn.textContent = 'Read more'
         btn.classList.add('btn', 'btn-info')
 
+        btn.addEventListener('click', () => {
+            if (dots.style.display === 'none') {
+                dots.style.display = 'inline'
+                btn.textContent = 'Read more'
+                lyrics_span.innerText = content_short
+            }
+            else {
+                dots.style.display = 'none'
+                btn.textContent = 'Read less'
+                lyrics_span.innerText = lyrics + '\n'
+            }
+        })
         let dots = document.createElement('span')
-        dots.innerHTML = '...'
+        dots.textContent = '...'
         dots.id = 'dots_' + song
-        li.append(lyrics, dots, btn)
+        li.append(writer_song_head, lyrics_span, dots, btn)
     }
     document.getElementById('container').append(div)
 }
@@ -71,42 +91,43 @@ async function repos() {
         li.innerHTML = `<h5>${elem.name[0].toUpperCase() + elem.name.slice(1)}</h5>${elem.description}<br><br><b>Commits</b>`
         for (let j = 0; j < elem.commits.length; j++) {
             let elem2 = elem.commits[j]
-            let msg = elem2.message
+            let comm_msg = elem2.message
             let elem_name = elem.name.toLowerCase()
             let btn = ''
             let str_size = 70
             let dots = ''
-            if (msg.length > str_size) {
-                msg = msg.slice(0, str_size)
-                msg = msg.slice(0, msg.lastIndexOf(" "))
+            let date_ = `<br><br>${elem2.date}:<br>`
+            let content_short = `${date_}${comm_msg}`
+
+            if (comm_msg.length > str_size) {
+                comm_msg = comm_msg.slice(0, str_size)
+                comm_msg = comm_msg.slice(0, comm_msg.lastIndexOf(" "))
+                content_short = `${date_}${comm_msg}`
 
                 btn = document.createElement('button')
                 btn.id = `${elem_name}${j}`
-                btn.innerHTML = 'Read more'
+                btn.textContent = 'Read more'
                 btn.classList.add('btn', 'btn-info')
 
                 dots = document.createElement('span')
-                dots.innerHTML = '...'
+                dots.textContent = '...'
                 dots.id = 'dots'
-
                 btn.addEventListener('click', () => {
                     if (dots.style.display === "none") {
                         dots.style.display = "inline";
-                        btn.innerHTML = "Read more";
-                        msg = msg.slice(0, str_size)
-                        msg = msg.slice(0, msg.lastIndexOf(" "))
-                        comm.innerHTML = `<br><br>${elem2.date}:<br>${msg}`
+                        btn.textContent = "Read more";
+                        comm.innerHTML = content_short
 
                     } else {
                         dots.style.display = "none";
-                        btn.innerHTML = "Read less";
-                        comm.innerHTML = `<br><br>${elem2.date}:<br>${elem2.message}`
+                        btn.textContent = "Read less";
+                        comm.innerHTML = `${date_}${elem2.message}`
                     }
                 })
 
             }
             let comm = document.createElement('span')
-            comm.innerHTML = `<br><br>${elem2.date}:<br>${msg}`
+            comm.innerHTML = content_short
             comm.id = `${elem_name}${j}`
 
             li.append(comm, dots, btn)

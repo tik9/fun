@@ -24,5 +24,6 @@ async function getPosts() {
             url: 'https://stackoverflow.com/questions/' + post_id,
             post_id
         }))
+    console.log(res)
     fs.writeFile(json, JSON.stringify(res))
 }

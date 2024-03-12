@@ -1,21 +1,29 @@
 
 
 var array_of_functions = [
-    // commits,
-    // issues,
+    commits,
+    issues,
     lyrics,
-    // posts,
+    posts,
     repos,
-    // trepos
+    trepos
 ]
 
 for (i = 0; i < array_of_functions.length; i++) {
     array_of_functions[i]();
     let fname = array_of_functions[i].name
-    let ahref = document.createElement('a')
-    ahref.href = '#' + fname
-    ahref.text = fname[0].toUpperCase() + fname.slice(1)
-    ahref.style.color = 'white'
-    ahref.style.marginRight = '20px'
-    topnav.append(ahref)
+    let btn = document.createElement('button')
+    btn.classList.add('btn', 'btn-link')
+    // ahref.href = '#' + fname
+    btn.textContent = fname[0].toUpperCase() + fname.slice(1)
+    btn.style.color = 'white'
+    btn.style.marginRight = '20px'
+    btn.addEventListener('click', (e) => {
+        document.getElementById(fname).scrollIntoView({
+            behavior: 'smooth'
+        });
+        e.preventDefault()
+        // return false
+    })
+    topnav.append(btn)
 }
