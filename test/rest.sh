@@ -1,5 +1,5 @@
 
-all() {
+update_js() {
     cd $(dirname $0)
     pwd
     # declare -a arr=('issues')
@@ -11,7 +11,7 @@ all() {
     done
 
 }
-all
+update_js
 
 issues() { ntl functions:invoke issues --port 80 --querystring 'repo=fun' ;}
 
@@ -28,8 +28,6 @@ sortTab3() {
 }
 
 time_api() { curl -s 'https://timeapi.io/api/Time/current/zone?timeZone=UTC' ;}
-
-utils_time() { ntl functions:invoke utils --port 80 --querystring 'q=123456' ;}
 
 utils_trunc() { ntl functions:invoke utils --port 80 --payload '{"type":"truncate", "val":"1234567","cut":3}' ;}
 

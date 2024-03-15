@@ -41,7 +41,6 @@ async function addLyric() {
     res = arrs.join("\n");
     obj.lyrics = res
     songs.unshift(obj)
-    // console.log(songs)
     fs.writeFile(json, JSON.stringify(songs))
 }
 

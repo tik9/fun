@@ -1,4 +1,4 @@
-import { getGhGraph, locale_date } from "./utils"
+import { getGhGraph } from "./utils"
 
 import { resolve } from 'path'
 import { promises as fs } from 'fs'
@@ -65,9 +65,8 @@ async function queryRepos() {
        }`
 
     let res = (await getGhGraph(query, jsonQuery)).data.search.edges
-    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'commits': elem.node.defaultBranchRef.target.history.edges.map(elem => ({ date: locale_date(elem.node.committedDate), message: elem.node.message })) }))
+    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'commits': elem.node.defaultBranchRef.target.history.edges.map(elem => ({ date: new Date(elem.node.committedDate).toLocaleDateString('de-de', { year: "numeric", day: "numeric", month: "numeric" }), message: elem.node.message })) }))
     fs.writeFile(json, JSON.stringify(res))
-    console.log(res)
 }
 
 

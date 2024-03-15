@@ -1,21 +1,33 @@
 
-import { find } from "./mongo"
-
 import { promises as fs } from 'fs'
 import { resolve } from "path"
 
 let json = import.meta.url.split('/').pop().split('.')[0]
 json = resolve('public', 'json', `${json}.json`)
 
-export default async (req: Request) => {
-    let res
-    // res = JSON.parse(await fs.readFile(json, 'utf-8'))
-    const arr = []
-    if (new URL(req.url).searchParams.get('save'))
-        res = await find()
-    // console.log(1, res)
 
+export default async (req: Request) => {
+    let res// res = JSON.parse(await fs.readFile(json, 'utf-8'))
+    // if (new URL(req.url).searchParams.get('date')) 
+    let query = new URL(req.url).searchParams.get('date')
+    if (/^\d\d\.\d\d\.\d\d\d\d$/.test(query))
+        res = locale_date(query)
     return new Response(JSON.stringify(res))
+}
+
+
+export function locale_date(date) {
+    if (date === new Date().toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' }))
+        return 'today'
+
+    Array(5).fill(1).map((_, i) => {
+
+        let day = new Date(new Date().setDate(new Date().getDate() - i)).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' })
+        if (day === date)
+            date = i + ' day(s) ago'
+    })
+
+    return date
 }
 
 async function getGhGraphSchema() {
@@ -50,11 +62,6 @@ export function truncate(text: string, size = 100) {
         return subString.slice(0, subString.lastIndexOf(" ")) + "..";
     }
     return text
-}
-
-export function locale_date(date) {
-
-    return new Date(date.substring(0, 10)).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 export function format_bytes(bytes: number) {

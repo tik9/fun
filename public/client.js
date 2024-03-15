@@ -10,14 +10,10 @@ includes()
 bottom_nav()
 head()
 
-var alias_cloud = 'social_cloud'
-var dateformat = /^\d{4}-\d{2}-\d{2}/
-
 
 async function lyrics() {
     let lyrics = arguments.callee.name
     let res = JSON.parse(await (await fetch(net_fun + lyrics)).json())
-    // console.log(res)
     let div = document.createElement('div')
 
     div.id = lyrics
@@ -96,7 +92,9 @@ async function repos() {
             let btn = ''
             let str_size = 70
             let dots = ''
-            let date_ = `<br><br>${elem2.date}:<br>`
+            let new_date = await (await fetch(net_fun + 'utils?date=' + elem2.date)).json()
+
+            let date_ = `<br><br>${new_date}:<br>`
             let content_short = `${date_}${comm_msg}`
 
             if (comm_msg.length > str_size) {

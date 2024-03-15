@@ -1,4 +1,4 @@
-import { locale_date, truncate } from './utils'
+import { truncate } from './utils'
 
 import { promises as fs } from 'fs'
 import { resolve } from 'path';
@@ -19,11 +19,10 @@ async function getPosts() {
 
     res = res.map(({ body: text, creation_date: date, post_id }) => (
         {
-            date: locale_date(new Date(date * 1000).toISOString()),
+            date: new Date(date * 1000).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' }),
             text: truncate(text),
             url: 'https://stackoverflow.com/questions/' + post_id,
             post_id
         }))
-    console.log(res)
     fs.writeFile(json, JSON.stringify(res))
 }

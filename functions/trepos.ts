@@ -1,5 +1,5 @@
 
-import { getGhGraph, locale_date } from './utils'
+import { getGhGraph } from './utils'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
@@ -16,7 +16,6 @@ export default async (req: Request) => {
 async function getRepos() {
     var query = `query{repositoryOwner(login: "tik9") { repositories (orderBy: { field: PUSHED_AT, direction: DESC }, first: 3) { nodes { name description homepageUrl pushedAt }}}}`
 
-    let res = ((await getGhGraph(query)).data.repositoryOwner.repositories.nodes).map((elem) => ({ updated: locale_date(elem.pushedAt), url: elem.homepageUrl, name: elem.name, description: elem.description, }))
-    console.log(res)
+    let res = ((await getGhGraph(query)).data.repositoryOwner.repositories.nodes).map((elem) => ({ updated: new Date(elem.pushedAt).toLocaleDateString('de-de', { day: 'numeric', month: 'numeric', year: 'numeric' }), url: elem.homepageUrl, name: elem.name, description: elem.description, }))
     fs.writeFile(json, JSON.stringify(res))
 }

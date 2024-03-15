@@ -14,8 +14,8 @@ export default async () => {
 
 async function createIssue(repo = 'fun') {
     let id = (await getOneRepo(repo)).data.repository.id
-    let title = 'Frontend Top Nav'
-    let body = 'Enter links to sections like repos, posts, etc.'
+    let title = 'get date in tables with age in days'
+    let body = 'e.g.  - 1 day ago - if the table entry is one day before the current date'
 
     let res = getGhGraph(`mutation CreateIssue {createIssue(input: {repositoryId: "${id}", title: "${title}", body: "${body}"}) {issue { number body}}}`)
     return res
