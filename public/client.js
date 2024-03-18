@@ -10,6 +10,43 @@ includes()
 bottom_nav()
 head()
 
+async function resMap(section) {
+    let res = await Promise.all((await (await fetch(net_fun + section)).json()).map(async item => {
+        return {
+            ...item, date: await (await fetch(net_fun + 'utils?date=' + item.date)).json()
+        }
+    }))
+    return res
+}
+
+async function commits() {
+    let commits = arguments.callee.name
+    let res = await resMap(commits)
+    let div = document.createElement('div')
+
+    div.id = commits
+    let head = document.createElement('h4')
+    head.classList.add('mt-4', 'mb-3')
+    head.textContent = `My ${commits}`
+    div.append(head, table(res, commits))
+    document.getElementById('cloud').append(div)
+}
+
+async function issues() {
+    let issues = arguments.callee.name
+
+    let res = await resMap(issues)
+    let div = document.createElement('div')
+
+    div.id = issues
+    let head = document.createElement('h4')
+    head.classList.add('mt-4', 'mb-3')
+    head.textContent = `My ${issues}`
+
+    document.getElementById('cloud').append(div)
+
+    div.append(head, table(res, issues))
+}
 
 async function lyrics() {
     let lyrics = arguments.callee.name
@@ -65,6 +102,20 @@ async function lyrics() {
         li.append(writer_song_head, lyrics_span, dots, btn)
     }
     document.getElementById('container').append(div)
+}
+
+async function posts() {
+    let posts = arguments.callee.name
+    let res = await resMap(posts)
+
+    let div = document.createElement('div')
+
+    div.id = posts
+    let head = document.createElement('h4')
+    div.append(head, table(res, posts))
+    head.classList.add('mt-4', 'mb-3')
+    head.textContent = `My ${posts}`
+    document.getElementById('cloud').append(div)
 }
 
 async function repos() {
@@ -137,7 +188,7 @@ async function repos() {
 
 async function trepos() {
     let repos = arguments.callee.name
-    let res = await (await fetch(net_fun + repos)).json()
+    let res = await resMap(repos)
     let div = document.createElement('div')
 
     div.id = repos
@@ -146,49 +197,6 @@ async function trepos() {
     head.textContent = 'Github repos I own'
     div.append(head, table(res, repos))
     document.getElementById('cloud').append(div)
-}
-
-async function commits() {
-    let commits = arguments.callee.name
-    let res = await (await fetch(net_fun + commits)).json()
-    let div = document.createElement('div')
-
-    div.id = commits
-    let head = document.createElement('h4')
-    head.classList.add('mt-4', 'mb-3')
-    head.textContent = `My ${commits}`
-    div.append(head, table(res, commits))
-    document.getElementById('cloud').append(div)
-}
-
-async function posts() {
-    let posts = arguments.callee.name
-    let res = await (await fetch(net_fun + posts)).json()
-    let div = document.createElement('div')
-
-    div.id = posts
-    let head = document.createElement('h4')
-    div.append(head, table(res, posts))
-    head.classList.add('mt-4', 'mb-3')
-    head.textContent = `My ${posts}`
-    document.getElementById('cloud').append(div)
-}
-
-
-async function issues() {
-    let issues = arguments.callee.name
-
-    let res = await (await fetch(net_fun + issues)).json()
-    let div = document.createElement('div')
-
-    div.id = issues
-    let head = document.createElement('h4')
-    head.classList.add('mt-4', 'mb-3')
-    head.textContent = `My ${issues}`
-
-    document.getElementById('cloud').append(div)
-
-    div.append(head, table(res, issues))
 }
 
 

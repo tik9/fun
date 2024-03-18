@@ -21,10 +21,11 @@ export function locale_date(date) {
         return 'today'
 
     Array(5).fill(1).map((_, i) => {
-
         let day = new Date(new Date().setDate(new Date().getDate() - i)).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' })
-        if (day === date)
-            date = i + ' day(s) ago'
+        if (day === date && i === 1)
+            date = 'yesterday'
+        else if (day === date)
+            date = i + ' days ago'
     })
 
     return date

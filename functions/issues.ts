@@ -36,7 +36,7 @@ export default async (req: Request) => {
   let res
   if (new URL(req.url).searchParams.get('save')) {
     res = (await getGhGraph(query)).data.repository.issues.edges
-    res = res.map(elem => ({ date: locale_date(elem.node.updatedAt), title: elem.node.title, text: elem.node.body, url: elem.node.url, }))
+    res = res.map(elem => ({ date: new Date(elem.node.updatedAt).toLocaleDateString('de-de', { year: 'numeric', day: '2-digit', month: '2-digit' }), title: elem.node.title, text: elem.node.body, url: elem.node.url, }))
     fs.writeFile(json, JSON.stringify(res))
   }
 
