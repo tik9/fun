@@ -75,9 +75,14 @@ async function lyrics() {
         let writer_song = `${writer}: ${song}`
         let writer_song_head = document.createElement('h6')
         writer_song_head.textContent = writer_song
-        let content_short = lyrics_short
+
+        let ifrm = document.createElement("iframe");
+        ifrm.setAttribute("src", 'https://www.youtube.com/embed/' + elem.link.split('v=').pop());
+        ifrm.style.width = "300px";
+        ifrm.style.height = "300px";
+
         let lyrics_span = document.createElement('span')
-        lyrics_span.innerText = content_short
+        lyrics_span.innerText = '\n\n' + lyrics_short
         lyrics_span.id = song + '_content'
         let btn = document.createElement('button')
         btn.id = 'btn_' + song
@@ -88,18 +93,18 @@ async function lyrics() {
             if (dots.style.display === 'none') {
                 dots.style.display = 'inline'
                 btn.textContent = 'Read more'
-                lyrics_span.innerText = content_short
+                lyrics_span.innerText = lyrics_short
             }
             else {
                 dots.style.display = 'none'
                 btn.textContent = 'Read less'
-                lyrics_span.innerText = lyrics + '\n'
+                lyrics_span.innerText = '\n\n' + lyrics + '\n'
             }
         })
         let dots = document.createElement('span')
         dots.textContent = '...'
         dots.id = 'dots_' + song
-        li.append(writer_song_head, lyrics_span, dots, btn)
+        li.append(writer_song_head, ifrm, lyrics_span, dots, btn)
     }
     document.getElementById('container').append(div)
 }
