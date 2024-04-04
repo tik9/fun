@@ -20,7 +20,7 @@ export default async (req: Request) => {
     else
         res = await find(coll)
 
-    console.log(res)
+    console.log(coll)
 
     // console.log(await list_coll())
 
@@ -42,7 +42,8 @@ export default async (req: Request) => {
     // rename_field('data', 'category', 'cat')
     // truncate(coll!)
     // update_one('data', 'text', 'Students towards Bachelor degree and technical employees', 'text', 'Students in a Bachelor degree and employees preparing for a math exam')
-    // update_many(coll, { cat: 'What famous people said' }, 'cat', 'What famous people said about learning')
+
+    update_many(coll, { cat: 'What the people say' }, 'cat', 'What people say')
 
     return new Response(JSON.stringify(res))
 }

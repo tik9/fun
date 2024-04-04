@@ -43,7 +43,7 @@ function table(arr, src) {
                     td.innerHTML = val
             }
             else if ('trepos' === src) {
-                if (elem2 === 'updated')
+                if (elem2 === 'last push')
                     td.append(aref(elem, val))
                 else td.innerHTML = val
             }

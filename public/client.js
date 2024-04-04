@@ -193,13 +193,18 @@ async function repos() {
 
 async function trepos() {
     let repos = arguments.callee.name
-    let res = await resMap(repos)
     let div = document.createElement('div')
 
     div.id = repos
     let head = document.createElement('h4')
     head.classList.add('mt-4', 'mb-3')
     head.textContent = 'Github repos I own'
+    let res = await resMap(repos)
+    res.forEach((ob) => {
+        ob['last push'] = ob.date
+        delete ob.date
+    })
+
     div.append(head, table(res, repos))
     document.getElementById('cloud').append(div)
 }
