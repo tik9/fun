@@ -29,7 +29,7 @@ async function commits() {
     head.classList.add('mt-4', 'mb-3')
     head.textContent = `My ${commits}`
     div.append(head, table(res, commits))
-    document.getElementById('cloud').append(div)
+    document.getElementById('content').append(div)
 }
 
 async function issues() {
@@ -43,7 +43,7 @@ async function issues() {
     head.classList.add('mt-4', 'mb-3')
     head.textContent = `My ${issues}`
 
-    document.getElementById('cloud').append(div)
+    document.getElementById('content').append(div)
 
     div.append(head, table(res, issues))
 }
@@ -55,58 +55,92 @@ async function lyrics() {
 
     div.id = lyrics
     let head = document.createElement('h4')
-    head.textContent = 'My favourite lyrics'
+    head.textContent = 'My favourite songs'
     head.classList.add('mt-4', 'mb-3')
     let ol = document.createElement('ol')
     div.append(head, ol)
     for (let elem of res) {
+
+        let writer = elem.writer[0].toUpperCase() + elem.writer.slice(1)
+        let song = elem.song[0].toUpperCase() + elem.song.slice(1)
+        let writer_song = `${writer}: ${song}`
+        let ws_head = document.createElement('h6')
+        ws_head.style.display = 'inline'
+
+        ws_head.textContent = writer_song
+        ws_head.style.marginRight = '10px'
         let li = document.createElement('li')
         ol.append(li)
         li.style.marginBottom = '25px'
         li.id = elem.song
         ol.append(li)
-
-        let lyrics = elem.lyrics
-        let lyrics_short = lyrics.slice(0, 70)
-        lyrics_short = lyrics_short.slice(0, lyrics_short.lastIndexOf(' '))
-
-        let writer = elem.writer[0].toUpperCase() + elem.writer.slice(1)
-        let song = elem.song[0].toUpperCase() + elem.song.slice(1)
-        let writer_song = `${writer}: ${song}`
-        let writer_song_head = document.createElement('h6')
-        writer_song_head.textContent = writer_song
-
         let ifrm = document.createElement("iframe");
-        ifrm.setAttribute("src", 'https://www.youtube.com/embed/' + elem.link.split('v=').pop());
-        ifrm.style.width = "300px";
-        ifrm.style.height = "300px";
+        let lyrics = document.createElement('span')
+        let dots2 = document.createElement('span')
+        let btn2 = document.createElement('button')
 
-        let lyrics_span = document.createElement('span')
-        lyrics_span.innerText = '\n\n' + lyrics_short
-        lyrics_span.id = song + '_content'
-        let btn = document.createElement('button')
-        btn.id = 'btn_' + song
-        btn.textContent = 'Read more'
-        btn.classList.add('btn', 'btn-info')
+        let btn1 = document.createElement('button')
 
-        btn.addEventListener('click', () => {
-            if (dots.style.display === 'none') {
-                dots.style.display = 'inline'
-                btn.textContent = 'Read more'
-                lyrics_span.innerText = lyrics_short
+        btn1.id = 'btn1_' + song
+        btn1.textContent = 'Open song'
+        btn1.classList.add('btn', 'btn-info')
+        document.addEventListener('keyup', (e) => { if (e.code === 'Enter') callb() })
+        btn1.addEventListener('click', () => callb())
+
+        function callb() {
+            if (btn1.textContent === 'Close song') {
+                btn1.textContent = 'Open song'
+
+                ifrm.style.display = 'none'
+                lyrics.style.display = 'none'
+                dots2.style.display = 'none'
+                btn2.style.display = 'none'
             }
             else {
-                dots.style.display = 'none'
-                btn.textContent = 'Read less'
-                lyrics_span.innerText = '\n\n' + lyrics + '\n'
+                btn1.textContent = 'Close song'
+
+                ifrm.style.display = 'block'
+                ifrm.setAttribute("src", 'https://www.youtube.com/embed/' + elem.link.split('v=').pop());
+                ifrm.style.width = "300px";
+                ifrm.style.height = "300px";
+
+                lyrics.style.display = 'inline'
+                let lyrics_long = elem.lyrics.slice(0, 1000)
+                let lyrics_short = lyrics_long.slice(0, 70)
+                lyrics_short = lyrics_short.slice(0, lyrics_short.lastIndexOf(' '))
+                lyrics.innerText = '\n\n' + lyrics_short
+                lyrics.id = song + '_content'
+
+                dots2.textContent = '...'
+                dots2.id = 'dots2_' + song
+
+                btn2.style.display = 'inline'
+                btn2.id = 'btn2_' + song
+                btn2.textContent = 'Read more'
+                btn2.classList.add('btn', 'btn-info')
+
+                btn2.addEventListener('click', () => {
+
+                    lyrics.innerText = '\n\n'
+                    if (dots2.style.display === 'none') {
+                        lyrics.innerText += lyrics_short
+                        dots2.style.display = 'inline'
+                dots2.textContent = '...'
+                btn2.textContent = 'Read more'
+                    }
+                    else {
+                        lyrics.innerText += lyrics_long + '\n'
+                        dots2.style.display = 'none'
+                        btn2.textContent = 'Read less'
+                    }
+                })
+
+                li.append(ifrm, lyrics, dots2, btn2)
             }
-        })
-        let dots = document.createElement('span')
-        dots.textContent = '...'
-        dots.id = 'dots_' + song
-        li.append(writer_song_head, ifrm, lyrics_span, dots, btn)
+        }
+        li.append(ws_head, btn1)
     }
-    document.getElementById('container').append(div)
+    document.getElementById('content').append(div)
 }
 
 async function posts() {
@@ -120,7 +154,7 @@ async function posts() {
     div.append(head, table(res, posts))
     head.classList.add('mt-4', 'mb-3')
     head.textContent = `My ${posts}`
-    document.getElementById('cloud').append(div)
+    document.getElementById('content').append(div)
 }
 
 async function repos() {
@@ -186,7 +220,7 @@ async function repos() {
 
             li.append(comm, dots, btn)
         }
-        document.getElementById('cloud').append(div)
+        document.getElementById('content').append(div)
 
     }
 }
@@ -206,7 +240,7 @@ async function trepos() {
     })
 
     div.append(head, table(res, repos))
-    document.getElementById('cloud').append(div)
+    document.getElementById('content').append(div)
 }
 
 
@@ -236,7 +270,7 @@ async function accounts() {
     let head = document.createElement('h4')
     head.classList.add('mt-4', 'mb-3')
     head.textContent = accounts[0].toUpperCase() + accounts.slice(1)
-    document.getElementById('cloud').append(head, div)
+    document.getElementById('content').append(head, div)
 
     div.append(list(obj, accounts))
 }

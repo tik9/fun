@@ -1,7 +1,8 @@
 
 ### Goal of the repo
 
-- learn Serverless Functions and continuos deployment
+- Serverless Functions and continuos deployment
+- Frontend code with pure JS
 
 <br>
 
@@ -17,5 +18,5 @@
 | Tool                 | About                |
 | -------------------- | -------------------- |
 | serverless functions | calling them in node |
-
+| event listeners| with click buttons and keypress|
 

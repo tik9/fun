@@ -65,7 +65,7 @@ async function queryRepos() {
        }`
 
     let res = (await getGhGraph(query, jsonQuery)).data.search.edges
-    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, 'commits': elem.node.defaultBranchRef.target.history.edges.map(elem => ({ date: new Date(elem.node.committedDate).toLocaleDateString('de-de', { year: "numeric", day: "2-digit", month: "2-digit" }), message: elem.node.message })) }))
+    res = res.map(elem => ({ name: elem.node.name, description: elem.node.description, commits: elem.node.defaultBranchRef.target.history.edges.map(elem => ({ date: new Date(elem.node.committedDate).toLocaleDateString('de-de', { year: "numeric", day: "2-digit", month: "2-digit" }), message: elem.node.message })) }))
 
     fs.writeFile(json, JSON.stringify(res))
 }

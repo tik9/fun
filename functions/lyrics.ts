@@ -56,7 +56,7 @@ async function getSong() {
     obj.link = link
     obj.song = song
 
-    console.log(obj)
+    // console.log(obj)
     songs.unshift(obj)
-    // fs.writeFile(json, JSON.stringify(songs))
+    fs.writeFile(json, JSON.stringify(songs))
 }

@@ -49,9 +49,8 @@ async function getGhGraphSchema() {
     return (await getGhGraph(query)).data.__schema.types[randomnumber]
 }
 
-export async function getGhGraph(query: any, jsonVars = {}) {
-    let res = await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: jsonVars }) })).json()
-    // console.log(res)
+export async function getGhGraph(query: any, vars = {}) {
+    let res = await (await fetch('https://api.github.com/graphql', { method: 'POST', headers: { "Authorization": "bearer " + process.env.ghtoken }, body: JSON.stringify({ query: query, variables: vars }) })).json()
     return res
 }
 
