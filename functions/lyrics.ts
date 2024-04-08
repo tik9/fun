@@ -41,7 +41,7 @@ async function getSong() {
 
     let lyrics = (await (await fetch(`https://api.lyrics.ovh/v1/${writer}/${song}`)).json()).lyrics
 
-    lyrics = lyrics.slice(0, 100)
+    // lyrics = lyrics.slice(0, 100)
 
     let link = await getYt(song)
 

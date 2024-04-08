@@ -18,6 +18,6 @@ async function getRepos() {
 
     let res = ((await getGhGraph(query)).data.repositoryOwner.repositories.nodes)
 
-    res = res.map((elem) => ({ date: new Date(elem.pushedAt).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' }), url: '//github.com/tik9/' + elem.name, name: elem.name, description: elem.description, }))
+    res = res.map(elem => ({ date: new Date(elem.pushedAt).toLocaleDateString('de-de', { day: '2-digit', month: '2-digit', year: 'numeric' }), url: '//github.com/tik9/' + elem.name, name: elem.name, description: elem.description, }))
     fs.writeFile(json, JSON.stringify(res))
 }

@@ -7,13 +7,16 @@ import { promises as fs } from "fs";
 var script = __filename.split(__dirname + "/").pop()?.split('.')[0]
 var json = resolve('public', 'json', `${script}.json`)
 
+let user = "tik9"
+
 export default async (req: Request) => {
   if (new URL(req.url).searchParams.get('save'))
     // await getRepoIssues
     await getAllIssues()
-  return new Response((await fs.readFile(json, 'utf-8')))
+
+  return new Response(await fs.readFile(json, 'utf-8'))
 }
-let user = "tik9"
+
 async function getAllIssues() {
   let query = `query($user: String!) {
     user(login: $user) {
@@ -27,9 +30,6 @@ async function getAllIssues() {
                   title
                   url
                   body
-                  repository {
-                    name
-                  }
                 }
               }
             }
@@ -38,16 +38,20 @@ async function getAllIssues() {
       }
     }
 }`
+
   let res = (await getGhGraph(query, { "user": user })).data.user.repositories.edges
 
-  // res=res[0].node.issues.edges
-  console.log(res)
+  // let res = JSON.parse(await fs.readFile(json, 'utf-8'))
 
-  // res = res.map(elem => ({ date: elem.node.createdAt, title: elem.node.title, text: elem.node.body, url: elem.node.url, repo: elem.node.repository }))
-  // res = res.map(elem => ({ date: new Date(elem.node.createdAt).toLocaleDateString('de-de', { year: 'numeric', day: '2-digit', month: '2-digit' }), title: elem.node.title, text: elem.node.body, url: elem.node.url, repo: elem.node.repository }))
+  res = res.map(elem => elem.node.issues.edges.map(elem => elem.node)).map(elem => (elem.map(({ repository, createdAt, ...elem }) => ({ date: new Date(createdAt).toLocaleDateString('de-de', { year: 'numeric', day: '2-digit', month: '2-digit' }), ...elem })))).filter(item => item.length)
+
+  if (res[1] === undefined) res = res.flat()
+
+  for (let elem of res) {
+    if (elem.body === '') delete elem.body
+  }
 
   fs.writeFile(json, JSON.stringify(res))
-
 }
 
 async function getRepoIssues() {
@@ -60,7 +64,6 @@ async function getRepoIssues() {
         edges {
           node {
             updatedAt
-            body
             title
             url
             comments(first: 3) {
@@ -77,6 +80,6 @@ async function getRepoIssues() {
   }`;
   let res = (await getGhGraph(query)).data.repository.issues.edges
 
-  res = res.map(elem => ({ date: new Date(elem.node.updatedAt).toLocaleDateString('de-de', { year: 'numeric', day: '2-digit', month: '2-digit' }), title: elem.node.title, text: elem.node.body, url: elem.node.url, }))
+  res = res.map(elem => ({ date: new Date(elem.node.updatedAt).toLocaleDateString('de-de', { year: 'numeric', day: '2-digit', month: '2-digit' }), title: elem.node.title, url: elem.node.url, comments: elem.node.comments }))
   fs.writeFile(json, JSON.stringify(res))
 }

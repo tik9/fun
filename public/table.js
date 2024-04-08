@@ -1,5 +1,5 @@
 function aref(elem, val) {
-    var aref = document.createElement('a')
+    let aref = document.createElement('a')
     aref.textContent = val
     aref.href = elem.url
     return aref
@@ -7,60 +7,41 @@ function aref(elem, val) {
 
 function table(arr, src) {
 
-    var table_ = document.createElement('table')
-    var thead = document.createElement('thead')
-    var tr = document.createElement('tr')
-    thead.appendChild(tr)
-    var columns = []
-    for (var key in arr[0]) {
-        if (['_id', '__v', 'api', 'category', 'post_id', 'url', 'comments'].includes(key)) continue
+    let table_ = document.createElement('table')
+    let thead = document.createElement('thead')
+    let tr = document.createElement('tr')
+    thead.append(tr)
+    let columns = []
+    for (let key in arr[0]) {
+        if (['_id', '__v', 'post_id', 'url'].includes(key)) continue
         if (arr[0].hasOwnProperty(key) && !columns.includes(key)) {
             columns.push(key);
-            // if (key == 'value') continue
 
-            var th = document.createElement('th')
-            th.appendChild(document.createTextNode(key[0].toUpperCase() + key.slice(1)));
-            tr.appendChild(th);
+            let th = document.createElement('th')
+            th.append(document.createTextNode(key[0].toUpperCase() + key.slice(1)));
+            tr.append(th);
         }
     }
 
-    table_.appendChild(thead);
-    var tbody = document.createElement('tbody');
-    for (var elem of arr) {
-        var tr = document.createElement('tr')
+    table_.append(thead);
+    let tbody = document.createElement('tbody');
+    for (let elem of arr) {
+        let tr = document.createElement('tr')
 
-        for (var elem2 of columns) {
-            var val = elem[elem2]
-            var td = document.createElement('td');
-            if (['commits', 'posts'].includes(src)) {
-                if (elem2 === 'date') td.append(aref(elem, val))
-                else td.innerHTML = val
-            }
+        for (let elem2 of columns) {
+            let val = elem[elem2]
+            if (val === undefined) continue
 
-            else if (src === 'issues') {
-                if (elem2 === 'date') td.append(aref(elem, val))
-                else
-                    td.innerHTML = val
-            }
-            else if ('trepos' === src) {
-                if (elem2 === 'last push')
-                    td.append(aref(elem, val))
-                else td.innerHTML = val
-            }
-            else if ('repos' === src) {
-                // else if ('totalCount' === elem2) td.innerHTML = `${Math.floor(val / 1000)} K`
-                if ('commits' === elem2) {
-                    for (let elem of val)
-                        td.innerHTML += elem.date + '<br>'
-                }
-                else td.innerHTML = val
-            }
+            let td = document.createElement('td');
+            if (elem2 === 'date')
+                td.append(aref(elem, val))
+            else td.textContent = val
 
-            tr.appendChild(td);
+            tr.append(td);
         }
-        tbody.appendChild(tr)
+        tbody.append(tr)
     }
-    table_.appendChild(tbody);
+    table_.append(tbody);
     table_.classList.add('table', 'table-bordered', 'table-striped', 'mt-4', 'mb-4')
     return table_;
 }

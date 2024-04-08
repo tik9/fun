@@ -1,5 +1,5 @@
 
-import { getGhGraph, locale_date } from './utils';
+import { getGhGraph } from './utils';
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
@@ -8,12 +8,65 @@ var json = resolve('public', `json/${script}.json`)
 
 export default async (req: Request) => {
   if (new URL(req.url).searchParams.get('save'))
-    await getCommits()
+    // await getRepoCommits()
+    await getAllCommits()
   return new Response(await fs.readFile(json, 'utf-8'))
 
 }
 
-async function getCommits() {
+async function getAllCommits() {
+  let query = `query (
+    $cursorRepo: String,
+    $cursorCommit: String,
+    $user: String = "tik9",
+    $emails: [String!] = ["user153015@gmail.com"]
+  ) {
+    user(login: $user) {
+      repositoriesContributedTo(
+        includeUserRepositories: true
+        contributionTypes: COMMIT
+        first: 10
+        after: $cursorRepo
+      ) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          name
+          defaultBranchRef {
+            target {
+              ... on Commit {
+                history(author: {emails: $emails}, after: $cursorCommit) {
+                  totalCount
+                  pageInfo {
+                    hasNextPage
+                    endCursor
+                  }
+                  nodes {
+                    ... on Commit {
+                      oid
+                      messageHeadline
+                      committedDate
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }`
+
+  let res = (await getGhGraph(query)).data.user.repositoriesContributedTo
+  // nodes[0].defaultBranchRef.target
+  console.log(res)
+
+}
+
+async function getRepoCommits() {
   let repo = 'fun'
   let query = `query {
     repository(owner: "tik9", name: "${repo}") {
